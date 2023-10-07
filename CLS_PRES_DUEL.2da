@@ -1,0 +1,9 @@
+2DA V2.0
+
+           LABEL          ReqType ReqParam1  ReqParam2 
+0          Tumble         SKILL   21         6         
+1          Dodge          FEAT    10         ****      
+2          Mobility       FEAT    26         ****      
+3          Base_Attack    BAB     6          ****      
+4          Weapon_Finesse FEAT    42         ****      
+5          ScriptVar      VAR     X2_AllowWM 0         
