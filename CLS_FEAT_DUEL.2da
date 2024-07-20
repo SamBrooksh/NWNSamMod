@@ -169,7 +169,7 @@
 165        PLAYER_TOOL_08                                 1113      1    99             1      
 166        PLAYER_TOOL_09                                 1114      1    99             1      
 167        PLAYER_TOOL_10                                 1115      1    99             1 
-168	   FEAT_CANNY_DEFENSE				  1143      3    1		0 
-169	   FEAT_ENHANCED_MOBILITY			  1136      3	 3 	        0
+168	       FEAT_CANNY_DEFENSE				              1143      3    1		        0 
+169	       FEAT_ENHANCED_MOBILITY			              1136      3	 3 	            0
      
 
