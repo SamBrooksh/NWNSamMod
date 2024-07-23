@@ -8,6 +8,12 @@ Then I will make my own with custom stuff completely
 # Other Changes
 Add more poisons (or just poisons in general)
 
+# GENERAL TODO
+Create Packages from classes
+Add TLK Table entries
+Saving Throw As well
+Find more Icons
+
 
 # Duelist
 # TODO
@@ -142,6 +148,10 @@ So - Feat that allows for choosing a spell to cast on 1/20 (beneficials will be 
 First need to test if there is an instant cast of spell scripts - closeish 
 
 # Void Scarred
+Useful icons ir_gengaze ir_genaura ir_genbolt ir_dcaster ir_elefire
+ife_exturn ife_fpersuade ife_unpossess ife_x1adabj ife_x1hailarr
+ife_x1sevade ife_x1precise ife_x2dethmast ife_x2udshp ife_x3_pdkwrath
+is_magvest is_enedrain is_x1onelan
 All flavor text/names still pending of course
 #### Alignment
 Any Chaotic
