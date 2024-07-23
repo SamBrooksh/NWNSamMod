@@ -55,7 +55,7 @@ Should be Elaborate Defense (which is sorta lame)
 Deflect Arrows - Requires a light or one handed piercing weapon (Check to see if can add deflect arrows to be able to do that - Looks like can just give deflect arrows)
 No Retreat - Maybe an Additional BAB increase? (Should be force enemies to provoke an attack... Seems doubtful to be able to occur)
 #### 10th Level
-Crippling Critical - Able to deal a penalty to target on crit (reduce speed to 10ft, 1d4 STR or DEX dmg, -4 to saving throws, -4 penalty to AC, or 2d6 bleed dmg - last 1 minute) - Probably should use some radial option to choose which one to be used in general. And then have it trigger in the onhit script as well
+Crippling Critical - Able to deal a penalty to target on crit (reduce speed to 10ft, 1d4 STR or DEX dmg, -4 to saving throws, -4 penalty to AC, or 2d6 bleed dmg - last 1 minute) - Probably should use some radial option to choose which one to be used in general. And then have it trigger in the onhit script as well - can't do it on critical so something similar to the spell critical
 
 
 ### Bonus Feats
@@ -66,7 +66,7 @@ Gain Intelligence Every other level (I believe that I had been doing this with a
 Improved Reaction - Gain +1 To dex every third level (can't do bonus to initiative)
 
 ## Scripts Needed
-OnHit changed - deal damamge
+OnHit changed - deal damamge, handle crippling critical
 
 
 # Mystic Theruge
@@ -100,7 +100,7 @@ Combined Spells - Allow spells to learn from other?
 #### 9th Level
 #### 10th Level
 Spell Synthesis - Somehow need to let creation of putting two spells into one? (And then make it so it can go up a level every other level)
-May need to do as ability, then choose two spells somehow as well - I think I should be able to do this one using the castactionspell with instant spell on
+May need to do as ability, then choose two spells somehow as well - I think I should be able to do this one using the castactionspell with instant spell on - probably will need a dummy feat or two
 ### Bonus Feats
 
 
@@ -133,7 +133,7 @@ Diverse Training - May not be possible - Looks like just not needed I think, So 
 #### 7th Level
 #### 8th Level
 #### 9th Level
-Spell's can deal critical damage (double damage) -Maybe
+Spell's can deal critical damage (double damage) -Maybe - Calling it Spell Reaction for now
 #### 10th Level
 Spell Critical - Looks Like should be possible with spell hooks... maybe
 ### Bonus Feats
@@ -177,7 +177,7 @@ Evasion
 #### 5th Level
 Void Swap - Swap positions with Void clone
 #### 6th Level
-Gain DR/1 and Energy Resist 1
+Gain DR/1 and Energy Resist 1 - Void Touched
 #### 7th Level
 Ability to cast Invisibility 2 + INT times/day
 #### 8th Level
@@ -206,10 +206,10 @@ Void Rip - AoE Fireball like spell that does Void and applies Curse - Clones Imm
 #### 19th Level
 Deft Damage - Void Strike empowered - 1/2 level, 2*level - both increased by INT
 #### 20th Level
-Can Summon 2 Clones (Maybe?) - they get full HP, Full Stats, instead of decreased stats
+Can Summon 2 Clones (Maybe?) - they get full HP, Full Stats, instead of decreased stats - Void Perfection
 ### Bonus Feats Options
 Cursed Strikes - After Delay, deal massive damage - also increases Impending Void dmg to be 1d6+1d4 (Min Level 16)
-Gain more DR/Energy Resist (Min Level 10)
+Gain more DR/Energy Resist (Min Level 10) - Void Strengthen
 Empower Void CLone - Gives Flat HP bonus per time taken? LVL 3
 Extra Haste, Incorporeal, Invis (Maybe all in one) - 2 Extra? LVL 11
 Void Resist - Reduce Debuff from Void Clone LVL 3
