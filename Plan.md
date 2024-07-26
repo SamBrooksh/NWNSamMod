@@ -14,6 +14,10 @@ Add TLK Table entries
 Saving Throw As well
 Find more Icons
 
+Modify nwscript.nss so that I can make it do getcasterlevel properly
+It may be better to create a new function for getcasterlevel(which) so it can get total of Divine or Arcane (or any other is I were to make it, or both for overlapping spells) 
+This would allow for the modification of all the other spells rather easily - looks like may need to account for level loss as well?
+Should also add a metamagic function (one that applies all metamagic stuff) - would actually be a couple - one for each effect change I believe
 
 # Duelist
 # TODO
