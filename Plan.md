@@ -20,7 +20,7 @@ This would allow for the modification of all the other spells rather easily - lo
 Should also add a metamagic function (one that applies all metamagic stuff) - would actually be a couple - one for each effect change I believe
 
 # Duelist
-# TODO
+## TODO
 Fill in stat file, make scripts for Precise Strike, and Canny Defense
 Design Enhanced Mobility, Add Parry Bonus Feat
 ### Prerequisites
@@ -187,7 +187,7 @@ Ability to cast Invisibility 2 + INT times/day
 #### 8th Level
 Ability to cast Haste 1 + INT times/day
 #### 9th Level
-Ability to cast Incorporeal 1 + INT times/day
+Void Shadowed - Ability to cast Incorporeal 1 + INT times/day
 #### 10th Level
 Void Renewall - Clone grants temp HP on it hitting
 #### 11st Level
