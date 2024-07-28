@@ -42,7 +42,7 @@
 38 Ambidex 1 1 -1 0
 39 CShot 5 1 -1 0
 40 Cleave 6 1 -1 0
-41 DefArrow 8 1 -1 0
+41 DefArrow 8 3 9 0
 42 Disarm 9 1 -1 0
 43 Dodge 10 1 -1 0
 44 ImpCritClub 15 1 -1 0
@@ -85,7 +85,7 @@
 81 FEAT_IMPROVED_CRITICAL_TRIDENT 1074 1 -1 0
 82 ImpDis 16 1 -1 0
 83 ImpKnock 17 1 -1 0
-84 ImpParry 18 1 -1 0
+84 ImpParry 18 3 5 0
 85 ImpPower 19 1 -1 0
 86 ImpTwo 20 1 -1 0
 87 ImpStrike 21 1 -1 0
@@ -173,5 +173,3 @@
 169 FEAT_ENHANCED_MOBILITY 1136 3 3 0
 170 Crippling_Critical 1148 3 10 1
 171 SkillFocusParr 183 3 2 0
-172 ImpParry 18 3 5 0
-173 DefArrow 8 3 9 0
