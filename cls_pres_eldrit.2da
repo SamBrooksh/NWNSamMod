@@ -6,4 +6,4 @@
 2 Mobility FEAT 26 ****
 3 Base_Attack BAB 6 ****
 4 Weapon_Finesse FEAT 42 ****
-5 ScriptVar VAR X2_AllowDuel 0
+5 ScriptVar VAR X2_AllowEldrit 0

@@ -41,13 +41,13 @@ Fast
 Precise Strike - While using a light 1 handed weapon and no shield, add duelist level to damage (Unless immune to crits) - looks like the easiest will probably the hacky way of on-hit scripts
 Canny Defense - When wearing light or no armor, add INT to AC (up to max of Duelist Level)
 #### 2nd Level
-Expert Parry - Bonus to Parry at Level 2
+Expert Parry - Bonus to Parry at Level 2 - Skill Focus?
 #### 3rd Level
 Enhanced Mobility - Gain bonus to AoO (check to see if possible - if not, may rework)
 #### 4th Level
-Grace - Gain +2 to Reflex
+Grace - Gain +2 to Reflex - Gain Lightning Reflex instead - maybe make Grace do something else and can be taken as bonus feat?
 #### 5th Level
-Riposte - Should make AoO after parrying... do more research into if this is possible or what
+Riposte - Should make AoO after parrying... do more research into if this is possible or what - if not change what it does - Improved Parry For now
 #### 6th Level
 Acrobatic Charge - Bonus to Tumble? Should be bonus against difficult terrain so maybe get freedom?
 #### 7th Level
@@ -75,7 +75,7 @@ OnHit changed - deal damamge, handle crippling critical
 
 # Mystic Theruge
 # TODO
-Add all necessary files (Skill list, feat list, bonus feat list, Package list), TLK Entries (Name, plural, etc)
+Add all necessary files (Skill list, bonus feat list, Package list, prereqs), TLK Entries (feat/description)
 Design Abilities - Maybe make the divine/arcane spells manually at a higher level and make it so that the class gets access to them? 
 
 ### Prerequisites
@@ -104,9 +104,9 @@ Combined Spells - Allow spells to learn from other?
 #### 9th Level
 #### 10th Level
 Spell Synthesis - Somehow need to let creation of putting two spells into one? (And then make it so it can go up a level every other level)
-May need to do as ability, then choose two spells somehow as well - I think I should be able to do this one using the castactionspell with instant spell on - probably will need a dummy feat or two
+May need to do as ability, then choose two spells somehow as well - I think I should be able to do this one using the castactionspell with instant spell on - probably will need a dummy feat or two?
 ### Bonus Feats
-
+Probably do at like 4 and 8 - something to help at least
 
 ### Stats
 

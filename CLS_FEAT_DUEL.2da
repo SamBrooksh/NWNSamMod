@@ -135,7 +135,7 @@
 131 WeapFocDMace 125 1 -1 0
 132 WeapFocDAxe 126 1 -1 0
 133 WeapFoc2Sw 127 1 -1 0
-134 Grace 1137 3 4 0
+134 Grace 1137 1 -1 0
 135 Riposte 1146 3 5 0
 136 Acrobatic_Charge 1144 3 6 0
 137 Elaborate_Defense 1145 3 7 0
@@ -173,3 +173,4 @@
 169 FEAT_ENHANCED_MOBILITY 1136 3 3 0
 170 Crippling_Critical 1148 3 10 1
 171 SkillFocusParr 183 3 2 0
+172 LightningRef 24 3 5 0
