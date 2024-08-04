@@ -1,6 +1,6 @@
 # Classes
 Duelist
-Mystic Theurge
+Mystic Theurge - Update mispellings
 Eldritch Knight
 Updating Arcane Archer to increase Arcane Spell usage
 

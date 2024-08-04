@@ -3,15 +3,37 @@ const int CLASS_MAX = 8;
 //Return TRUE if is an arcane class 
 int SM_isArcane(int class)
 {
-    //TODO:
-    return TRUE;
+    switch(class)
+    {
+        case CLASS_TYPE_BARD:
+        case CLASS_TYPE_SORCERER:
+        case CLASS_TYPE_WIZARD:
+        
+        //Add the additional classes here
+        //case CLASS_PRES_PALE_MASTER:
+        //case CLASS_TYPE_MYSTIC_THEURGE:
+        //case CLASS_TYPE_ELDRITCH_KNIGHT:
+            return TRUE;
+        default:
+            return FALSE;
+    }
 }
 
 //Return TRUE if is divine class
 int SM_isDivine(int class)
 {
-    //TODO:
-    return TRUE;
+    switch(class)
+    {
+        case CLASS_TYPE_CLERIC:
+        case CLASS_TYPE_DRUID:
+        case CLASS_TYPE_RANGER:
+        case CLASS_TYPE_PALADIN:
+
+        //Add the additional classes here
+            return TRUE;
+        default:
+            return FALSE;
+    }
 }
 
 //Returns the modified level for spells
@@ -35,10 +57,12 @@ int SM_GetCasterLevel(object oCaster, int arcaneDivine)
                 {
                     total += GetLevelByClass(pClass, oCaster);
                 }
+                //Divine Spellcaster
                 else if (SM_isDivine(pClass) && arcaneDivine == DIVINE)
                 {
                     total += GetLevelByClass(pClass, oCaster);
                 }
+                //Check for Prestige Classes Modifications
                 else 
                 {
                     if (arcaneDivine == ARCANE)
@@ -62,6 +86,8 @@ int SM_GetCasterLevel(object oCaster, int arcaneDivine)
                     
                 }
             }
+            else    //Break out a little early
+                return total;
         }
     }
     return total;
