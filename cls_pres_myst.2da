@@ -1,9 +1,9 @@
 2DA V2.0
 
  LABEL ReqType ReqParam1 ReqParam2
-0 Lore SKILL **** 8
-1 DivineSpellcasting SPELL 2 ****
-2 ArcaneSpellcasting ARCSPELL 2 ****
-3 **** **** **** ****
+0 Lore SKILL 8 ****
+1 DivineSpellcasting SPELL 3 ****
+2 ArcaneSpellcasting ARCSPELL 3 ****
+3 CLERIC CLASSOR 2 ****
 4 **** **** **** ****
 5 ScriptVar VAR X2_AllowMyst 0

@@ -134,6 +134,6 @@
 130 NPC_Aribeth_Blackguard 84523 84106 31 STR 50 **** **** **** **** PackSPPala1 PackFTPalaH PackSKPalaH PackEQPala1 0 0
 131 Purple_Dragon_Knight 111933 111934 41 STR 50 **** **** **** **** **** PackFTFight1 PackSKFight1 PackEQFight1 0 1
 132 Duelist 16777218 16777341 59 DEX 50 **** **** **** **** **** **** **** **** 0 1
-133 Mystic_Theruge 16777329 16777342 60 WIS 20 **** **** **** **** **** **** **** **** 0 1
+133 Mystic_Theurge 16777329 16777342 60 WIS 20 **** **** **** **** **** **** **** **** 0 1
 134 Void_Scarred 16777337 16777343 62 DEX 20 **** **** **** **** **** **** **** **** 0 1
 135 Eldritch_Knight 16777333 16777344 61 WIS 50 **** **** **** **** **** **** **** **** 0 1
