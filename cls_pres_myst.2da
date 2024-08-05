@@ -3,7 +3,7 @@
  LABEL ReqType ReqParam1 ReqParam2
 0 Lore SKILL 8 ****
 1 DivineSpellcasting SPELL 3 ****
-2 ArcaneSpellcasting ARCSPELL 3 ****
+2 ArcaneSpellcasting ARCSPELL 2 ****
 3 CLERIC CLASSOR 2 ****
-4 **** **** **** ****
+4 DRUID CLASSOR 3 ****
 5 ScriptVar VAR X2_AllowMyst 0

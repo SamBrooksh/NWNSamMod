@@ -1,6 +1,6 @@
 # Classes
 Duelist
-Mystic Theurge - Update mispellings
+Mystic Theurge
 Eldritch Knight
 Updating Arcane Archer to increase Arcane Spell usage
 
@@ -79,19 +79,22 @@ Add all necessary files (Skill list, bonus feat list, Package list, prereqs), TL
 Design Abilities - Maybe make the divine/arcane spells manually at a higher level and make it so that the class gets access to them? 
 
 ### Prerequisites
-Able to cast 2nd level divine and arcane spells
+Able to cast 2nd level divine and arcane spells - May need to change, sounds like you can't do the divine spell requirement easily, and probably won't be able to do it 
+Will be Level 2 Arcane caster, and then Cleric, Druid, and able to cast level 3 spells - so technically could be lvl5 wiz, lvl1 cleric
+Can't get it any closer though - And add Lore 8 just to make sure they are at least level 5
 #### Alignment
 Any
 #### Skills
 Lore 8 Ranks
 ### Class Skills
 2 + INT
-Lore, Spellcraft, Heal (ADD MORE)
+Lore, Spellcraft, Heal, Concentration, Appraise, Crafts (ADD MORE)
 ### BAB Rate
 Slow
 ### Abilities
 
-
+May give bonus feats every other level instead of combined spells?
+Also will want to a on level up script that starts a dialog with the player that lets them learn a spell for their arcane classes I think...
 #### 1st Level
 Combined Spells - Allow spells to learn from other?
 #### 2nd Level
