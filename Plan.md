@@ -131,28 +131,36 @@ Lore, Ride, Spellcraft, Concentration, Discipline, Parry, Craft Armor, Craft Wea
 1
 ### Abilities
 #### 1st Level
-Diverse Training - May not be possible - Looks like just not needed I think, So something to replace this (Maybe just another feat) 
+Diverse Training - May not be possible - Looks like just not needed I think, So something to replace this (Maybe just another feat)
+Bonus Feat 
 #### 2nd Level
+INT/CHA UP
 #### 3rd Level
+STR/DEX UP
 #### 4th Level
+Gain DR 1?
 #### 5th Level
+Bonus Feat
 #### 6th Level
+INT/CHA
 #### 7th Level
+STR/DEX UP
 #### 8th Level
+Bonus Feat
 #### 9th Level
 Spell's can deal critical damage (double damage) -Maybe - Calling it Spell Reaction for now
 #### 10th Level
-Spell Critical - Looks Like should be possible with spell hooks... maybe
+Spell Critical - Looks Like should be possible with spell hooks... maybe - Should be quite doable with NWNX, but also needs to manage the spells that create other spells appropriately - That may harder to manage (so start with just getting magic missile to work, then delayed fireball - and that should be enough I think?)
 ### Bonus Feats
-At 1st, 5th and 9th
+At 1st, 5th and 8th (So that 9th gets Spell critical instead)
 ### Stats
-I think increases to str and int 
+I think increases to str/dex and int/cha both by 1, just twice
 ## Scripts Needed
 Spellhook like script - essentially make a check to try and modify spell damage - Will need to place in all spells right before reducing it or the like. Will need to modify quite a bit (just like adding maximize metamagic) - I think a spell critical would affect all - so for AOE's need to add check for crit - so two functions really.
-Technically spell critical is on making a critical, cast a spell - so I may make a level 9 do the potential double damage, and then a script on level 10 try to cast a predefined spell on a critical - I don't think that this one will work - maybe add script for on equip/unequip that as on hit tag to Unique Power to then cast a chosen spell - then modify the onhitcast script (x2_s3_onhitcast) to check to see if origin was Eldritch Knight, then check local variable on that character to see what spell to cast? Defaulting to Magic Missle I think at the target with the casters level - I assume should be possible
+Technically spell critical is on making a critical, cast a spell - so I may make a level 9 do the potential double damage, and then a script on level 10 try to cast a predefined spell on a critical
 Modify all spells to handle the random chance of critical's (Have it as a feat)
 So - Feat that allows for choosing a spell to cast on 1/20 (beneficials will be on self, bad on enemy) - choosing the feat in the radial menu will start a dialog asking what type spell to choose (with the list of known possible spells)
-First need to test if there is an instant cast of spell scripts - closeish 
+First need to test if there is an instant cast of spell scripts - closeish, should be effective enough I think
 
 # Void Scarred
 Useful icons ir_gengaze ir_genaura ir_genbolt ir_dcaster ir_elefire
@@ -165,7 +173,7 @@ Any Chaotic
 
 ### Class Skills
 Disable Trap, Heal, Hide, Listen, Lore, Move Silently, Open Lock, Search, Set Trap, Use Magic Device, Tumble, Craft Trap, Bluff, Intimidate, Craft Armor, Craft Weapon
-I'm thinkink 6 + INT
+I'm thinking 6 + INT
 ### BAB
 3/4 - Rogue speed
 
