@@ -35,6 +35,7 @@
 #include "X0_I0_SPELLS"
 #include "x2_i0_spells"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 
 void main()
@@ -76,7 +77,15 @@ void main()
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam5, OBJECT_SELF);
     }
 
-
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 
     effect eDam1, eDam2, eDam3, eDam4, eDam5, eKnock;
     eKnock= EffectKnockdown();
@@ -101,6 +110,13 @@ void main()
             nDamage2 = d6(10);
             nDamage3 = d6(10);
             nDamage4 = d6(10);
+            if (spellReaction)
+            {
+                nDamage1 = FloatToInt(IntToFloat(nDamage1) * SPELL_REACTION_MULTIPLIER);
+                nDamage2 = FloatToInt(IntToFloat(nDamage2) * SPELL_REACTION_MULTIPLIER);
+                nDamage3 = FloatToInt(IntToFloat(nDamage3) * SPELL_REACTION_MULTIPLIER);
+                nDamage4 = FloatToInt(IntToFloat(nDamage4) * SPELL_REACTION_MULTIPLIER);
+            }
             // no we don't care about evasion. there is no evasion to hellball
             if (MySavingThrow(SAVING_THROW_REFLEX,oTarget,nSpellDC,SAVING_THROW_TYPE_SPELL,OBJECT_SELF,fDelay) >0)
             {

@@ -15,6 +15,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -53,6 +54,18 @@ void main()
     int nDamage;
     float fDelay;
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eFNF, GetSpellTargetLocation());
+    
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
+
     //Get first target in the specified area
     oTarget =GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, GetSpellTargetLocation());
     while (GetIsObjectValid(oTarget))
@@ -68,6 +81,10 @@ void main()
         else if (nMetaMagic == METAMAGIC_EMPOWER)
         {
             nDamage = nDamage + (nDamage/2) + nCasterLevel;
+        }
+        if (spellReaction)
+        {
+            nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
         }
         //If the target is an allied undead it is healed
         if(GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)

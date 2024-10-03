@@ -13,6 +13,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -48,6 +49,14 @@ void main()
         {
             //Set damage effect
             int nDamage =  MaximizeOrEmpower(3, 1, GetMetaMagicFeat());
+            if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+            {
+                if (d20(1) == 20)
+                {
+                    SpeakString("Spell Reaction!", 1);
+                    nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+                }
+            }
             effect eBad = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
             //Apply the VFX impact and damage effect
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);

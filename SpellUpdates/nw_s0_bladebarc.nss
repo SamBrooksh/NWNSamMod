@@ -16,6 +16,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -32,7 +33,17 @@ void main()
     {
         nLevel = 20;
     }
-
+    
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     //--------------------------------------------------------------------------
     // GZ 2003-Oct-15
     // Add damage to placeables/doors now that the command support bit fields
@@ -69,6 +80,11 @@ void main()
                 else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
                     nDamage = nDamage + (nDamage/2);
+                }
+                //Adding Eldritch Knight Spell double damage chance
+                if (spellReaction)
+                {
+                    nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                 }
 
                 //Adjust damage according to Reflex Save, Evasion or Improved Evasion

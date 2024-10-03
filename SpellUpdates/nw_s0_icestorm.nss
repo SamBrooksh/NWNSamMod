@@ -14,6 +14,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -47,6 +48,16 @@ void main()
     effect eDam,eDam2, eDam3;
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetSpellTargetLocation();
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     //Apply the ice storm VFX at the location captured above.
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eExplode, lTarget);
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
@@ -77,6 +88,12 @@ void main()
                    nDamage = nDamage + (nDamage / 2);
                    nDamage2 = nDamage2 + (nDamage2 / 2);
                    nDamage3 = nDamage3 + (nDamage3 / 2);
+                }
+                if (spellReaction)
+                {
+                    nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+                    nDamage2 = FloatToInt(IntToFloat(nDamage2) * SPELL_REACTION_MULTIPLIER);
+                    nDamage3 = FloatToInt(IntToFloat(nDamage3) * SPELL_REACTION_MULTIPLIER);
                 }
                 nDamage2 = nDamage2 + nDamage3;
                 //Set the damage effect

@@ -16,6 +16,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -53,6 +54,15 @@ void main()
     {
         nCasterLvl = 10;
     }
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 
     //Apply the fireball explosion at the location captured above.
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eExplode, lTarget);
@@ -79,6 +89,10 @@ void main()
     	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
                    nDamage = nDamage + nDamage / 2;
+                }
+                if (spellReaction)
+                {
+                    nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                 }
                 //Adjust the damage based on the Reflex Save, Evasion and Improved Evasion.
                 nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ALL);

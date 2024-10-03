@@ -64,6 +64,16 @@ void main()
     {
         nDuration = 1;
     }
+    
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 
     //--------------------------------------------------------------------------
     // Flamethrower VFX, thanks to Alex
@@ -89,7 +99,7 @@ void main()
         //----------------------------------------------------------------------
         DelayCommand(fDelay,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oTarget,RoundsToSeconds(nDuration)));
         object oSelf = OBJECT_SELF; // because OBJECT_SELF is a function
-        DelayCommand(fDelay+0.1f,RunImpact(oTarget, oSelf,nMetaMagic));
+        DelayCommand(fDelay+0.1f,RunImpact(oTarget, oSelf,nMetaMagic,spellReaction));
     }
     else
     {
@@ -104,7 +114,7 @@ void main()
 }
 
 
-void RunImpact(object oTarget, object oCaster, int nMetaMagic)
+void RunImpact(object oTarget, object oCaster, int nMetaMagic, int spellReaction)
 {
     //--------------------------------------------------------------------------
     // Check if the spell has expired (check also removes effects)
@@ -120,11 +130,15 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic)
         // Calculate Damage
         //----------------------------------------------------------------------
         int nDamage = MaximizeOrEmpower(6,2,nMetaMagic);
+        if (spellReaction)
+        {
+            nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+        }
         effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);
         effect eVis = EffectVisualEffect(VFX_IMP_FLAME_S);
         eDam = EffectLinkEffects(eVis,eDam); // flare up
         ApplyEffectToObject (DURATION_TYPE_INSTANT,eDam,oTarget);
-        DelayCommand(6.0f,RunImpact(oTarget,oCaster,nMetaMagic));
+        DelayCommand(6.0f,RunImpact(oTarget,oCaster,nMetaMagic,spellReaction));
     }
 }
 

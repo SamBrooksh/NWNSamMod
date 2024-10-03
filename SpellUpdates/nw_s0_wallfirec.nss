@@ -14,6 +14,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -40,6 +41,16 @@ void main()
 
     oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     //Declare the spell shape, size and the location.
+    
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     while(GetIsObjectValid(oTarget))
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
@@ -59,6 +70,10 @@ void main()
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
                      nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
+                }
+                if (spellReaction)
+                {
+                    nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                 }
                 nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE);
                 if(nDamage > 0)

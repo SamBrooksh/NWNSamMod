@@ -17,6 +17,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -54,6 +55,15 @@ void main()
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eWeird, GetSpellTargetLocation());
     //Get the first target in the spell area
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetSpellTargetLocation(), TRUE);
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     while (GetIsObjectValid(oTarget))
     {
         //Make a faction check
@@ -87,7 +97,16 @@ void main()
                                     }
                                     if (nMetaMagic == METAMAGIC_EMPOWER)
                                     {
-                                        nDamage = FloatToInt( IntToFloat(nDamage) * 1.5 );
+                                        nDamage = FloatToInt(IntToFloat(nDamage) * 1.5 );
+                                    }
+                                    int spellReaction = FALSE;
+                                    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+                                    {
+                                        if (d20(1) == 20)
+                                        {
+                                            SpeakString("Spell Reaction!", 1);
+                                            nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER );
+                                        }
                                     }
                                     //Set damage effect
                                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);

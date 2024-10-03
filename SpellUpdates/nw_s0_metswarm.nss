@@ -16,6 +16,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -48,6 +49,16 @@ void main()
     //Get first object in the spell area
     float fDelay;
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(OBJECT_SELF));
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     while(GetIsObjectValid(oTarget))
     {
     	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
@@ -73,6 +84,10 @@ void main()
     		          {
     			         nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
              		  }
+                      if (spellReaction)
+                      {
+                        nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+                      }
                       nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(),SAVING_THROW_TYPE_FIRE);
                       //Set the damage effect
                       eFire = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);

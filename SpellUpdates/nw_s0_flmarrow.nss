@@ -16,6 +16,7 @@
 
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -48,6 +49,16 @@ void main()
     int nMissiles = (nCasterLvl)/4;
     float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);
     float fDelay = fDist/(3.0 * log(fDist) + 2.0);
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     //Limit missiles to five
     if(nMissiles == 0)
     {
@@ -79,6 +90,10 @@ void main()
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
                       nDam = nDam + nDam/2; //Damage/Healing is +50%
+                }
+                if (spellReaction)
+                {
+                    nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                 }
                 nDam = GetReflexAdjustedDamage(nDam, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE);
                 //Set damage effect

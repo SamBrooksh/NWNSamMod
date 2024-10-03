@@ -20,6 +20,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -44,6 +45,16 @@ void main()
     int nMinimumTargets = 2;
     int nTentaclesPerTarget;
     int nCasterLevel = GetCasterLevel(OBJECT_SELF);
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 
     if ( nCasterLevel > 20 )
     {
@@ -133,6 +144,10 @@ void main()
                             if (nMetaMagic == METAMAGIC_EMPOWER)
                             {
                                 nDieDam = nDieDam + (nDieDam/2); //Damage/Healing is +50%
+                            }
+                            if (spellReaction)
+                            {
+                                nDieDam = FloatToInt(IntToFloat(nDieDam) * SPELL_REACTION_MULTIPLIER);
                             }
                             nDamage = nDamage + nDieDam;
 

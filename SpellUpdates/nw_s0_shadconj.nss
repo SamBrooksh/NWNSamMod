@@ -14,7 +14,7 @@
 //:: Created On: April 12, 2001
 //:://////////////////////////////////////////////
 //:: VFX Pass By: Preston W, On: June 25, 2001
-
+#include "sm_spellfunc"
 void ShadowBolt (object oTarget, int nMetaMagic);
 
 void main()
@@ -88,6 +88,15 @@ void ShadowBolt (object oTarget, int nMetaMagic)
 		{
 			nDamage = nDamage + nDamage/2; //Damage/Healing is +50%
 		}
+        int spellReaction = FALSE;
+        if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+        {
+            if (d20(1) == 20)
+            {
+                SpeakString("Spell Reaction!", 1);
+                nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+            }
+        }
         if (ReflexSave(oTarget, GetSpellSaveDC()))
         {
             nDamage = nDamage/2;

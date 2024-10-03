@@ -62,3 +62,4 @@ void main()
     //ActionCastSpellAtObject(spellID, otarget, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
     //May need to change Action Cast Spells to change which classtype to use
 }
+

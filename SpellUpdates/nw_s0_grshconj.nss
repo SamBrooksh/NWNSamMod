@@ -14,6 +14,7 @@
 //:: Created On: April 12, 2001
 //:://////////////////////////////////////////////
 
+#include "sm_spellfunc"
 void ShadowBolt (object oTarget, int nMetaMagic);
 
 void main()
@@ -74,6 +75,16 @@ void ShadowBolt (object oTarget, int nMetaMagic)
     int nDamage;
     int nBolts = GetCasterLevel(OBJECT_SELF)/5;
     int nCnt;
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     for (nCnt = 0; nCnt < nBolts; nCnt++)
     {
         int nDam = d6(3);
@@ -86,6 +97,10 @@ void ShadowBolt (object oTarget, int nMetaMagic)
 		{
 			nDamage = nDamage + nDamage/2; //Damage/Healing is +50%
 		}
+        if (spellReaction)
+        {
+            nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+        }
         if (ReflexSave(oTarget, GetSpellSaveDC()))
         {
             nDamage = nDamage/2;

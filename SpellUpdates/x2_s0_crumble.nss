@@ -18,6 +18,7 @@
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "X2_i0_spells"
+#include "sm_spellfunc"
 
 void DoCrumble (int nDam, object oCaster, object oTarget);
 
@@ -45,6 +46,7 @@ void main()
     int  nType      = GetObjectType(oTarget);
     int  nRacial    = GetRacialType(oTarget);
     int  nMetaMagic = GetMetaMagicFeat();
+    
 
     //Minimum caster level of 1, maximum of 15.
     if(nCasterLvl == 0)
@@ -69,6 +71,15 @@ void main()
     {
         return;
     }
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 
     int nDam = d6(nCasterLvl);
 
@@ -80,6 +91,10 @@ void main()
     if (nMetaMagic == METAMAGIC_EMPOWER)
     {
         nDam = nDam + nDam/2;
+    }
+    if (spellReaction)
+    {
+        nDam = FloatToInt(IntToFloat(nDam) * SPELL_REACTION_MULTIPLIER);
     }
     
     if (nDam>0)

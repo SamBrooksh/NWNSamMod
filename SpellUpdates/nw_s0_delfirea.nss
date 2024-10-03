@@ -18,6 +18,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -35,9 +36,20 @@ void main()
     {
         nCasterLevel = 20;
     }
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     effect eDam;
     effect eExplode = EffectVisualEffect(VFX_FNF_FIREBALL);
     effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
+    
     //Check the faction of the entering object to make sure the entering object is not in the casters faction
     if(nFire == 0)
     {
@@ -65,6 +77,10 @@ void main()
                         else if (nMetaMagic == METAMAGIC_EMPOWER)
                         {
                             nDamage = nDamage + (nDamage/2);//Damage/Healing is +50%
+                        }
+                        if (spellReaction)
+                        {
+                            nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                         }
                         //Change damage according to Reflex, Evasion and Improved Evasion
                         nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, GetAreaOfEffectCreator());

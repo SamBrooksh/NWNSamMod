@@ -20,6 +20,7 @@ float SpellDelay (object oTarget, int nShape);
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellconsts"
 
 void main()
 {
@@ -53,6 +54,16 @@ void main()
     {
         nCasterLevel = 15;
     }
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 11.0, lTargetLocation, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     //Cycle through the targets within the spell shape until an invalid object is captured.
@@ -80,6 +91,10 @@ void main()
         		    else if (nMetaMagic == METAMAGIC_EMPOWER)
         		    {
         			     nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
+                    }
+                    if (spellReaction)
+                    {
+                        nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                     }
                     //Adjust damage according to Reflex Save, Evasion or Improved Evasion
                     nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_COLD);

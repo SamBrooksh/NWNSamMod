@@ -19,6 +19,7 @@
 #include "X0_I0_SPELLS"
 
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -64,6 +65,15 @@ void main()
     if (nMetaMagic == METAMAGIC_EMPOWER)
     {
         nHD = nHD + (nHD/2); //Damage/Healing is +50%
+    }
+    //Adding Eldritch Knight Spell double damage chance
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            nHD = nHD * SPELL_REACTION_MULTIPLIER;
+        }
     }
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eFNF, GetSpellTargetLocation());
     //Check for at least one valid object to start the main loop

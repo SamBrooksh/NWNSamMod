@@ -31,6 +31,7 @@
 #include "x2_inc_switches"
 #include "x2_inc_itemprop"
 #include "x0_i0_henchman"
+#include "sm_spellfunc"
 
 // * Constants
 // * see spellsIsTarget for a definition of these constants
@@ -119,12 +120,12 @@ void DoCaltropEffect(object oTarget);
 void DoTrapSpike(int nDamage);
 
 //* fires a storm of nCap missiles at targets in area
-void DoMissileStorm(int nD6Dice, int nCap, int nSpell, int nMIRV = VFX_IMP_MIRV, int nVIS = VFX_IMP_MAGBLUE, int nDAMAGETYPE = DAMAGE_TYPE_MAGICAL, int nONEHIT = FALSE, int nReflexSave = FALSE);
+void DoMissileStorm(int nD6Dice, int nCap, int nSpell, int nMIRV = VFX_IMP_MIRV, int nVIS = VFX_IMP_MAGBLUE, int nDAMAGETYPE = DAMAGE_TYPE_MAGICAL, int nONEHIT = FALSE, int nReflexSave = FALSE, int spellReaction = FALSE);
 
 // * Applies ability score damage
 void DoDirgeEffect(object oTarget);
 
-void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, int vfx_impactHurt, int vfx_impactHeal, int nSpellID);
+void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, int vfx_impactHurt, int vfx_impactHeal, int nSpellID, int spellReaction = FALSE);
 
 // * improves an animal companion or summoned creature's attack and damage and the ability to hit
 // * magically protected creatures
@@ -569,7 +570,7 @@ void DoSpikeGrowthEffect(object oTarget)
 //:: Created On:
 //:://////////////////////////////////////////////
 
-void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, int vfx_impactHurt, int vfx_impactHeal, int nSpellID)
+void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, int vfx_impactHurt, int vfx_impactHeal, int nSpellID, int spellReaction = FALSE)
 {
     //Declare major variables
     object oTarget = GetSpellTargetObject();
@@ -591,6 +592,10 @@ void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, 
     if (nMetaMagic == METAMAGIC_EMPOWER)
     {
         nDamage = nDamage + (nDamage / 2);
+    }
+    if (spellReaction)
+    {
+        nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
     }
 
 
@@ -650,7 +655,7 @@ void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, 
 //:://////////////////////////////////////////////
 //:: Modified March 14 2003: Removed the option to hurt chests/doors
 //::  was potentially causing bugs when no creature targets available.
-void DoMissileStorm(int nD6Dice, int nCap, int nSpell, int nMIRV = VFX_IMP_MIRV, int nVIS = VFX_IMP_MAGBLUE, int nDAMAGETYPE = DAMAGE_TYPE_MAGICAL, int nONEHIT = FALSE, int nReflexSave = FALSE)
+void DoMissileStorm(int nD6Dice, int nCap, int nSpell, int nMIRV = VFX_IMP_MIRV, int nVIS = VFX_IMP_MAGBLUE, int nDAMAGETYPE = DAMAGE_TYPE_MAGICAL, int nONEHIT = FALSE, int nReflexSave = FALSE, spellReaction = FALSE)
 {
     object oTarget = OBJECT_INVALID;
     int nCasterLvl = GetCasterLevel(OBJECT_SELF);
@@ -763,6 +768,10 @@ void DoMissileStorm(int nD6Dice, int nCap, int nSpell, int nMIRV = VFX_IMP_MIRV,
                         if (nMetaMagic == METAMAGIC_EMPOWER)
                         {
                               nDam = nDam + nDam/2; //Damage/Healing is +50%
+                        }
+                        if (spellReaction)
+                        {
+                            nDam = FloatToInt(IntToFloat(nDam) * SPELL_REACTION_MULTIPLIER);
                         }
                         // Jan. 29, 2004 - Jonathan Epp
                         // Reflex save was not being calculated for Firebrand

@@ -15,6 +15,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -66,6 +67,16 @@ void main()
 
     effect eGood = EffectLinkEffects(eStr, eDur);
     effect eBad = EffectLinkEffects(eStr_Low, eDur2);
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetSpellTargetLocation();
@@ -88,6 +99,10 @@ void main()
                 else if (nMetaMagic == METAMAGIC_EMPOWER)
             {
                nDamage = nDamage + (nDamage / 2);
+            }
+            if (spellReaction)
+            {
+                nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
             }
             if(MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NEGATIVE, OBJECT_SELF, fDelay))
             {

@@ -23,6 +23,7 @@
 
 #include "x2_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 
 void main()
@@ -51,6 +52,15 @@ void main()
     effect   eDam;
     object   oLastValid;
     effect   eStun = EffectLinkEffects(EffectVisualEffect(VFX_IMP_STUN),EffectStunned());
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 
     //--------------------------------------------------------------------------
     // Calculate Damage Dice. 1d per 2 caster levels, max 5d
@@ -105,6 +115,10 @@ void main()
             {
 
                 nPotential = MaximizeOrEmpower(6, nNumDice, nMetaMagic);
+                if (spellReaction)
+                {
+                    nPotential = FloatToInt(IntToFloat(nPotential) * SPELL_REACTION_MULTIPLIER);
+                }
                 nDamage    = GetReflexAdjustedDamage(nPotential, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ELECTRICITY);
 
                 //--------------------------------------------------------------

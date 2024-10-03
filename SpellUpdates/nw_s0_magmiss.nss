@@ -19,6 +19,7 @@
 
 #include "NW_I0_SPELLS"    
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -52,6 +53,16 @@ void main()
     float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);
     float fDelay = fDist/(3.0 * log(fDist) + 2.0);
     float fDelay2, fTime;
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 	if(!GetIsReactionTypeFriendly(oTarget))
 	{
         //Fire cast spell at event for the specified target
@@ -78,6 +89,10 @@ void main()
     	        {
     		          nDam = nDam + nDam/2; //Damage/Healing is +50%
     	        }
+                if (spellReaction)
+                {
+                    nDam = FloatToInt(IntToFloat(nDam) * SPELL_REACTION_MULTIPLIER);
+                }
                 fTime = fDelay;
                 fDelay2 += 0.1;
                 fTime += fDelay2;

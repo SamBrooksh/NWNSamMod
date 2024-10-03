@@ -15,6 +15,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -38,6 +39,16 @@ void main()
         {
             //Roll Damage
             nDamage = d20();
+            //Adding Eldritch Knight Spell double damage chance
+            int spellReaction = FALSE;
+            if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+            {
+                if (d20(1) == 20)
+                {
+                    SpeakString("Spell Reaction!", 1);
+                    nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+                }
+            }
             //Set Damage Effect with the modified damage
             eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING);
             //Apply damage and visuals

@@ -16,13 +16,10 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
-
-
-
-
     //Declare major variables
     object oTarget = GetEnteringObject();
     effect eDam;
@@ -48,6 +45,15 @@ void main()
         else if (nMetaMagic == METAMAGIC_EMPOWER)
         {
             nDamage = nDamage + (nDamage/2);
+        }
+        //Adding Eldritch Knight Spell double damage chance
+        if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+        {
+            if (d20(1) == 20)
+            {
+                SpeakString("Spell Reaction!", 1);
+                nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+            }
         }
         //Make SR Check
         if (!MyResistSpell(GetAreaOfEffectCreator(), oTarget) )

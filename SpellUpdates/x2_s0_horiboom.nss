@@ -19,6 +19,7 @@
 #include "NW_I0_SPELLS"
 #include "x0_i0_spells"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -56,6 +57,15 @@ void main()
     {
         nCasterLvl = 5;
     }
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
     {
         if(!MyResistSpell(OBJECT_SELF, oTarget))
@@ -72,6 +82,10 @@ void main()
             if (nMetaMagic == METAMAGIC_EMPOWER)
             {
                 nDam = nDam + nDam/2; //Damage/Healing is +50%
+            }
+            if (spellReaction)
+            {
+                nDam = FloatToInt(IntToFloat(nDam) * SPELL_REACTION_MULTIPLIER);
             }
             //Set damage effect
             effect eDam = EffectDamage(nDam, DAMAGE_TYPE_SONIC);

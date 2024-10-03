@@ -16,6 +16,7 @@
 
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -44,6 +45,15 @@ void main()
     int nMetaMagic = GetMetaMagicFeat();
     int nCnt;
     effect eVis = EffectVisualEffect(VFX_IMP_ACID_S);
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 
 	if(!GetIsReactionTypeFriendly(oTarget))
 	{
@@ -74,6 +84,10 @@ void main()
                     nBonus = 5;
                 }
                 nDam = nDam + nBonus;
+                if (spellReaction)
+                {
+                    nDam = FloatToInt(IntToFloat(nDam) * SPELL_REACTION_MULTIPLIER);
+                }
                 effect eDam = EffectDamage(nDam, DAMAGE_TYPE_MAGICAL);
                 ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
                 ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget);

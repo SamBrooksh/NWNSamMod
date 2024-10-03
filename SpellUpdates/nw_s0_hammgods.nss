@@ -15,6 +15,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -50,6 +51,16 @@ void main()
     effect eVis = EffectVisualEffect(VFX_IMP_DIVINE_STRIKE_HOLY);
     effect eStrike = EffectVisualEffect(VFX_FNF_STRIKE_HOLY);
     float fDelay;
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     int nDamageDice = nCasterLvl/2;
     if(nDamageDice == 0)
     {
@@ -85,6 +96,10 @@ void main()
 	            else if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
                     nDamage = FloatToInt( IntToFloat(nDamage) * 1.5 );
+                }
+                if (spellReaction)
+                {
+                    nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                 }
                 //Make a will save for half damage and negation of daze effect
                 if (MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE, OBJECT_SELF, 0.5))

@@ -52,6 +52,16 @@ void main()
     {
         nCasterLvl = 25;
     }
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     //Apply the horrid wilting explosion at the location captured above.
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eExplode, lTarget);
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
@@ -80,6 +90,10 @@ void main()
                     else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {
                        nDamage = nDamage + nDamage / 2;
+                    }
+                    if (spellReaction)
+                    {
+                        nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                     }
                     if(/*Fort Save*/ MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, OBJECT_SELF, fDelay))
                     {

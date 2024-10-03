@@ -21,6 +21,7 @@
 
 #include "NW_I0_SPELLS"    
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -52,6 +53,16 @@ void main()
     effect eDam;
     effect eVis = EffectVisualEffect(VFX_IMP_SUNSTRIKE);
     effect eRay = EffectBeam(VFX_BEAM_HOLY, OBJECT_SELF, BODY_NODE_HAND);
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 	if(!GetIsReactionTypeFriendly(oTarget))
 	{
         //Fire cast spell at event for the specified target
@@ -101,6 +112,10 @@ void main()
             if (nMetaMagic == METAMAGIC_EMPOWER)
             {
                 nDamage = nDamage + (nDamage/2);
+            }
+            if (spellReaction)
+            {
+                nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
             }
             //Set the damage effect
             eDam = EffectDamage(nDamage, DAMAGE_TYPE_DIVINE);

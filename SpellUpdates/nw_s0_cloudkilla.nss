@@ -15,6 +15,7 @@
 //:://////////////////////////////////////////////
 
 #include "X0_I0_SPELLS"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -43,6 +44,15 @@ void main()
     else if (nMetaMagic == METAMAGIC_EMPOWER)
     {
         nDam =  nDam + (nDam/2); //Damage/Healing is +50%
+    }
+    //Adding Eldritch Knight Spell double damage chance
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetEffectCreator()))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            nDam = FloatToInt(IntToFloat(nDam) * SPELL_REACTION_MULTIPLIER);
+        }
     }
     eDam = EffectDamage(nDam, DAMAGE_TYPE_ACID);
     if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE , GetAreaOfEffectCreator()) )

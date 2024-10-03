@@ -1,5 +1,6 @@
 const int CLASS_MAX = 8;
 const int FEAT_SPELL_REACTION = 1149;
+const float SPELL_REACTION_MULTIPLIER = 2;
 
 //Return TRUE if is an arcane class 
 int SM_isArcane(int class)

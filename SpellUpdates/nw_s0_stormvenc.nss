@@ -14,13 +14,39 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
-
+#include "sm_spellfunc"
 void main()
 {
 
     //Declare major variables
-    effect eAcid = EffectDamage(d6(3), DAMAGE_TYPE_ACID);
-    effect eElec = EffectDamage(d6(6), DAMAGE_TYPE_ELECTRICAL);
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
+    effect eAcid;
+    if (spellReaction)
+    {
+        eAcid = EffectDamage(FloatToInt(IntToFloat(d6(3)) * SPELL_REACTION_CRITICAL), DAMAGE_TYPE_ACID);
+    }
+    else 
+    {
+        eAcid = EffectDamage(d6(3), DAMAGE_TYPE_ACID);
+    }
+
+    effect eElec;
+    if (spellReaction)
+    {
+        eElec = EffectDamage(FloatToInt(IntToFloat(d6(6)) * SPELL_REACTION_MULTIPLIER), DAMAGE_TYPE_ELECTRICAL);
+    }
+    else
+    {
+        eElec = EffectDamage(d6(6), DAMAGE_TYPE_ELECTRICAL);
+    }
     effect eStun = EffectStunned();
     effect eVisAcid = EffectVisualEffect(VFX_IMP_ACID_S);
     effect eVisElec = EffectVisualEffect(VFX_IMP_LIGHTNING_M);

@@ -45,6 +45,16 @@ void main()
     effect eDam;
     effect eVis = EffectVisualEffect(VFX_IMP_DEATH);
     effect eVis2 = EffectVisualEffect(VFX_IMP_SONIC);
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     if(!GetIsReactionTypeFriendly(oTarget))
     {
         //Fire cast spell at event for the specified target
@@ -75,6 +85,10 @@ void main()
                          if (nMetaMagic == METAMAGIC_EMPOWER)
                          {
                             nDamage = FloatToInt( IntToFloat(nDamage) * 1.5 );
+                         }
+                         if (spellReaction)
+                         {
+                            nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                          }
                          //Set the damage property
                          eDam = EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL);

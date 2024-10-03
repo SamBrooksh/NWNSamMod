@@ -16,6 +16,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -54,6 +55,16 @@ void main()
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(OBJECT_SELF), OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     //Cycle through the targets within the spell shape until an invalid object is captured.
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     while(GetIsObjectValid(oTarget))
     {
         //This spell smites everyone who is more than 2 meters away from the caster.
@@ -77,6 +88,10 @@ void main()
                       else if (nMetaMagic == METAMAGIC_EMPOWER)
                       {
                          nDamage = nDamage + (nDamage/2);//Damage/Healing is +50%
+                      }
+                      if (spellReaction)
+                      {
+                        nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                       }
                       //Save versus both holy and fire damage
                       nDamage2 = GetReflexAdjustedDamage(nDamage/2, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DIVINE);

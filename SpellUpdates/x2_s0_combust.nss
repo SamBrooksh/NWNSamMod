@@ -26,6 +26,7 @@
 #include "x2_I0_SPELLS"
 #include "x2_inc_toollib"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void RunCombustImpact(object oTarget, object oCaster, int nLevel, int nMetaMagic);
 
@@ -53,7 +54,15 @@ void main()
     int nDC = GetSpellSaveDC();
     int nLevel = GetCasterLevel(OBJECT_SELF);
 
-
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     //--------------------------------------------------------------------------
     // Calculate the damage, 2d6 + casterlevel, capped at +10
     //--------------------------------------------------------------------------
@@ -74,6 +83,11 @@ void main()
         {
             nDamage = nDamage + (nDamage/2);//Damage/Healing is +50%
         }
+    }
+
+    if (spellReaction)
+    {
+        nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
     }
 
     //--------------------------------------------------------------------------

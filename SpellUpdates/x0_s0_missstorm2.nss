@@ -15,6 +15,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -35,9 +36,18 @@ void main()
 
 // End of Spell Cast Hook
 
+    
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
 
-
-    DoMissileStorm(2, 20, SPELL_ISAACS_GREATER_MISSILE_STORM);
+    DoMissileStorm(2, 20, SPELL_ISAACS_GREATER_MISSILE_STORM, VFX_IMP_MIRV, VFX_IMP_MAGBLUE, DAMAGE_TYPE_MAGICAL, FALSE, FALSE, spellReaction);
 }
 
 

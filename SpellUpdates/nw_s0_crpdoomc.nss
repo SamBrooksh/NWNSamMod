@@ -15,6 +15,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -44,7 +45,16 @@ void main()
         return;
     }
 
-
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     //Get first target in spell area
     oTarget = GetFirstInPersistentObject();
     while(GetIsObjectValid(oTarget) && nDamCount < 1000)
@@ -61,8 +71,18 @@ void main()
                 SignalEvent(oTarget,EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_CREEPING_DOOM));
                 //Roll Damage
                 nDamage = d6(nSwarm);
-                //Set Damage Effect with the modified damage
-                eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING);
+                if (spellReaction)
+                {
+                    
+                    //Set Damage Effect with the modified damage, but not count it for the total
+                    eDam = EffectDamage(FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER), DAMAGE_TYPE_PIERCING);
+                }
+                else
+                {
+                    //Set Damage Effect with the modified damage
+                    eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING);    
+                } 
+                
                 //Apply damage and visuals
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));

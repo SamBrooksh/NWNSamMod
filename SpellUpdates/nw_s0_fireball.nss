@@ -20,6 +20,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -52,6 +53,16 @@ void main()
     effect eDam;
     //Get the spell target location as opposed to the spell target.
     location lTarget = GetSpellTargetLocation();
+    //Adding Eldritch Knight Spell double damage chance
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     //Limit Caster level for the purposes of damage
     if (nCasterLvl > 10)
     {
@@ -84,6 +95,10 @@ void main()
         	        else if (nMetaMagic == METAMAGIC_EMPOWER)
                     {
                        nDamage = nDamage + nDamage / 2;
+                    }
+                    if (spellReaction)
+                    {
+                        nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                     }
                     //Adjust the damage based on the Reflex Save, Evasion and Improved Evasion.
                     nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE);

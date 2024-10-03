@@ -17,6 +17,7 @@
 //:: Last Updated By:
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -37,12 +38,21 @@ void main()
 
 // End of Spell Cast Hook
 
-
+    
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     int nDamage =  GetCasterLevel(OBJECT_SELF);
     if (nDamage > 15)
         nDamage = 15;
 
-    DoMissileStorm(nDamage, 15, SPELL_FIREBRAND, VFX_IMP_MIRV_FLAME, VFX_IMP_FLAME_M, DAMAGE_TYPE_FIRE, TRUE, TRUE);
+    DoMissileStorm(nDamage, 15, SPELL_FIREBRAND, VFX_IMP_MIRV_FLAME, VFX_IMP_FLAME_M, DAMAGE_TYPE_FIRE, TRUE, TRUE, spellReaction);
 }
 
 

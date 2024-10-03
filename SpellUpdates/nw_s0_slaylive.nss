@@ -14,6 +14,7 @@
 
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -72,6 +73,15 @@ void main()
                     if (nMetaMagic == METAMAGIC_EMPOWER)
                     {
                         nDamage = nDamage + (nDamage/2);
+                    }
+                    int spellReaction = FALSE;
+                    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+                    {
+                        if (d20(1) == 20)
+                        {
+                            SpeakString("Spell Reaction!", 1);
+                            nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+                        }
                     }
                     //Apply damage effect and VFX impact
                     eDam = EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE);

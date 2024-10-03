@@ -22,6 +22,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -57,10 +58,20 @@ void main()
     {
         nCasterLevel = 5;
     }
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.
     oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 10.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 
     //Cycle through the targets within the spell shape until an invalid object is captured.
+                
     while(GetIsObjectValid(oTarget))
     {
         if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
@@ -83,6 +94,12 @@ void main()
     		    {
     			     nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
     		    }
+                //Adding Eldritch Knight Spell double damage chance
+                if (spellReaction)
+                {
+                    SpeakString("Spell Reaction!", 1);
+                    nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+                }
                 //Run the damage through the various reflex save and evasion feats
                 nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE);
                 eFire = EffectDamage(nDamage, DAMAGE_TYPE_FIRE);

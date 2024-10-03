@@ -116,7 +116,6 @@ Probably do at like 4 and 8 - something to help at least
 
 # Eldritch Knight
 # TODO
-Finish Sorting the Spells into categories - Edit the onequip/onunequip scripts to manage ability
 Mod spells to make possible for crits
 ### Prerequisites
 #### Alignment

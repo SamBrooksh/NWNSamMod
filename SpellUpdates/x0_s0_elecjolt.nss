@@ -13,6 +13,7 @@
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
+#include "sm_spellfunc"
 
 void main()
 {
@@ -47,7 +48,18 @@ void main()
         if(!MyResistSpell(OBJECT_SELF, oTarget))
         {
             //Set damage effect
-            effect eBad = EffectDamage(MaximizeOrEmpower(3, 1, GetMetaMagicFeat()), DAMAGE_TYPE_ELECTRICAL);
+            effect eBad;
+            if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+            {
+                if (d20(1) == 20)
+                {
+                    SpeakString("Spell Reaction!", 1);
+                    eBad = EffectDamage(FloatToInt(IntToFloat(MaximizeOrEmpower(3, 1, GetMetaMagicFeat())) * SPELL_REACTION_MULTIPLIER), DAMAGE_TYPE_ELECTRICAL);
+                }
+            }
+            else {
+                eBad = EffectDamage(MaximizeOrEmpower(3, 1, GetMetaMagicFeat()), DAMAGE_TYPE_ELECTRICAL);
+            }
             //Apply the VFX impact and damage effect
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
             ApplyEffectToObject(DURATION_TYPE_INSTANT, eBad, oTarget);

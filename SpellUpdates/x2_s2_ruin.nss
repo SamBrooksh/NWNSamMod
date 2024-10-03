@@ -15,6 +15,7 @@
 #include "x2_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "x0_I0_SPELLS"
+#include "sm_spellfunc"
 void main()
 {
 
@@ -42,6 +43,16 @@ void main()
     float fDelay = fDist/(3.0 * log(fDist) + 2.0);
 
     int nSpellDC = GetEpicSpellSaveDC(OBJECT_SELF);
+    int spellReaction = FALSE;
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
+    {
+        if (d20(1) == 20)
+        {
+            SpeakString("Spell Reaction!", 1);
+            spellReaction = TRUE;
+        }
+    }
+
 
     if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
     {
@@ -50,6 +61,10 @@ void main()
         //Roll damage
         int nDam = d6(35);
         //Set damage effect
+        if (spellReaction)
+        {
+            nDam = FloatToInt(IntToFloat(nDam) * SPELL_REACTION_MULTIPLIER);
+        }
 
         if (MySavingThrow(SAVING_THROW_FORT,oTarget,nSpellDC,SAVING_THROW_TYPE_SPELL,OBJECT_SELF) != 0 )
         {

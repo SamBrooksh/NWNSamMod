@@ -22,9 +22,9 @@
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 #include "x2_i0_spells"
-#include "sm_spellfuncs"
+#include "sm_spellfunc"
 
-void RunImpact(object oTarget, object oCaster, int nMetamagic);
+void RunImpact(object oTarget, object oCaster, int nMetamagic, int spellReaction);
 
 void main()
 {
@@ -95,15 +95,15 @@ void main()
             // Do the initial 3d6 points of damage
             //----------------------------------------------------------------------
             int nDamage = MaximizeOrEmpower(6,3,nMetaMagic);
-            int spellCritical = 0;
+            int spellReaction = FALSE;
             //Allow Eldritch Knight, and others technically to deal bonus damage every once in a while with spells
             if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
             {
                 if (d20(1) == 20)
                 {
                     SpeakString("Spell Reaction!", 1);
-                    spellCritical = 1;
-                    nDamage = nDamage * 2;
+                    spellReaction = TRUE;
+                    nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
                 }
             }
             effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
@@ -115,7 +115,7 @@ void main()
             //----------------------------------------------------------------------
             DelayCommand(fDelay,ApplyEffectToObject(DURATION_TYPE_TEMPORARY,eDur,oTarget,RoundsToSeconds(nDuration)));
             object oSelf = OBJECT_SELF; // because OBJECT_SELF is a function
-            DelayCommand(6.0f,RunImpact(oTarget, oSelf,nMetaMagic,spellCritical));
+            DelayCommand(6.0f,RunImpact(oTarget, oSelf,nMetaMagic,spellReaction));
         }
         else
         {
@@ -131,7 +131,7 @@ void main()
 }
 
 
-void RunImpact(object oTarget, object oCaster, int nMetaMagic, int spellCritical=FALSE)
+void RunImpact(object oTarget, object oCaster, int nMetaMagic,spellReaction=FALSE)
 {
     //--------------------------------------------------------------------------
     // Check if the spell has expired (check also removes effects)
@@ -147,15 +147,15 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic, int spellCritical
         // Calculate Damage
         //----------------------------------------------------------------------
         int nDamage = MaximizeOrEmpower(6,1,nMetaMagic);
-        if (spellCritical == TRUE)
+        if (spellReaction == TRUE)
         {
-            nDamage = nDamage * 2;
+            nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
         }
         effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
         effect eVis = EffectVisualEffect(VFX_IMP_ACID_S);
         eDam = EffectLinkEffects(eVis,eDam); // flare up
         ApplyEffectToObject (DURATION_TYPE_INSTANT,eDam,oTarget);
-        DelayCommand(6.0f,RunImpact(oTarget,oCaster,nMetaMagic));
+        DelayCommand(6.0f,RunImpact(oTarget,oCaster,nMetaMagic,spellReaction));
     }
 }
 

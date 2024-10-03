@@ -13,6 +13,7 @@
 //:://////////////////////////////////////////////
 //:: March 2003: Removed movement speed penalty
 #include "X0_I0_SPELLS"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -49,6 +50,15 @@ void main()
                 if (nMetaMagic == METAMAGIC_EMPOWER)
                 {
                      nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
+                }
+                //Adding Eldritch Knight Spell double damage chance
+                if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+                {
+                    if (d20(1) == 20)
+                    {
+                        SpeakString("Spell Reaction!", 1);
+                        nDamage = FloatToInt(IntToFloat(nDamage) * SPELL_REACTION_MULTIPLIER);
+                    }
                 }
             //Adjust damage for Reflex Save, Evasion and Improved Evasion
             nDamage = GetReflexAdjustedDamage(nDamage, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_FIRE, GetAreaOfEffectCreator());
