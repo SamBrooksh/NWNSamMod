@@ -2,7 +2,7 @@
 Duelist
 Mystic Theurge
 Eldritch Knight
-Updating Arcane Archer to increase Arcane Spell usage
+Updating Arcane Archer to increase Arcane Spell usage - Also get new spells (should be able to add that to all when done)
 
 Then I will make my own with custom stuff completely
 # Other Changes
@@ -15,7 +15,7 @@ Saving Throw As well
 Find more Icons
 
 Modify nwscript.nss so that I can make it do getcasterlevel properly
-It may be better to create a new function for getcasterlevel(which) so it can get total of Divine or Arcane (or any other is I were to make it, or both for overlapping spells) 
+It may be better to create a new function for getcasterlevel(which) so it can get total of Divine or Arcane (or any other is I were to make it, or both for overlapping spells) - I think doing this will be smarter
 This would allow for the modification of all the other spells rather easily - looks like may need to account for level loss as well?
 Should also add a metamagic function (one that applies all metamagic stuff) - would actually be a couple - one for each effect change I believe
 
@@ -59,8 +59,7 @@ Should be Elaborate Defense (which is sorta lame)
 Deflect Arrows - Requires a light or one handed piercing weapon (Check to see if can add deflect arrows to be able to do that - Looks like can just give deflect arrows)
 No Retreat - Maybe an Additional BAB increase? (Should be force enemies to provoke an attack... Seems doubtful to be able to occur)
 #### 10th Level
-Crippling Critical - Able to deal a penalty to target on crit (reduce speed to 10ft, 1d4 STR or DEX dmg, -4 to saving throws, -4 penalty to AC, or 2d6 bleed dmg - last 1 minute) - Probably should use some radial option to choose which one to be used in general. And then have it trigger in the onhit script as well - can't do it on critical so something similar to the spell critical
-
+Crippling Critical - Able to deal a penalty to target on crit (reduce speed to 10ft, 1d4 STR or DEX dmg, -4 to saving throws, -4 penalty to AC, or 2d6 bleed dmg - last 1 minute) - Probably should use some radial option to choose which one to be used in general. Should be able to with NWNX
 
 ### Bonus Feats
 8th Level only I think
@@ -82,17 +81,21 @@ Design Abilities - Maybe make the divine/arcane spells manually at a higher leve
 Able to cast 2nd level divine and arcane spells - May need to change, sounds like you can't do the divine spell requirement easily, and probably won't be able to do it 
 Will be Level 2 Arcane caster, and then Cleric, Druid, and able to cast level 3 spells - so technically could be lvl5 wiz, lvl1 cleric
 Can't get it any closer though - And add Lore 8 just to make sure they are at least level 5
+
 #### Alignment
 Any
+
 #### Skills
 Lore 8 Ranks
+
 ### Class Skills
 2 + INT
 Lore, Spellcraft, Heal, Concentration, Appraise, Crafts (ADD MORE)
+
 ### BAB Rate
 Slow
-### Abilities
 
+### Abilities
 May give bonus feats every other level instead of combined spells?
 Also will want to a on level up script that starts a dialog with the player that lets them learn a spell for their arcane classes I think...
 #### 1st Level
@@ -107,16 +110,18 @@ Combined Spells - Allow spells to learn from other?
 #### 9th Level
 #### 10th Level
 Spell Synthesis - Somehow need to let creation of putting two spells into one? (And then make it so it can go up a level every other level)
-May need to do as ability, then choose two spells somehow as well - I think I should be able to do this one using the castactionspell with instant spell on - probably will need a dummy feat or two?
+May need to do as ability, then choose two spells somehow as well - I think I should be able to do this one using the castactionspell with instant spell on - probably will need a dummy feat or two? - this will probably be a hassle
 ### Bonus Feats
 Probably do at like 4 and 8 - something to help at least
 
 ### Stats
-
+Maybe bonuses to INT/CHA/WIS?
 
 # Eldritch Knight
 # TODO
-Mod spells to make possible for crits
+Create Menu for Spell Reaction
+Create NWNX effects to let Sorcerer and Wizard learn spells when leveling up
+
 ### Prerequisites
 #### Alignment
 Any
@@ -147,18 +152,16 @@ STR/DEX UP
 #### 8th Level
 Bonus Feat
 #### 9th Level
-Spell's can deal critical damage (double damage) -Maybe - Calling it Spell Reaction for now
+Spell's can deal critical damage (double damage) -Maybe- Calling it Spell Reaction for now
 #### 10th Level
-Spell Critical - Looks Like should be possible with spell hooks... maybe - Should be quite doable with NWNX, but also needs to manage the spells that create other spells appropriately - That may harder to manage (so start with just getting magic missile to work, then delayed fireball - and that should be enough I think?)
+Spell Critical - Looks Like should be possible with spell hooks... maybe - Should be quite doable with NWNX, but also needs to manage the spells that create other spells appropriately - That may harder to manage (so start with just getting magic missile to work, then delayed fireball - and that should be enough I think? -Maybe not needed actually)
 ### Bonus Feats
 At 1st, 5th and 8th (So that 9th gets Spell critical instead)
 ### Stats
 I think increases to str/dex and int/cha both by 1, just twice
 ## Scripts Needed
-Spellhook like script - essentially make a check to try and modify spell damage - Will need to place in all spells right before reducing it or the like. Will need to modify quite a bit (just like adding maximize metamagic) - I think a spell critical would affect all - so for AOE's need to add check for crit - so two functions really.
 Technically spell critical is on making a critical, cast a spell - so I may make a level 9 do the potential double damage, and then a script on level 10 try to cast a predefined spell on a critical
-Modify all spells to handle the random chance of critical's (Have it as a feat)
-So - Feat that allows for choosing a spell to cast on 1/20 (beneficials will be on self, bad on enemy) - choosing the feat in the radial menu will start a dialog asking what type spell to choose (with the list of known possible spells)
+So - Feat that allows for choosing a spell to cast on crits (beneficials will be on self, bad on enemy) - choosing the feat in the radial menu will start a dialog asking what type spell to choose (with the list of known possible spells)
 First need to test if there is an instant cast of spell scripts - closeish, should be effective enough I think
 
 # Void Scarred
@@ -205,7 +208,7 @@ Void Assimilation - Reduce the Penalty of summoning a clone
 #### 12nd Level
 Curse (Consumed by Void) - Clone attempts to Void Curse on hit (lower DC), player can activate it 3+INT number of times
 #### 13rd Level
-Void Hop = Short Range Teleport (Essentially Spell - with small penalty) 1 + INT times
+Void Hop = Short Range Teleport (Essentially Spell - with small penalty) 1 + INT times - May rework
 Void Scorn - Target Debuff for a while (Clone has small chance to try and apply)
 #### 14th Level
 Reinvigorate - Remove Fading from target to get buffs
@@ -228,7 +231,7 @@ Empower Void CLone - Gives Flat HP bonus per time taken? LVL 3
 Extra Haste, Incorporeal, Invis (Maybe all in one) - 2 Extra? LVL 11
 Void Resist - Reduce Debuff from Void Clone LVL 3
 Void Missile - 1+INT uses like Magic Missle but void LVL 3
-Extra Void Missle - Gain 3 Charges LVL 5
+Extra Void Missle - Gain 3 Charges LVL 5 - currently doing it just in 2da, may need to change it so it doesn't change name
 Crackling Missiles - Void Missle applies Fading Debuff LVL 7
 Clone Copy - Clones cast Void missle (with all feats) as well LVL 13
 Null Missile - Void Missile applies Void Scorn LVL 13

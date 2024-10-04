@@ -1,6 +1,4 @@
-const int CLASS_MAX = 8;
-const int FEAT_SPELL_REACTION = 1149;
-const float SPELL_REACTION_MULTIPLIER = 2;
+#include "sm_consts"
 
 //Return TRUE if is an arcane class 
 int SM_isArcane(int class)
@@ -103,14 +101,50 @@ int SM_Maximize_Or_Empower(object oCaster, int feat, int damage, int max = 6)
         return max;
     if (feat == METAMAGIC_EMPOWER)
         return damage * 1.5;
-    return 0;
+    return damage;
 }
 
 //Returns the Extended amount of a spell if the extended feat
 //Should be able to call regardless
-int SM_Extended(object oCaster, int feat, int duration)
+float SM_Extended(object oCaster, int feat, float duration)
 {
     if (feat == METAMAGIC_EXTEND)
         return duration * 2.0;
     return duration;
 }
+
+//Used on rest to manually add modifier to uses for a specific feat?
+void SM_Increase_Uses_Per_Day(object oTarget)
+{
+    int chaMod = GetAbilityModifier(ABILITY_CHARISMA, oTarget);
+    int intMod = GetAbilityModifier(ABILITY_INTELLIGENCE, oTarget);
+
+    if (GetHasFeat(FEAT_VOID_MISSILE, oTarget))
+    {
+        int extra = GetHasFeat(FEAT_VOID_EXTRA_MISSILE, oTarget);
+        int uses = (extra * 3) + intMod + 1;
+        SetLocalInt(oTarget, "SM_VMISS_USES", uses);
+    }
+}
+
+//Put all on rest functions in here, so it is simple to add to the finished rest function
+void SM_Rest_Finished_Functions(object oSleeper)
+{
+    SM_Increase_Uses_Per_Day(oSleeper);
+}
+
+// Persistent Debuff 
+void SM_Void_Fading_Debuff()
+{}
+
+void SM_Void_Consumed_Debuff()
+{}
+
+void SM_Void_Scorned_Debuff()
+{}
+
+void SM_Void_Cursed_Strikes_Debuff()
+{}
+
+void SM_Fade_Out_Buff()
+{}

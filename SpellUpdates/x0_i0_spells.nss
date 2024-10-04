@@ -31,7 +31,7 @@
 #include "x2_inc_switches"
 #include "x2_inc_itemprop"
 #include "x0_i0_henchman"
-#include "sm_spellfunc"
+#include "sm_consts"
 
 // * Constants
 // * see spellsIsTarget for a definition of these constants
