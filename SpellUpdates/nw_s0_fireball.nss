@@ -55,7 +55,7 @@ void main()
     location lTarget = GetSpellTargetLocation();
     //Adding Eldritch Knight Spell double damage chance
     int spellReaction = FALSE;
-    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
     {
         if (d20(1) == 20)
         {

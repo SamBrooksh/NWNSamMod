@@ -227,7 +227,7 @@ Can Summon 2 Clones (Maybe?) - they get full HP, Full Stats, instead of decrease
 ### Bonus Feats Options
 Cursed Strikes - After Delay, deal massive damage - also increases Impending Void dmg to be 1d6+1d4 (Min Level 16)
 Gain more DR/Energy Resist (Min Level 10) - Void Strengthen
-Empower Void CLone - Gives Flat HP bonus per time taken? LVL 3
+Empower Void Clone - Gives Flat HP bonus per time taken? LVL 3
 Extra Haste, Incorporeal, Invis (Maybe all in one) - 2 Extra? LVL 11
 Void Resist - Reduce Debuff from Void Clone LVL 3
 Void Missile - 1+INT uses like Magic Missle but void LVL 3

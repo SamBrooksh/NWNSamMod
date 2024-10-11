@@ -1,4 +1,5 @@
 #include "sm_consts"
+#include "nw_i0_spells"
 
 //Return TRUE if is an arcane class 
 int SM_isArcane(int class)
@@ -118,12 +119,19 @@ void SM_Increase_Uses_Per_Day(object oTarget)
 {
     int chaMod = GetAbilityModifier(ABILITY_CHARISMA, oTarget);
     int intMod = GetAbilityModifier(ABILITY_INTELLIGENCE, oTarget);
-
-    if (GetHasFeat(FEAT_VOID_MISSILE, oTarget))
+    if (GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oTarget))  //Being a bit more efficient
     {
-        int extra = GetHasFeat(FEAT_VOID_EXTRA_MISSILE, oTarget);
-        int uses = (extra * 3) + intMod + 1;
-        SetLocalInt(oTarget, "SM_VMISS_USES", uses);
+        if (GetHasFeat(FEAT_VOID_MISSILE, oTarget))
+        {
+            int extra = GetHasFeat(FEAT_VOID_EXTRA_MISSILE, oTarget);
+            int vMissUses = (extra * 3) + intMod + 1;
+            SetLocalInt(oTarget, CONST_USES_VMISSILE, vMissUses);
+        }
+        if (GetHasFeat(FEAT_VOID_RIP, oTarget))
+        {
+            int vRipUses = 1 + intMod / 2;
+            SetLocalInt(oTarget, CONST_USES_VOID_RIP, vRipUses);
+        }
     }
 }
 
@@ -134,15 +142,16 @@ void SM_Rest_Finished_Functions(object oSleeper)
 }
 
 // Persistent Debuff 
-void SM_Void_Fading_Debuff(int rounds, object oTarget, object oCaster)
+void SM_Void_Fading_Debuff(object oTarget, object oCaster)
 {   
     int fading_div = 2;
-    if (GetIsDead(oTarget) || rounds < 1 || GetLocalInt(oTarget, CONST_VOID_FADING_DEBUFF))
+    string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
+    int remaining = GetLocalInt(oTarget, concatenate);
+    if (GetIsDead(oTarget) || remaining < 1)
     {
-        SetLocalInt(oTarget, CONST_VOID_FADING_DEBUFF, 0);
+        SetLocalInt(oTarget, concatenate, 0);
         return;
     }
-    SetLocalInt(oTarget, CONST_VOID_FADING_DEBUFF, 1);
     int dc = 10 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
     dc = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster) / fading_div;
 
@@ -153,44 +162,92 @@ void SM_Void_Fading_Debuff(int rounds, object oTarget, object oCaster)
         effect eVis = EffectVisualEffect(); //Find visuals for this
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        rounds = rounds + 1;    //This makes it so # of rounds successes are needed - May be too strong
     }
-
-    DelayCommand(RoundsToSeconds(1), SM_Void_Fading_Debuff(rounds - 1, oTarget, oCaster));
+    SetLocalInt(oTarget, concatenate, remaining - 1);
+    DelayCommand(RoundsToSeconds(1), SM_Void_Fading_Debuff(oTarget, oCaster));
 }
 
-
-void SM_Void_Consumed_Debuff(int rounds, object oTarget, object oCaster)
+void SM_Apply_Fading_Debuff(object oTarget, object oCaster, int rounds = 1)
 {
-    if (GetIsDead(oTarget) || rounds < 1 || GetLocalFloat(oTarget, CONST_VOID_CONSUMED_DEBUFF))
+    string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
+
+    if (GetLocalInt(oTarget, concatenate))
+    {   
+        //Should probably have something be said as well
+        //I think I'll just have it extend the duration
+        int current = GetLocalInt(oTarget, concatenate) + rounds;
+        SetLocalInt(oTarget, concatenate, current);
+        return;//Don't have it trigger twice as often
+    }
+    //Put in a VFX here as well
+    SetLocalInt(oTarget, concatenate, rounds);
+    DelayCommand(RoundsToSeconds(1), SM_Void_Fading_Debuff(oTarget, oCaster));
+}
+
+void SM_Void_Consumed_Debuff(object oTarget, object oCaster)
+{
+    string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
+    int curr = GetLocalInt(oTarget, concatenated);
+    if (GetIsDead(oTarget) || curr < 1)
     {
-        SetLocalInt(oTarget, CONST_VOID_CONSUMED_DEBUFF, 0);
+        //This may not work if target is dead...
+        SetLocalInt(oTarget, concatenated, 0);
         return;
     }
     int chance = 75;
     if (d100() > chance)
     {
-        //reapply
-        DelayCommand(RoundsToSeconds(1), SM_Void_Fading_Debuff(2, oTarget, oCaster));
+        //Apply the Fading Debuff for a single round
+        SM_Apply_Fading_Debuff(oTarget, oCaster, 1);
     }
     
-    DelayCommand(RoundsToSeconds(1), SM_Void_Consumed_Debuff(rounds - 1, oTarget, oCaster));
+    SetLocalInt(oTarget, concatenated, curr - 1);
+    DelayCommand(RoundsToSeconds(1), SM_Void_Consumed_Debuff(oTarget, oCaster));
 }
 
-void SM_Void_Scorned_Debuff()
+void SM_Apply_Void_Consumed(object oTarget, oCaster, int rounds = 1)
 {
-    if (GetIsDead(oTarget) || rounds < 1)
+    string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
+    int nDuration = GetLocalInt(oTarget, concatenated);
+    if (nDuration < 1)
+    {
+        DelayCommand(RoundsToSeconds(1), SM_Void_Consumed_Debuff(oTarget, oCaster));
+        //May remove this check, and then that should allow multiple people to hit and apply debuffs - it will spread the duration between them though
+        //That may be a bit fast though
+    }
+    SetLocalInt(oTarget, concatenated, nDuration + rounds);
+}
+
+void SM_Void_Scorned_Debuff(int rounds, object oTarget, object oCaster)
+{
+    string concatenated = CONST_VOID_SCORNED_DEBUFF + ObjectToString(oCaster);
+    int current = GetLocalInt(oTarget, concatenated);
+    if (GetIsDead(oTarget) || current < 1)
+    {
+        SetLocalInt(oTarget, concatenated, 0);
+        return;
+    }
+
+    DelayCommand(RoundsToSeconds(1), SM_Void_Scorned_Debuff(oTarget, oCaster));
+}
+
+void SM_Apply_Void_Scorned(object oTarget, object oCaster, int rounds = 1)
+{
+
+}
+
+void SM_Void_Cursed_Strikes_Debuff(object oTarget, object oCaster)
+{
+    //string concatenated = ;
+    if (GetIsDead(oTarget))
     {
         return;
     }
 }
-
-void SM_Void_Cursed_Strikes_Debuff()
+void SM_Apply_Cursed_Strikes(object oTarget, object oCaster, int rounds = 1)
 {
-    
-    if (GetIsDead(oTarget) || rounds < 1)
-    {
-        return;
-    }
+
 }
 
 void SM_Reinivigorated_Buff(object oCaster, object oTarget)
