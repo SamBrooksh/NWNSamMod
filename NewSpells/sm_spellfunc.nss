@@ -134,17 +134,82 @@ void SM_Rest_Finished_Functions(object oSleeper)
 }
 
 // Persistent Debuff 
-void SM_Void_Fading_Debuff()
-{}
+void SM_Void_Fading_Debuff(int rounds, object oTarget, object oCaster)
+{   
+    int fading_div = 2;
+    if (GetIsDead(oTarget) || rounds < 1 || GetLocalInt(oTarget, CONST_VOID_FADING_DEBUFF))
+    {
+        SetLocalInt(oTarget, CONST_VOID_FADING_DEBUFF, 0);
+        return;
+    }
+    SetLocalInt(oTarget, CONST_VOID_FADING_DEBUFF, 1);
+    int dc = 10 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
+    dc = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster) / fading_div;
 
-void SM_Void_Consumed_Debuff()
-{}
+    if (!MySavingThrow(SAVING_THROW_FORT, oTarget, dc, oCaster))
+    {
+        int nDamage = GetHitDice(oTarget);
+        effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
+        effect eVis = EffectVisualEffect(); //Find visuals for this
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+    }
+
+    DelayCommand(RoundsToSeconds(1), SM_Void_Fading_Debuff(rounds - 1, oTarget, oCaster));
+}
+
+
+void SM_Void_Consumed_Debuff(int rounds, object oTarget, object oCaster)
+{
+    if (GetIsDead(oTarget) || rounds < 1 || GetLocalFloat(oTarget, CONST_VOID_CONSUMED_DEBUFF))
+    {
+        SetLocalInt(oTarget, CONST_VOID_CONSUMED_DEBUFF, 0);
+        return;
+    }
+    int chance = 75;
+    if (d100() > chance)
+    {
+        //reapply
+        DelayCommand(RoundsToSeconds(1), SM_Void_Fading_Debuff(2, oTarget, oCaster));
+    }
+    
+    DelayCommand(RoundsToSeconds(1), SM_Void_Consumed_Debuff(rounds - 1, oTarget, oCaster));
+}
 
 void SM_Void_Scorned_Debuff()
-{}
+{
+    if (GetIsDead(oTarget) || rounds < 1)
+    {
+        return;
+    }
+}
 
 void SM_Void_Cursed_Strikes_Debuff()
-{}
+{
+    
+    if (GetIsDead(oTarget) || rounds < 1)
+    {
+        return;
+    }
+}
 
-void SM_Fade_Out_Buff()
-{}
+void SM_Reinivigorated_Buff(object oCaster, object oTarget)
+{
+    
+}
+
+void SM_Fade_Out_Buff(object oGotHit)
+{
+    int nduration = 1;
+    int nACBonus = 2;
+    if (GetHasFeat(FEAT_VOID_IMPROVED_FADE_OUT, oGotHit))
+    {
+        nduration = nduration + GetAbilityModifier(ABILITY_INTELLIGENCE, oGotHit);
+        nACBonus = nACBonus * GetAbilityModifier(ABILITY_INTELLIGENCE, oGotHit);    //May change the bonus of the improved
+    }
+    effect eACBonus = EffectACIncrease(nACBonus);
+    //Need to figure out what to show on occurence
+    effect eVis = EffectVisualEffect();
+    effect eLink = EffectLinkEffects(eACBonus, eVis);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oGotHit, RoundsToSeconds(nduration));
+}

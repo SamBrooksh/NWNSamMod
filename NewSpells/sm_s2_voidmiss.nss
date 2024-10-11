@@ -22,27 +22,10 @@
 
 void main()
 {
-
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-23 by GeorgZ
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
-
-    if (!X2PreSpellCastCode())
-    {
-	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-// End of Spell Cast Hook
-
-
     object oTarget = GetSpellTargetObject();
     object oCaster = OBJECT_SELF;
     int nDamage = 0;
+    int voidLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
     effect eMissile = EffectVisualEffect(VFX_IMP_MIRV); //Change
     effect eVis = EffectVisualEffect(VFX_IMP_MAGBLUE);  //Change
     float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);
@@ -51,34 +34,16 @@ void main()
 	if(!GetIsReactionTypeFriendly(oTarget))
 	{
         //Fire cast spell at event for the specified target
-        //Probably will need to change this
+        //Probably will need to change this to Void Missile 
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_MAGIC_MISSILE));
-        //Make SR Check
         //Make a Touch attack
+
       	if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
 	    {
             //Apply a single damage hit for each missile instead of as a single mass
             
-            for (nCnt = 1; nCnt <= nMissiles; nCnt++)
-            {
                 //Roll damage
                 int nDam = d4(1) + 1;
-     	        //Enter Metamagic conditions
-    	        if (nMetaMagic == METAMAGIC_MAXIMIZE)
-    	        {
-    		          nDam = 5;//Damage is at max
-    	        }
-    	        if (nMetaMagic == METAMAGIC_EMPOWER)
-    	        {
-    		          nDam = nDam + nDam/2; //Damage/Healing is +50%
-    	        }
-                if (spellReaction)
-                {
-                    nDam = FloatToInt(IntToFloat(nDam) * SPELL_REACTION_MULTIPLIER);
-                }
-                fTime = fDelay;
-                fDelay2 += 0.1;
-                fTime += fDelay2;
 
                 //Set damage effect
                 effect eDam = EffectDamage(nDam, DAMAGE_TYPE_MAGICAL);
@@ -95,5 +60,7 @@ void main()
                 ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget);
             }
          }
+         //Remove a use properly
+         
      }
 }
