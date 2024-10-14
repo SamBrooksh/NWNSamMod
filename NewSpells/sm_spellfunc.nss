@@ -2,7 +2,7 @@
 #include "nw_i0_spells"
 
 //Return TRUE if is an arcane class 
-int SM_isArcane(int class)
+int SMisArcane(int class)
 {
     switch(class)
     {
@@ -21,7 +21,7 @@ int SM_isArcane(int class)
 }
 
 //Return TRUE if is divine class
-int SM_isDivine(int class)
+int SMisDivine(int class)
 {
     switch(class)
     {
@@ -39,7 +39,7 @@ int SM_isDivine(int class)
 
 //Returns the modified level for spells
 //class should be 0 for Arcane, and 1 for Divine I think
-int SM_GetCasterLevel(object oCaster, int arcaneDivine)
+int SMGetCasterLevel(object oCaster, int arcaneDivine)
 {
     const int ARCANE = 0;
     const int DIVINE = 1;
@@ -96,7 +96,7 @@ int SM_GetCasterLevel(object oCaster, int arcaneDivine)
 
 // Returns the updated damage if the caster used Maximize or Empower
 //Needs max in case of Maximize - otherwise just assumes 6 arbitraily
-int SM_Maximize_Or_Empower(object oCaster, int feat, int damage, int max = 6)
+int SMMaximizeOrEmpower(object oCaster, int feat, int damage, int max = 6)
 {
     if (feat == METAMAGIC_MAXIMIZE)
         return max;
@@ -107,7 +107,7 @@ int SM_Maximize_Or_Empower(object oCaster, int feat, int damage, int max = 6)
 
 //Returns the Extended amount of a spell if the extended feat
 //Should be able to call regardless
-float SM_Extended(object oCaster, int feat, float duration)
+float SMExtended(object oCaster, int feat, float duration)
 {
     if (feat == METAMAGIC_EXTEND)
         return duration * 2.0;
@@ -115,7 +115,7 @@ float SM_Extended(object oCaster, int feat, float duration)
 }
 
 //Used on rest to manually add modifier to uses for a specific feat?
-void SM_Increase_Uses_Per_Day(object oTarget)
+void SMIncreaseUsesPerDay(object oTarget)
 {
     int chaMod = GetAbilityModifier(ABILITY_CHARISMA, oTarget);
     int intMod = GetAbilityModifier(ABILITY_INTELLIGENCE, oTarget);
@@ -136,13 +136,13 @@ void SM_Increase_Uses_Per_Day(object oTarget)
 }
 
 //Put all on rest functions in here, so it is simple to add to the finished rest function
-void SM_Rest_Finished_Functions(object oSleeper)
+void SMRestFinishedFunctions(object oSleeper)
 {
-    SM_Increase_Uses_Per_Day(oSleeper);
+    SMIncreaseUsesPerDay(oSleeper);
 }
 
 // Persistent Debuff 
-void SM_Void_Fading_Debuff(object oTarget, object oCaster)
+void SMVoidFadingDebuff(object oTarget, object oCaster)
 {   
     int fading_div = 2;
     string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
@@ -165,10 +165,10 @@ void SM_Void_Fading_Debuff(object oTarget, object oCaster)
         rounds = rounds + 1;    //This makes it so # of rounds successes are needed - May be too strong
     }
     SetLocalInt(oTarget, concatenate, remaining - 1);
-    DelayCommand(RoundsToSeconds(1), SM_Void_Fading_Debuff(oTarget, oCaster));
+    DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
 }
 
-void SM_Apply_Fading_Debuff(object oTarget, object oCaster, int rounds = 1)
+void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
 {
     string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
 
@@ -182,10 +182,10 @@ void SM_Apply_Fading_Debuff(object oTarget, object oCaster, int rounds = 1)
     }
     //Put in a VFX here as well
     SetLocalInt(oTarget, concatenate, rounds);
-    DelayCommand(RoundsToSeconds(1), SM_Void_Fading_Debuff(oTarget, oCaster));
+    DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
 }
 
-void SM_Void_Consumed_Debuff(object oTarget, object oCaster)
+void SMVoidConsumedDebuff(object oTarget, object oCaster)
 {
     string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
     int curr = GetLocalInt(oTarget, concatenated);
@@ -199,27 +199,27 @@ void SM_Void_Consumed_Debuff(object oTarget, object oCaster)
     if (d100() > chance)
     {
         //Apply the Fading Debuff for a single round
-        SM_Apply_Fading_Debuff(oTarget, oCaster, 1);
+        SMApplyFadingDebuff(oTarget, oCaster, 1);
     }
     
     SetLocalInt(oTarget, concatenated, curr - 1);
-    DelayCommand(RoundsToSeconds(1), SM_Void_Consumed_Debuff(oTarget, oCaster));
+    DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster));
 }
 
-void SM_Apply_Void_Consumed(object oTarget, oCaster, int rounds = 1)
+void SMApplyVoidConsumed(object oTarget, oCaster, int rounds = 1)
 {
     string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
     int nDuration = GetLocalInt(oTarget, concatenated);
     if (nDuration < 1)
     {
-        DelayCommand(RoundsToSeconds(1), SM_Void_Consumed_Debuff(oTarget, oCaster));
+        DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster));
         //May remove this check, and then that should allow multiple people to hit and apply debuffs - it will spread the duration between them though
         //That may be a bit fast though
     }
     SetLocalInt(oTarget, concatenated, nDuration + rounds);
 }
 
-void SM_Void_Scorned_Debuff(int rounds, object oTarget, object oCaster)
+void SMVoidScornedDebuff(int rounds, object oTarget, object oCaster)
 {
     string concatenated = CONST_VOID_SCORNED_DEBUFF + ObjectToString(oCaster);
     int current = GetLocalInt(oTarget, concatenated);
@@ -229,15 +229,15 @@ void SM_Void_Scorned_Debuff(int rounds, object oTarget, object oCaster)
         return;
     }
 
-    DelayCommand(RoundsToSeconds(1), SM_Void_Scorned_Debuff(oTarget, oCaster));
+    DelayCommand(RoundsToSeconds(1), SMVoidScornedDebuff(oTarget, oCaster));
 }
 
-void SM_Apply_Void_Scorned(object oTarget, object oCaster, int rounds = 1)
+void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1)
 {
 
 }
 
-void SM_Void_Cursed_Strikes_Debuff(object oTarget, object oCaster)
+void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
 {
     //string concatenated = ;
     if (GetIsDead(oTarget))
@@ -245,17 +245,17 @@ void SM_Void_Cursed_Strikes_Debuff(object oTarget, object oCaster)
         return;
     }
 }
-void SM_Apply_Cursed_Strikes(object oTarget, object oCaster, int rounds = 1)
+void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 1)
 {
 
 }
 
-void SM_Reinivigorated_Buff(object oCaster, object oTarget)
+void SMReinivigoratedBuff(object oCaster, object oTarget)
 {
     
 }
 
-void SM_Fade_Out_Buff(object oGotHit)
+void SMFadeOutBuff(object oGotHit)
 {
     int nduration = 1;
     int nACBonus = 2;
@@ -269,4 +269,10 @@ void SM_Fade_Out_Buff(object oGotHit)
     effect eVis = EffectVisualEffect();
     effect eLink = EffectLinkEffects(eACBonus, eVis);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oGotHit, RoundsToSeconds(nduration));
+}
+
+int SMHasVoidDebuff(object oTarget, object oCaster, string base)
+{
+    string concat = base + ObjectToString(oCaster);
+    return GetLocalInt(oTarget, concat);
 }
