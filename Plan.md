@@ -235,7 +235,7 @@ Extra Void Missle - Gain 3 Charges LVL 5 - currently doing it just in 2da, may n
 Crackling Missiles - Void Missle applies Fading Debuff LVL 7
 Clone Copy - Clones cast Void missle (with all feats) as well LVL 13
 Null Missile - Void Missile applies Void Scorn LVL 13
-Fade Out - After getting hit, gain AC Bonus for a short time (1 round) LVL 7
+Fade Out - After getting hit, gain AC Bonus for a short time (1 round) LVL 7    - Maybe a different colored mage armor
 Improved Fade Out - Larger Bonus, Longer time (INT MOD rounds) LVL 11
 Void's Hatred - Increases the chance that Clones try to apply Void Scorn LVL 13
 Ravaging Swap - Deal Void Damage to creatures between Clone and Player - 1d10 + INT per 3 levels LVL 9?

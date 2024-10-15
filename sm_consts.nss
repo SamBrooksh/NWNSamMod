@@ -77,3 +77,4 @@ const string CONST_USES_VMISSILE     =  "SM_VMISS_USES";
 const string CONST_USES_VOID_RIP     =  "SM_VRIP_USES";
 
 const int SPELL_VOID_MISSLE         =   860;
+const int VFX_IMP_MIRV_RED          =   906;
