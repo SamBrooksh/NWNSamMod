@@ -35,7 +35,7 @@ void main()
 	{
         //Fire cast spell at event for the specified target
         //Probably will need to change this to Void Missile 
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_MAGIC_MISSILE));
+        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_VOID_MISSLE));
         //Make a Touch attack
 
       	if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))

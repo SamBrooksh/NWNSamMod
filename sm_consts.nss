@@ -75,3 +75,5 @@ const string CONST_VOID_SCORNED_DEBUFF= "SM_V_SCORNED_DEBUFF";
 
 const string CONST_USES_VMISSILE     =  "SM_VMISS_USES";
 const string CONST_USES_VOID_RIP     =  "SM_VRIP_USES";
+
+const int SPELL_VOID_MISSLE         =   860;
