@@ -196,7 +196,7 @@ Void Swap - Swap positions with Void clone
 #### 6th Level
 Gain DR/1 and Energy Resist 1 - Void Touched
 #### 7th Level
-Ability to cast Invisibility 2 + INT times/day
+Ability to cast Invisibility 2 + INT times/day - Void Cloak
 #### 8th Level
 Ability to cast Haste 1 + INT times/day
 #### 9th Level

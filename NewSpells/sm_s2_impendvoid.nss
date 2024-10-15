@@ -6,12 +6,13 @@ void main()
     object oTarget = GetSpellTargetObject();
     int bFading = SMHasVoidDebuff(oTarget, oCaster, CONST_VOID_FADING_DEBUFF);
     int bScorned = SMHasVoidDebuff(oTarget, oCaster, CONST_VOID_SCORNED_DEBUFF);
-    int bVConsumed = SMHasVoidDebuff(oTarget, oCaster, CONST_VOID_CONSUMED_DEBUFF);  
+    int bVConsumed = SMHasVoidDebuff(oTarget, oCaster, CONST_VOID_CONSUMED_DEBUFF);
+    int bCursedStrikes = SMHasVoidDebuff(oTarget, oCaster, CONST_VOID_CURSED_S_DEBUFF);  
     int nLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
     int nDamage; 
     effect eDamage;
     effect eVis;
-    int nMultipler = bFading + bVConsumed + bScorned;
+    int nMultipler = bFading + bVConsumed + bScorned + bCursedStrikes;
     if ( bFading || bVConsumed || bScorned)
     {
         //nDamage = d6(nLevel);   //Maybe make it so that it increases the dice for each (but probably would need to make them d4's instead)

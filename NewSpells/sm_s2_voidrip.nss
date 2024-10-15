@@ -35,7 +35,7 @@ void main()
             {
                 
                 int dur = 2 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
-                SM_Apply_Consumed_By_Void(oTarget, oCaster, dur);
+                SMApplyConsumedByVoid(oTarget, oCaster, dur);
             }
         }
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTarget, FALSE, OBJECT_TYPE_CREATURE);

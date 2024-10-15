@@ -1,5 +1,6 @@
 #include "sm_consts"
 #include "nw_i0_spells"
+#include "nwnx_creature"
 
 //Return TRUE if is an arcane class 
 int SMisArcane(int class)
@@ -239,15 +240,36 @@ void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1)
 
 void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
 {
-    //string concatenated = ;
+    string concatenated = CONST_VOID_CURSED_S_DEBUFF + ObjectToString(oCaster);
+    int current = GetLocalInt(oTarget, concatenated);
     if (GetIsDead(oTarget))
     {
         return;
     }
+    if (current < 1)
+    {
+        int nDamage = d12(GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster));
+        effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
+        effect eVis = EffectVisualEffect(VFX_COM_BLOOD_LRG_RED);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        SetLocalInt(oTarget, concatenated, 0);
+    }
+    DelayCommand(RoundsToSeconds(1), SMVoidCursedStrikesDebuff(oTarget, oCaster));
 }
-void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 1)
-{
 
+void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 5)
+{
+    string concatenated = CONST_VOID_CURSED_S_DEBUFF + ObjectToString(oCaster);
+    if (GetLocalInt(oTarget, concatenated))
+    {
+        SpeakString("Target already has Cursed Strikes!", 1);
+        return;
+    }
+    SetLocalInt(oTarget, concatenated, rounds);
+    effect eVis = EffectVisualEffect(VFX_DUR_AURA_PULSE_BLUE_BLACK);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, IntToFloat(rounds));
+    DelayCommand(RoundsToSeconds(1), SMVoidCursedStrikesDebuff(oTarget, oCaster));
 }
 
 void SMReinivigoratedBuff(object oCaster, object oTarget)
@@ -266,8 +288,9 @@ void SMFadeOutBuff(object oGotHit)
     }
     effect eACBonus = EffectACIncrease(nACBonus);
     //Need to figure out what to show on occurence
-    effect eVis = EffectVisualEffect();
+    effect eVis = EffectVisualEffect(VFX_DUR_AURA_PULSE_GREY_WHITE);
     effect eLink = EffectLinkEffects(eACBonus, eVis);
+    eLink = EffectTag(eLink, CONST_FADE_OUT_BUFF);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oGotHit, RoundsToSeconds(nduration));
 }
 
@@ -276,3 +299,84 @@ int SMHasVoidDebuff(object oTarget, object oCaster, string base)
     string concat = base + ObjectToString(oCaster);
     return GetLocalInt(oTarget, concat);
 }
+
+void SMSummonClone(object oCaster, Location lLocation)
+{
+    int nDuration = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);    //10 minutes per level I think
+    int chaPen = 3;
+    int strPen = 4;
+    int refPen = 2;
+    int willPen = 2;
+    int fortPen = 2;
+    if (GetHasFeat(FEAT_VOID_ASSIMILATION, oCaster))
+    {
+        //Reduce penalties
+    }
+    
+    effect eCha = EffectAbilityDecrease(ABILITY_CHARISMA, chaPen);
+    effect eStr = EffectAbilityDecrease(ABILITY_STRENGTH, strPen);
+    effect eRef = EffectSavingThrowDecrease(SAVING_THROW_REFLEX, refPen);
+    effect eWill = EffectSavingThrowDecrease(SAVING_THROW_WILL, willPen);
+    effect eFort = EffectSavingThrowDecrease(SAVING_THROW_FORT, fortPen);
+    effect eCombined = EffectLinkEffects(eCha, eStr);
+    eCombined = EffectLinkEffects(eRef, eCombined);
+    eCombined = EffectLinkEffects(eWill, eCombined);
+    eCombined = EffectLinkEffects(eFort, eCombined);
+    eCombined = SupernaturalEffect(eCombined);
+    eCombined = EffectTag(eCombined, CONST_VOID_SUMMON_DEBUFF);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oCaster);
+
+    object oSummon2;
+    object oSummon = ObjectCopy(oCaster, lLocation);
+    ForceRefreshObjectUUID(oSummon);
+    NWNX_Creature_AddAssociate(oCaster, oSummon, ASSOCIATE_TYPE_SUMMONED);
+    //These should be all the Feat modifications
+    //Set Max HP to 75%, -2 to all Base Stats I think, unless Void Perfection
+    if (GetHasFeat(FEAT_VOID_PERFECTION, oCaster))
+    {
+        oSummon2 = ObjectCopy(oCaster, lLocation);
+        ForceRefreshObjectUUID(oSummon2);
+        NWNX_Creature_AddAssociate(oCaster, oSummon2, ASSOCIATE_TYPE_SUMMONED);
+    }
+    else 
+    {
+        
+    }
+    //Need to modify weapon on hit modifier, and potentially scripts attached to the creature?
+    if (GetHasFeat(FEAT_VOID_RENEWALL, oCaster))
+    {
+
+    }
+    if (GetHasFeat(FEAT_VOID_CONSUMED_BY_VOID, oCaster))
+    {
+
+    }
+    if (GetHasFeat(FEAT_VOID_SCORN, oCaster))
+    {
+
+    }
+    if (GetHasFeat(FEAT_SAPPING_STRIKE, oCaster))
+    {
+
+    }
+
+
+}
+
+void SMRemoveBuff(object oCaster, string DEBUFF)
+{
+    effect eEffect = GetFirstEffect(oCaster);
+    while(GetIsEffectValid(eEffect))
+    {
+        if(GetEffectTag(eEffect) == DEBUFF)
+            RemoveEffect(oCaster, eEffect);
+        eEffect = GetNextEffect(oCaster);
+    }
+}
+
+/*
+Suffer a penalty to summon a clone that does less dmg and a debuff -
+ It gets bonus damage from player INT (Debuff is -4 STR, -3 CON, -2 REF/WILL/FORT, 
+ -3 CHA, until Clone is unsummoned - may too big of a debuff - 
+ maybe have it deal 1 void dmg to player every couple of rounds)- Once per day, lasts until unsummoned I think
+*/
