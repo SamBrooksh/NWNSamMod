@@ -1,17 +1,17 @@
 #MAXMODEL ASCII
-# model: vPR_magmisl
-filedependancy vPR_magmisl.max
-newmodel vPR_magmisl
-setsupermodel vPR_magmisl NULL
+# model: vPR_magmisl_void
+filedependancy vPR_magmisl_void.max
+newmodel vPR_magmisl_void
+setsupermodel vPR_magmisl_void NULL
 classification EFFECT
 setanimationscale 1
 #MAXGEOM  ASCII
-beginmodelgeom vPR_magmisl
-node dummy vPR_magmisl
+beginmodelgeom vPR_magmisl_void
+node dummy vPR_magmisl_void
   parent NULL
 endnode
 node emitter star
-  parent vPR_magmisl
+  parent vPR_magmisl_void
   p2p 0
   p2p_sel 1
   affectedByWind 0
@@ -28,7 +28,7 @@ node emitter star
   update Fountain
   render Normal
   blend Lighten
-  texture fxpa_flare02
+  texture fxpa_flare02_void
   xgrid 1
   ygrid 1
   loop 0
@@ -38,8 +38,8 @@ node emitter star
   blastLength 0
   position 0 0 0
   orientation 0 -1 0 -1.5708
-  colorStart 1 1 1
-  colorEnd 1 1 1
+  colorStart 0.525490 0 0.960784
+  colorEnd 0 0 0
   alphaStart 0.9
   alphaEnd 0.2
   sizeStart 1.8
@@ -98,8 +98,8 @@ node emitter spark
   blastLength 0
   position 0 -0.000247645 -0.000135355
   orientation 0 1 0 -1.5708
-  colorStart 1 1 1
-  colorEnd 1 1 1
+  colorStart 0.36255 0.325491 0.325491
+  colorEnd 0 0 0
   alphaStart 1
   alphaEnd 0
   sizeStart 0.4
@@ -158,8 +158,8 @@ node emitter spark01
   blastLength 0
   position 0 -0.000247645 -0.000135355
   orientation 0 1 0 -1.5708
-  colorStart 1 1 1
-  colorEnd 1 1 1
+  colorStart 0.36255 0.325491 0.325491
+  colorEnd 0.525490 0 0.960784
   alphaStart 1
   alphaEnd 0
   sizeStart 0.4
@@ -191,7 +191,7 @@ node emitter spark01
   threshold 0
 endnode
 node light AuroraLight02
-  parent vPR_magmisl
+  parent vPR_magmisl_void
   ambientonly 1
   shadow 0
   isdynamic 1
@@ -203,8 +203,8 @@ node light AuroraLight02
   orientation 0 0 0 0
   radius 5
   multiplier 1.5
-  color 0.419608 0.705882 0.925491
+  color 0.525490 0 0.960784
 endnode
-endmodelgeom vPR_magmisl
+endmodelgeom vPR_magmisl_void
 
-donemodel vPR_magmisl
+donemodel vPR_magmisl_void
