@@ -328,13 +328,16 @@ void SMSummonClone(object oCaster, Location lLocation)
 
     object oSummon2;
     object oSummon = ObjectCopy(oCaster, lLocation);
+    int bVoidPerf = GetHasFeat(FEAT_VOID_PERFECTION, oCaster); 
+    oSummon = SMNoDrops(oSummon);//This may do what I want exactly
     ForceRefreshObjectUUID(oSummon);
     NWNX_Creature_AddAssociate(oCaster, oSummon, ASSOCIATE_TYPE_SUMMONED);
     //These should be all the Feat modifications
     //Set Max HP to 75%, -2 to all Base Stats I think, unless Void Perfection
-    if (GetHasFeat(FEAT_VOID_PERFECTION, oCaster))
+    if (bVoidPerf)
     {
         oSummon2 = ObjectCopy(oCaster, lLocation);
+        oSummon2 = SMNoDrops(oSummon2); //This may do what I want exactly
         ForceRefreshObjectUUID(oSummon2);
         NWNX_Creature_AddAssociate(oCaster, oSummon2, ASSOCIATE_TYPE_SUMMONED);
     }
@@ -343,22 +346,7 @@ void SMSummonClone(object oCaster, Location lLocation)
         
     }
     //Need to modify weapon on hit modifier, and potentially scripts attached to the creature?
-    if (GetHasFeat(FEAT_VOID_RENEWALL, oCaster))
-    {
-
-    }
-    if (GetHasFeat(FEAT_VOID_CONSUMED_BY_VOID, oCaster))
-    {
-
-    }
-    if (GetHasFeat(FEAT_VOID_SCORN, oCaster))
-    {
-
-    }
-    if (GetHasFeat(FEAT_SAPPING_STRIKE, oCaster))
-    {
-
-    }
+    //Probably just add the one 
 
 
 }
@@ -374,9 +362,85 @@ void SMRemoveBuff(object oCaster, string DEBUFF)
     }
 }
 
-/*
-Suffer a penalty to summon a clone that does less dmg and a debuff -
- It gets bonus damage from player INT (Debuff is -4 STR, -3 CON, -2 REF/WILL/FORT, 
- -3 CHA, until Clone is unsummoned - may too big of a debuff - 
- maybe have it deal 1 void dmg to player every couple of rounds)- Once per day, lasts until unsummoned I think
-*/
+object SMNoDrops(object oCreature)
+{
+    object oGear = GetItemInSlot(INVENTORY_SLOT_ARMS, oCreature);   
+    if(GetIsObjectValid(oGear))
+    {
+        SetDroppableFlag(oGear, FALSE);
+        ActionTakeItem(oGear, oCreature);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_ARROWS, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+        SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_BELT, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+        SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_BOLTS, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+        SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_BOOTS, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+        SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_BULLETS, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+        SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_CHEST, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+        SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_CLOAK, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+         SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_HEAD, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+        SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+         SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_LEFTRING, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+        SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_NECK, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+        SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+         SetDroppableFlag(oGear, FALSE);
+    }
+    oGear = GetItemInSlot(INVENTORY_SLOT_RIGHTRING, oCreature);
+    if(GetIsObjectValid(oGear))
+    {
+         SetDroppableFlag(oGear, FALSE);
+    }
+
+    oGear = GetFirstItemInInventory(oCreature);
+    while (oGear != OBJECT_INVALID)
+    {
+        SetDroppableFlag(oGear, FALSE);
+        oGear = GetNextItemInInventory(oCreature);
+    }
+    return oCreature;
+}

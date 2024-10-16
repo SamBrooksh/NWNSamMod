@@ -9,7 +9,7 @@ const int FEAT_IMPROVED_REACTION_1 =    1134;
 const int FEAT_DUEL_PARRY =             1135;
 const int FEAT_ENHANCED_MOBILITY =      1136;
 const int FEAT_GRACE =                  1137;
-const int FEAT_PRECISE_STRIKE =         1138;
+const int FEAT_PRECISE_STRIKE_2 =       1138;
 const int FEAT_IMPROVED_REACTION_2 =    1139;
 const int FEAT_IMPROVED_REACTION_3 =    1140;
 const int FEAT_IMPROVED_REACTION_4 =    1141;
@@ -81,5 +81,5 @@ const string CONST_USES_VMISSILE     =  "SM_VMISS_USES";
 const string CONST_USES_VOID_RIP     =  "SM_VRIP_USES";
 
 const int SPELL_VOID_MISSLE         =   860;
-const int VFX_IMP_MIRV_RED          =   906;
-const int VFX_IMP_MIRV_VOID         =   907;
+const int VFX_IMP_MIRV_RED          =   673;
+const int VFX_IMP_MIRV_VOID         =   674;
