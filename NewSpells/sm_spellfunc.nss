@@ -348,7 +348,6 @@ void SMSummonClone(object oCaster, Location lLocation)
     //Need to modify weapon on hit modifier, and potentially scripts attached to the creature?
     //Probably just add the one 
 
-
 }
 
 void SMRemoveBuff(object oCaster, string DEBUFF)

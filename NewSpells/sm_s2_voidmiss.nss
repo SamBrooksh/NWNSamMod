@@ -5,7 +5,7 @@
 /*
 // A missile of magical energy darts forth from your
 // fingertip and unerringly strikes its target. The
-// missile deals 1d4+1 points of damage.
+// missile deals 1d4 points of damage.
 //
 // For every two extra levels of experience past 1st, you
 // gain an additional missile.
@@ -60,7 +60,7 @@ void main()
 void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel, int NULL_MISSILE = FALSE, int CRACKLING = FALSE)
 {
     effect eMissile = EffectVisualEffect(VFX_IMP_MIRV_VOID); //Change
-    effect eVis = EffectVisualEffect(VFX_IMP_MAGBLUE);  //Change
+    effect eVis = EffectVisualEffect(VFX_VOID_IMPACT);  //Change
     float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);
     float fDelay = fDist/(3.0 * log(fDist) + 2.0);
     float fDelay2, fTime;
@@ -75,7 +75,7 @@ void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel,
         for (nCnt = 1; nCnt <= nMissiles; nCnt++)
         {
             //Roll damage
-            int nDam = d4(1) + 1;
+            int nDam = d4(1);
 
             //Set damage effect
             effect eDam = EffectDamage(nDam, DAMAGE_TYPE_VOID);

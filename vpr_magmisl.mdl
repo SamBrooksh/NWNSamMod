@@ -38,8 +38,8 @@ node emitter star
   blastLength 0
   position 0 0 0
   orientation 0 -1 0 -1.5708
-  colorStart 0.454902 0.219608 0.65098
-  colorEnd 0.454902 0.219608 0.65098
+  colorStart 1 1 1
+  colorEnd 1 1 1
   alphaStart 0.9
   alphaEnd 0.2
   sizeStart 1.8
@@ -98,8 +98,8 @@ node emitter spark
   blastLength 0
   position 0 -0.000247645 -0.000135355
   orientation 0 1 0 -1.5708
-  colorStart 0.454902 0.219608 0.65098
-  colorEnd 0.454902 0.219608 0.65098
+  colorStart 1 1 1
+  colorEnd 1 1 1
   alphaStart 1
   alphaEnd 0
   sizeStart 0.4
@@ -158,8 +158,8 @@ node emitter spark01
   blastLength 0
   position 0 -0.000247645 -0.000135355
   orientation 0 1 0 -1.5708
-  colorStart 0.454902 0.219608 0.65098
-  colorEnd 0.454902 0.219608 0.65098
+  colorStart 1 1 1
+  colorEnd 1 1 1
   alphaStart 1
   alphaEnd 0
   sizeStart 0.4
@@ -203,7 +203,7 @@ node light AuroraLight02
   orientation 0 0 0 0
   radius 5
   multiplier 1.5
-  color 0.454902 0.219608 0.65098
+  color 0.419608 0.705882 0.925491
 endnode
 endmodelgeom vPR_magmisl
 
