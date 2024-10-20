@@ -18,12 +18,14 @@
 
 #include "NW_I0_SPELLS"    
 #include "x2_inc_spellhook" 
-#include "sm_spellfunc"
+#include "sm_consts"
+//#include "sm_spellfunc"
 
 void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel, int NULL_MISSILE = FALSE, int CRACKLING = FALSE);
 
 void main()
 {
+    SpeakString("Started", 1);
     object oTarget = GetSpellTargetObject();
     object oCaster = OBJECT_SELF;
     int nDamage = 0;
@@ -31,9 +33,10 @@ void main()
     int cloneCast = GetHasFeat(FEAT_VOID_CLONE_MISSILE_COPY, oCaster);
     int cracklingCast = GetHasFeat(FEAT_VOID_CRACKLING_MISSILE, oCaster);
     int nullCast = GetHasFeat(FEAT_VOID_NULL_MISSILE, oCaster);
+    float fDelay = 0.0;
 
-	if(!GetIsReactionTypeFriendly(oTarget))
-	{
+    if(!GetIsReactionTypeFriendly(oTarget))
+    {
         //Fire cast spell at event for the specified target
         //Probably will need to change this to Void Missile 
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_VOID_MISSLE));
@@ -60,8 +63,8 @@ void main()
 void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel, int NULL_MISSILE = FALSE, int CRACKLING = FALSE)
 {
     effect eMissile = EffectVisualEffect(VFX_IMP_MIRV_VOID); //Change
-    effect eVis = EffectVisualEffect(VFX_VOID_IMPACT);  //Change
-    float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);
+    effect eVis = EffectVisualEffect(VFX_MIRV_VOID_IMPACT);  //Change
+    float fDist = GetDistanceBetween(oCaster, oTarget);
     float fDelay = fDist/(3.0 * log(fDist) + 2.0);
     float fDelay2, fTime;
     int nMissiles = nCasterLevel / 3;
@@ -82,12 +85,12 @@ void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel,
             if (NULL_MISSILE)
             {
                 //Have them try to resist - with delay I assume
-                DelayCommand(fTime, SMApplyVoidScornDebuff(oTarget, oCaster));
+                //DelayCommand(fTime, SMApplyVoidScornDebuff(oTarget, oCaster));
             }
             if (CRACKLING)
             {
                 //Have them try to resist - with delay I assume
-                DelayCommand(fTime, SMApplyFadingDebuff(oTarget, oCaster));
+                //DelayCommand(fTime, SMApplyFadingDebuff(oTarget, oCaster));
             }
             fTime = fDelay;
             fDelay2 += 0.1;

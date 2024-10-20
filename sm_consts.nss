@@ -73,6 +73,7 @@ const string CONST_VOID_CONSUMED_DEBUFF="SM_V_CONSUMED_DEBUFF";
 const string CONST_VOID_SCORNED_DEBUFF= "SM_V_SCORNED_DEBUFF";
 const string CONST_VOID_CURSED_S_DEBUFF="SM_V_CURSED_S_DEBUFF";
 const string CONST_VOID_SUMMON_DEBUFF=  "VOID_SUMMON_PENALTY";
+const string CONST_VOID_RESISTS =       "VOID_RESISTS";
 
 const string VOID_CLONE_HEX_NUM     =   "SM_V_CLONE_HEX_NUM";
 const string VOID_CLONE_HEX_NUM2      = "SM_V_CLONE_HEX_NUM2";
@@ -84,4 +85,6 @@ const int SPELL_VOID_MISSLE         =   860;
 
 const int VFX_IMP_MIRV_RED          =   673;
 const int VFX_IMP_MIRV_VOID         =   674;
-const int VFX_VOID_IMPACT           =   675;
+const int VFX_MIRV_VOID_IMPACT      =   675;
+const int VFX_IMP_VOID_RIP          =   676;
+const int VFX_IMP_RIP_IMPACT        =   677;

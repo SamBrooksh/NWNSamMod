@@ -33,7 +33,6 @@ void main()
             eDam = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
             if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nReflexDC, SAVING_THROW_TYPE_NONE, oCaster, 0.0))
             {
-                
                 int dur = 2 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
                 SMApplyConsumedByVoid(oTarget, oCaster, dur);
             }

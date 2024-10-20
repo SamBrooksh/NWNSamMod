@@ -1,0 +1,461 @@
+#MAXMODEL ASCII
+# model: vff_voidrip
+filedependancy vff_voidrip.max
+newmodel vff_voidrip
+setsupermodel vff_voidrip NULL
+classification EFFECT
+setanimationscale 1
+#MAXGEOM  ASCII
+beginmodelgeom vff_voidrip
+node dummy vff_voidrip
+  parent NULL
+endnode
+node emitter Ring
+  parent vff_voidrip
+  p2p 0
+  p2p_sel 1
+  affectedByWind 0
+  m_isTinted 0
+  bounce 0
+  random 0
+  inherit 0
+  inheritvel 0
+  inherit_local 0
+  inherit_part 0
+  splat 0
+  renderorder 0
+  spawntype 0
+  update Explosion
+  render Billboard_to_World_Z
+  blend Lighten
+  texture fxpa_ringwave
+  xgrid 2
+  ygrid 2
+  loop 0
+  deadspace 0
+  twosidedtex 0
+  blastRadius 11
+  blastLength 0.8
+  position -0.000507622 0.00081668 0.0593585
+  orientation 0 0 0 0
+  xsize 0
+  ysize 0
+  threshold 0
+  combinetime 0
+  colorStart 0.1960784 0 0.2705882
+  colorEnd 0.1960784 0 0.2705882
+  alphaStart 1
+  alphaEnd 0.1
+  sizeStart 0.5
+  sizeEnd 17
+  sizeStart_y 0
+  sizeEnd_y 0
+  birthrate 0
+  lifeExp 0.4
+  mass 0
+  spread 0
+  particleRot 0
+  velocity 0
+  randvel 0
+  bounce_co 0
+  blurlength 10
+  fps 12
+  frameStart 0
+  frameEnd 3
+  lightningDelay 0
+  lightningRadius 0
+  lightningScale 0
+  p2p_bezier2 0
+  p2p_bezier3 0
+  grav 0
+  drag 0
+endnode
+node emitter Chunkssml
+  parent vff_voidrip
+  p2p 0
+  p2p_sel 1
+  affectedByWind 0
+  m_isTinted 0
+  bounce 1
+  random 0
+  inherit 0
+  inheritvel 0
+  inherit_local 0
+  inherit_part 0
+  splat 0
+  renderorder 0
+  spawntype 0
+  update Explosion
+  render Normal
+  blend Normal
+  texture NULL
+  chunkName Fx_Rockchunksml
+  xgrid 0
+  ygrid 0
+  loop 0
+  deadspace 0
+  twosidedtex 0
+  blastRadius 0
+  blastLength 0
+  position -0.000507622 0.00081788 0.0191669
+  orientation 0 0 0 0
+  xsize 0
+  ysize 0
+  threshold 0
+  combinetime 0
+  colorStart 0.1960784 0 0.2705882
+  colorEnd 0.1960784 0 0.2705882
+  alphaStart 1
+  alphaEnd 1
+  sizeStart 0.04
+  sizeEnd 0.04
+  sizeStart_y 0
+  sizeEnd_y 0
+  birthrate 0
+  lifeExp 5
+  mass 1
+  spread 2.79253
+  particleRot 5
+  velocity 8
+  randvel 3
+  bounce_co 0.4
+  blurlength 10
+  fps 0
+  frameStart 0
+  frameEnd 0
+  lightningDelay 0
+  lightningRadius 0
+  lightningScale 0
+  p2p_bezier2 0
+  p2p_bezier3 0
+  grav 0
+  drag 0
+endnode
+node emitter Smoke
+  parent vff_voidrip
+  p2p 0
+  p2p_sel 1
+  affectedByWind 0
+  m_isTinted 0
+  bounce 0
+  random 0
+  inherit 0
+  inheritvel 0
+  inherit_local 0
+  inherit_part 0
+  splat 0
+  renderorder 0
+  spawntype 0
+  update Fountain
+  render Normal
+  blend Normal
+  texture fxpa_Smoke01
+  xgrid 4
+  ygrid 4
+  loop 0
+  deadspace 0
+  twosidedtex 0
+  blastRadius 0
+  blastLength 0
+  position 4.93526e-07 0.0131282 0.280859
+  orientation 0 0 0 0
+  xsize 0
+  ysize 0
+  threshold 0
+  combinetime 0
+  colorStart 0.1960784 0 0.2705882
+  colorEnd 0.1960784 0 0.2705882
+  alphaStart 0.8
+  alphaEnd 0
+  sizeStart 0.5
+  sizeEnd 6
+  sizeStart_y 0
+  sizeEnd_y 0
+  birthrate 0
+  lifeExp 2
+  mass 0
+  spread 1.0472
+  particleRot 0.5
+  velocity 2
+  randvel 0.5
+  bounce_co 0
+  blurlength 10
+  fps 16
+  frameStart 0
+  frameEnd 15
+  lightningDelay 0
+  lightningRadius 0
+  lightningScale 0
+  p2p_bezier2 0
+  p2p_bezier3 0
+  grav 0
+  drag 0
+endnode
+node emitter Flame01
+  parent vff_voidrip
+  p2p 0
+  p2p_sel 1
+  affectedByWind 0
+  m_isTinted 0
+  bounce 0
+  random 0
+  inherit 1
+  inheritvel 0
+  inherit_local 0
+  inherit_part 0
+  splat 0
+  renderorder 0
+  spawntype 0
+  update Explosion
+  render Motion_Blur
+  blend Lighten
+  texture fxpa_flstrk
+  xgrid 1
+  ygrid 1
+  loop 0
+  deadspace 0.00365542
+  twosidedtex 0
+  blastRadius 0
+  blastLength 0
+  position 0 0 0.768827
+  orientation 1 0 0 -6.27446
+  xsize 0
+  ysize 0
+  threshold 0
+  combinetime 0
+  colorStart 0.1960784 0 0.2705882
+  colorEnd 0.1960784 0 0.2705882
+  alphaStart 0.3
+  alphaEnd 0.3
+  sizeStart 2
+  sizeEnd 10
+  sizeStart_y 5
+  sizeEnd_y 20
+  birthrate 0
+  lifeExp 0.2
+  mass 0
+  spread 3.14159
+  particleRot 0
+  velocity 15
+  randvel 0
+  bounce_co 0
+  blurlength 10
+  fps 0
+  frameStart 0
+  frameEnd 0
+  lightningDelay 0
+  lightningRadius 0
+  lightningScale 0
+  p2p_bezier2 0
+  p2p_bezier3 0
+  grav 0
+  drag 0
+endnode
+node emitter MainExplode02
+  parent vff_voidrip
+  p2p 0
+  p2p_sel 1
+  affectedByWind 0
+  m_isTinted 0
+  bounce 0
+  random 0
+  inherit 0
+  inheritvel 0
+  inherit_local 0
+  inherit_part 0
+  splat 0
+  renderorder 0
+  spawntype 0
+  update Explosion
+  render Normal
+  blend Lighten
+  texture fxpa_Explode1
+  xgrid 4
+  ygrid 4
+  loop 0
+  deadspace 0
+  twosidedtex 0
+  blastRadius 0
+  blastLength 0
+  position -0.00918402 0.000864239 1.3386
+  orientation 0 0 0 0
+  xsize 50
+  ysize 50
+  threshold 0
+  combinetime 0
+  colorStart 0.1960784 0 0.2705882
+  colorEnd 0.1960784 0 0.2705882
+  alphaStart 1
+  alphaEnd 1
+  sizeStart 3
+  sizeEnd 5
+  sizeStart_y 0
+  sizeEnd_y 0
+  birthrate 1
+  lifeExp 1
+  mass 0
+  spread 0
+  particleRot -0.5
+  velocity 0
+  randvel 0
+  bounce_co 0
+  blurlength 10
+  fps 16
+  frameStart 0
+  frameEnd 15
+  lightningDelay 0
+  lightningRadius 0
+  lightningScale 0
+  p2p_bezier2 0
+  p2p_bezier3 0
+  grav 0
+  drag 0
+endnode
+node emitter WIND_Dummy01
+  parent vff_voidrip
+  p2p 0
+  p2p_sel 1
+  affectedByWind 0
+  m_isTinted 0
+  bounce 0
+  random 0
+  inherit 0
+  inheritvel 0
+  inherit_local 0
+  inherit_part 0
+  splat 0
+  renderorder 0
+  spawntype 0
+  update Explosion
+  render Normal
+  blend Lighten
+  texture NULL
+  xgrid 0
+  ygrid 0
+  loop 0
+  deadspace 0
+  twosidedtex 0
+  blastRadius 8
+  blastLength 0.5
+  position 0.0117078 0.00566773 0.267095
+  orientation 0 0 0 0
+  xsize 0
+  ysize 0
+  threshold 0
+  combinetime 0
+  colorStart 0.1960784 0 0.2705882
+  colorEnd 0.1960784 0 0.2705882
+  alphaStart 0
+  alphaEnd 0
+  sizeStart 0
+  sizeEnd 0
+  sizeStart_y 0
+  sizeEnd_y 0
+  birthrate 0
+  lifeExp 0
+  mass 0
+  spread 0
+  particleRot 0
+  velocity 0
+  randvel 0
+  bounce_co 0
+  blurlength 10
+  fps 0
+  frameStart 0
+  frameEnd 0
+  lightningDelay 0
+  lightningRadius 0
+  lightningScale 0
+  p2p_bezier2 0
+  p2p_bezier3 0
+  grav 0
+  drag 0
+endnode
+node light AuroraLight01
+  parent vff_voidrip
+  ambientonly 0
+  shadow 1
+  isdynamic 0
+  affectdynamic 1
+  lightpriority 2
+  fadingLight 0
+  flareradius 0
+  position 0 0 1.7
+  orientation -0.5773503 0.5773503 0.5773503 -2.0944
+  radius 10
+  multiplier 1
+  color 0.1960784 0 0.2705882
+endnode
+endmodelgeom vff_voidrip
+
+#MAXANIM ASCII
+newanim impact vff_voidrip
+  length 4.96667
+  transtime 0.25
+  animroot vff_voidrip
+  event 0 detonate
+  event 0.0333333 detonate
+  event 0.0333333 detonate
+  event 0.133333 detonate
+  node dummy vff_voidrip
+    parent NULL
+  endnode
+  node emitter Ring
+    parent vff_voidrip
+    birthratekey 2
+         0.0000000    1.0000000
+         4.9666700    1.0000000
+  endnode
+  node emitter Chunkssml
+    parent vff_voidrip
+    birthratekey 2
+         0.0000000    4.0000000
+         4.9666700    4.0000000
+  endnode
+  node emitter Smoke
+    parent vff_voidrip
+    birthratekey 5
+         0.0000000    0.0000000
+         0.1000000    0.0000000
+         0.1333330   10.0000000
+         0.6000000   10.0000000
+         0.6333330    0.0000000
+  endnode
+  node emitter Flame01
+    parent vff_voidrip
+    birthratekey 2
+         0.0000000    3.0000000
+         4.9666700    3.0000000
+  endnode
+  node emitter MainExplode02
+    parent vff_voidrip
+    positionkey 4
+         0.0000000   -0.0091840    0.0008642    1.3386000
+         0.2000000   -0.0091840    0.0008642    1.7880700
+         2.7333300   -0.0091840    0.0008642    1.6227601
+         4.9666700   -0.0091840    0.0008642    1.3427800
+  endnode
+  node emitter WIND_Dummy01
+    parent vff_voidrip
+    birthratekey 2
+         0.0000000    1.0000000
+         4.9666700    1.0000000
+  endnode
+  node light AuroraLight01
+    parent vff_voidrip
+    colorkey 11
+         0.0000000    0.1960784 0 0.2705882
+         0.0333333    0.1960784 0 0.2705882
+         0.1666670    0.1960784 0 0.2705882
+         0.2666670    0.1960784 0 0.2705882
+         0.4000000    0.1960784 0 0.2705882
+         0.5333330    0.1960784 0 0.2705882
+         0.6333330    0.1960784 0 0.2705882
+         0.7333330    0.1960784 0 0.2705882
+         0.7666670    0.1960784 0 0.2705882
+         1.1000000    0.0000000    0.0000000    0.0000000
+         4.9666700    0.0000000    0.0000000    0.0000000
+  endnode
+doneanim impact vff_voidrip
+
+donemodel vff_voidrip

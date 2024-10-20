@@ -332,6 +332,7 @@ void SMSummonClone(object oCaster, Location lLocation)
     oSummon = SMNoDrops(oSummon);//This may do what I want exactly
     ForceRefreshObjectUUID(oSummon);
     NWNX_Creature_AddAssociate(oCaster, oSummon, ASSOCIATE_TYPE_SUMMONED);
+    SetLocalInt(oCaster, VOID_CLONE_HEX_NUM, ObjectToString(oSummon));
     //These should be all the Feat modifications
     //Set Max HP to 75%, -2 to all Base Stats I think, unless Void Perfection
     if (bVoidPerf)
@@ -340,6 +341,7 @@ void SMSummonClone(object oCaster, Location lLocation)
         oSummon2 = SMNoDrops(oSummon2); //This may do what I want exactly
         ForceRefreshObjectUUID(oSummon2);
         NWNX_Creature_AddAssociate(oCaster, oSummon2, ASSOCIATE_TYPE_SUMMONED);
+        SetLocalInt(oCaster, VOID_CLONE_HEX_NUM2, ObjectToString(oSummon2));
     }
     else 
     {
@@ -442,4 +444,90 @@ object SMNoDrops(object oCreature)
         oGear = GetNextItemInInventory(oCreature);
     }
     return oCreature;
+}
+
+void SMApplyVoidResistances(object oPlayer)
+{
+    int nFireResist = 0;
+    int nColdResist = 0;
+    int nElecResist = 0;
+    int nAcidResist = 0;
+    int nSonicResist = 0;
+    int nVoidResist = 0;
+    int nDmgResist  = 0;
+
+    if (GetHasFeat(FEAT_VOID_TOUCHED, oPlayer))
+    {
+        nFireResist += 1;
+        nColdResist += 1;
+        nElecResist += 1;
+        nAcidResist += 1;
+        nSonicResist += 1;
+        nVoidResist += 1;
+        nDmgResist += 1;
+    }
+    if (GetHasFeat(FEAT_VOID_STRENGTHEN, oPlayer))
+    {
+        nFireResist += 4;
+        nColdResist += 4;
+        nElecResist += 4;
+        nAcidResist += 4;
+        nSonicResist += 4;
+        nVoidResist += 4;
+        nDmgResist += 2;    
+    }
+    if (nFireResist == 0)//Should make this more conclusive in the future I think
+    {
+        return;
+    }
+    effect eFireResist = EffectDamageResistance(DAMAGE_TYPE_FIRE, nFireResist);
+    effect eColdResist = EffectDamageResistance(DAMAGE_TYPE_COLD, nColdResist);
+    effect eElecResist = EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, nElecResist);
+    effect eAcidResist = EffectDamageResistance(DAMAGE_TYPE_ACID, nAcidResist);
+    effect eSonicResist = EffectDamageResistance(DAMAGE_TYPE_SONIC, nSonicResist);
+    effect eVoidResist = EffectDamageResistance(DAMAGE_TYPE_VOID, nVoidResist);
+    effect eDmgResist = EffectDamageResistance(DAMAGE_POWER_PLUS_FIVE, nDmgResist);
+
+    effect eLink = EffectLinkEffects(eFireResist, eColdResist);
+    eLink = EffectLinkEffects(eElecResist, eLink);
+    eLink = EffectLinkEffects(eAcidResist, eLink);
+    eLink = EffectLinkEffects(eSonicResist, eLink);
+    eLink = EffectLinkEffects(eVoidResist, eLink);
+    eLink = EffectLinkEffects(eDmgResist, eLink);
+    eLink = EffectTag(CONST_VOID_RESISTS, eLink);
+    eLink = SupernaturalEffect(eLink);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPlayer);
+    //May need to reset on rest
+}
+
+void SMVoidSwap(object oCaster, object oTarget)
+{
+    int oClone1 = GetLocalInt(oCaster, VOID_CLONE_HEX_NUM);
+    int oClone2 = GetLocalInt(oCaster, VOID_CLONE_HEX_NUM2);
+    int target = ObjectToString(oTarget);
+    if (target != oClone1 && target != oClone2)
+    {
+        //TODO//Increment useage - specify target and return
+        return;
+    }
+    Location lCaster = GetLocation(oCaster);
+    Location lTarget = GetLocation(oTarget);    
+    int ravage = GetHasFeat(FEAT_VOID_RAVAGING_SWAP, oCaster);
+    int empower = GetHasFeat(FEAT_VOID_EMPOWERING_SWAP, oCaster);
+    float size = 30.0;
+    object inBetween = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
+    while (GetIsObjectValid(inBetween)) 
+    {
+        //Exclude caster and target
+        if (inBetween != oCaster && inBetween != oTarget)
+        {
+            //Don't hurt friends
+            if (spellIsTarget(inBetween, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+            {
+                //Do the Ravage feat
+            }
+        }
+        GetNextObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
+    }
+    
 }

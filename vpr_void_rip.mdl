@@ -1,0 +1,246 @@
+endnode#MAXMODEL ASCII
+# model: vpr_void_rip
+filedependancy vpr_void_rip.max
+newmodel vpr_void_rip
+setsupermodel vpr_void_rip NULL
+classification EFFECT
+setanimationscale 1
+#MAXGEOM  ASCII
+beginmodelgeom vpr_void_rip
+node dummy vpr_void_rip
+  parent NULL
+endnode
+node emitter Flame01
+  parent vpr_void_rip
+  p2p 0
+  p2p_sel 1
+  affectedByWind 0
+  m_isTinted 0
+  bounce 0
+  random 0
+  inherit 1
+  inheritvel 0
+  inherit_local 0
+  inherit_part 0
+  splat 0
+  renderorder 0
+  spawntype 0
+  update Fountain
+  render Aligned_to_Particle_Dir
+  blend Normal
+  texture fxpa_flame00
+  xgrid 4
+  ygrid 4
+  loop 0
+  deadspace 0.20944
+  twosidedtex 1
+  blastRadius 0
+  blastLength 0
+  position 0 0 0
+  orientation 1 0 0 -3.14159
+  colorStart 0 0 0
+  colorEnd 0.262745 0.18823529 0.290196
+  alphaStart 0
+  alphaEnd 0
+  sizeStart 0
+  sizeEnd 3
+  sizeStart_y 0
+  sizeEnd_y 0
+  frameStart 0
+  frameEnd 0
+  birthrate 220
+  lifeExp 0.2
+  mass 0
+  spread 6.28319
+  particleRot 0
+  velocity 0
+  randvel 0
+  fps 0
+  xsize 0
+  ysize 0
+  bounce_co 0
+  blurlength 10
+  lightningDelay 0
+  lightningRadius 0
+  lightningScale 0
+  p2p_bezier2 0
+  p2p_bezier3 0
+  combinetime 0
+  drag 0
+  grav 0
+  threshold 0
+endnode
+node emitter spark
+  parent Flame01
+  p2p 0
+  p2p_sel 1
+  affectedByWind 0
+  m_isTinted 0
+  bounce 0
+  random 0
+  inherit 0
+  inheritvel 0
+  inherit_local 0
+  inherit_part 0
+  splat 0
+  renderorder 0
+  spawntype 1
+  update Fountain
+  render Normal
+  blend Lighten
+  texture fxpa_flare
+  xgrid 1
+  ygrid 1
+  loop 0
+  deadspace 0
+  twosidedtex 0
+  blastRadius 0
+  blastLength 0
+  position 0 -0.040911 0
+  orientation -0.5773503 0.5773503 0.5773503 -4.18879
+  colorStart 0.1960784 0 0.2705882
+  colorEnd 0.1960784 0 0.2705882
+  alphaStart 0.6
+  alphaEnd 1
+  sizeStart 0.7
+  sizeEnd 0
+  sizeStart_y 0
+  sizeEnd_y 0
+  frameStart 0
+  frameEnd 0
+  birthrate 10
+  lifeExp 1
+  mass 0
+  spread 3.49066
+  particleRot 0.5
+  velocity 1
+  randvel 0.5
+  fps 0
+  xsize 0
+  ysize 0
+  bounce_co 0
+  blurlength 10
+  lightningDelay 0
+  lightningRadius 0
+  lightningScale 0
+  p2p_bezier2 0
+  p2p_bezier3 0
+  combinetime 0
+  drag 0
+  grav 0
+  threshold 0
+endnode
+node light AuroraLight02
+  parent vpr_void_rip
+  ambientonly 0
+  shadow 1
+  isdynamic 1
+  affectdynamic 1
+  lightpriority 2
+  fadingLight 0
+  flareradius 0
+  position -0.000731277 0.0812304 0
+  orientation 0 0 0 0
+  radius 5
+  multiplier 5
+  color 0.262745 0.18823529 0.290196
+endnode
+node emitter WIND_Dummy
+  parent vpr_void_rip
+  p2p 0
+  p2p_sel 1
+  affectedByWind 0
+  m_isTinted 0
+  bounce 0
+  random 0
+  inherit 1
+  inheritvel 0
+  inherit_local 0
+  inherit_part 0
+  splat 0
+  renderorder 0
+  spawntype 0
+  update Explosion
+  render Normal
+  blend Lighten
+  texture NULL
+  xgrid 0
+  ygrid 0
+  loop 0
+  deadspace 0
+  twosidedtex 0
+  blastRadius 7
+  blastLength 2
+  position -0.00249214 0.000424452 -0.300185
+  orientation 0 0 0 0
+  colorStart 0.262745 0.18823529 0.290196
+  colorEnd 0.262745 0.18823529 0.290196
+  alphaStart 0
+  alphaEnd 0
+  sizeStart 0
+  sizeEnd 0
+  sizeStart_y 0
+  sizeEnd_y 0
+  frameStart 0
+  frameEnd 0
+  birthrate 1
+  lifeExp 0
+  mass 0
+  spread 0
+  particleRot 0
+  velocity 0
+  randvel 0
+  fps 0
+  xsize 0
+  ysize 0
+  bounce_co 0
+  blurlength 10
+  lightningDelay 0
+  lightningRadius 0
+  lightningScale 0
+  p2p_bezier2 0
+  p2p_bezier3 0
+  combinetime 0
+  drag 0
+  grav 0
+  threshold 0
+endnode
+endmodelgeom vpr_void_rip
+
+#MAXANIM ASCII
+newanim travel01 vpr_void_rip
+  length 0.466667
+  transtime 0.25
+  animroot vpr_void_rip
+  event 0 detonate
+  event 0.1 detonate
+  event 0.2 detonate
+  event 0.3 detonate
+  node dummy vpr_void_rip
+    parent NULL
+  endnode
+  node emitter Flame01
+    parent vpr_void_rip
+  endnode
+  node emitter spark
+    parent Flame01
+  endnode
+  node light AuroraLight02
+    parent vpr_void_rip
+    colorkey 9
+         0.0000000    0.8901970    0.7019610    0.1372550
+         0.0666667    0.9294120    0.8666670    0.4352940
+         0.1000000    0.8901970    0.7019610    0.1372550
+         0.1666670    0.9294120    0.8666670    0.4352940
+         0.2000000    0.8901970    0.7019610    0.1372550
+         0.2666670    0.9294120    0.8666670    0.4352940
+         0.3666670    0.8901970    0.7019610    0.1372550
+         0.4333330    0.9294120    0.8666670    0.4352940
+         0.4666670    0.0000001    0.0000000    0.0000000
+  endnode
+  node emitter WIND_Dummy
+    parent vpr_void_rip
+  endnode
+doneanim travel01 vpr_void_rip
+
+donemodel vpr_void_rip
