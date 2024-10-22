@@ -27,6 +27,10 @@ void main()
 {
     SpeakString("Started", 1);
     object oTarget = GetSpellTargetObject();
+    if (!GetIsObjectValid(oTarget))
+    {
+        oTarget = StringToObject("0x2");
+    }
     object oCaster = OBJECT_SELF;
     int nDamage = 0;
     int voidLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);

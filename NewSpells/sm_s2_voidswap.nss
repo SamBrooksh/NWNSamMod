@@ -10,6 +10,8 @@ void main()
     if (target != oClone1 && target != oClone2)
     {
         //TODO//Increment useage - specify target and return
+        IncrementRemainingFeatUses(oCaster, FEAT_VOID_SWAP);
+        SpeakString("Can only swap with a clone!", 1);
         return;
     }
     Location lCaster = GetLocation(oCaster);
@@ -18,6 +20,7 @@ void main()
     int empower = GetHasFeat(FEAT_VOID_EMPOWERING_SWAP, oCaster);
     float size = 30.0;
     object inBetween = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
+    
     while (GetIsObjectValid(inBetween)) 
     {
         //Exclude caster and target
@@ -32,4 +35,18 @@ void main()
         GetNextObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
     }
     
+    if (empower)
+    {
+        //Gain Buff (Clone and Player) After Swapping for short time 
+        //(+2 Atk Bonus, +10 temp HP, +10% to random modifiers - like clone applying debuffs?, +LVL to Void Damage for INT MOD turns) LVL 5
+        //Need to set up local int for the void damage and random modifier
+        int nTempHp = GetMaxHitPoints(oCaster) / 10;
+        int nAttackBonus = 2; 
+        effect eBuff = EffectAttackIncrease(2);
+        effect eTemp = EffectTemporaryHitpoints(nTempHp);
+        int nDuration = GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster) + 1;
+        eBuff = EffectLinkEffects(eBuff, eTemp);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, RoundsToSeconds(nDuration));
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, lTarget, RoundsToSeconds(nDuration));
+    }
 }

@@ -1,76 +1,98 @@
-#include "NW_I0_SPELLS"
-#include "x2_inc_spellhook"
-
-void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel);
-
-void main()
-{
-    object oTarget = GetSpellTargetObject();
-    object oCaster = OBJECT_SELF;
-    int voidLevel = 10;
-
-
-    if(!GetIsReactionTypeFriendly(oTarget))
+#include "nw_i0_spells"
+#include "sm_consts"
+// Persistent Debuff 
+void SMVoidFadingDebuff(object oTarget, object oCaster)
+{   
+    int fading_div = 2;
+    string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
+    int remaining = GetLocalInt(oTarget, concatenate);
+    if (GetIsDead(oTarget) || remaining < 1)
     {
-        //Fire cast spell at event for the specified target
-        //Probably will need to change this to Void Missile
-        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_MAGIC_MISSILE));
-        //Make a Touch attack
-        int resist = MyResistSpell(OBJECT_SELF, oTarget, 0.0);
-        //Apply the MIRV and damage effect
-        AssignCommand(oCaster, castMissile(oCaster, oTarget, resist, voidLevel));
-
-        int nClone = 1;
-        object oClone = GetAssociate(ASSOCIATE_TYPE_SUMMONED, oCaster, nClone);
-        //Probably should check that it is a clone somehow as well
-        while (GetIsObjectValid(oClone))
-        {
-            //if (CLONEVALID)
-            AssignCommand(oClone, castMissile(oCaster, oTarget, resist, voidLevel));
-            nClone += 1;
-            oClone = GetAssociate(ASSOCIATE_TYPE_SUMMONED, oCaster, nClone);
-        }
-
+        SetLocalInt(oTarget, concatenate, 0);
+        return;
     }
+    int dc = 10 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
+    dc = dc + GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster) / fading_div;
+
+    if (!MySavingThrow(SAVING_THROW_FORT, oTarget, dc, SAVING_THROW_TYPE_ALL, oCaster))
+    {
+        int nDamage = GetHitDice(oTarget);
+        effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
+        effect eVis = EffectVisualEffect(VFX_IMP_MIRV_VOID); //Find visuals for this
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        rounds = rounds + 1;    //This makes it so # of rounds successes are needed - May be too strong
+    }
+    SetLocalInt(oTarget, concatenate, remaining - 1);
+    DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
 }
 
-void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel)
+void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
 {
-    effect eMissile = EffectVisualEffect(VFX_IMP_MIRV); //Change
-    effect eVis = EffectVisualEffect(VFX_IMP_MAGBLUE);  //Change
-    float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);
-    float fDelay = fDist/(3.0 * log(fDist) + 2.0);
-    float fDelay2, fTime;
-    int nMissiles = nCasterLevel / 3;
-    if (nMissiles > 3)
-    {
-        nMissiles = 3;
-    }
-    int nCnt;
-    if (!RESISTED)
-    {
-        for (nCnt = 1; nCnt <= nMissiles; nCnt++)
-        {
-            //Roll damage
-            int nDam = 0;
+    string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
 
-            //Set damage effect
-            effect eDam = EffectDamage(nDam, DAMAGE_TYPE_MAGICAL);
-            //Apply the MIRV and damage effect
-            DelayCommand(fTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-            DelayCommand(fTime, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget));
-            DelayCommand(fDelay2, ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget));
-            fTime = fDelay;
-            fDelay2 += 0.1;
-            fTime += fDelay2;
+    if (GetLocalInt(oTarget, concatenate))
+    {   
+        //Should probably have something be said as well
+        //I think I'll just have it extend the duration
+        int current = GetLocalInt(oTarget, concatenate) + rounds;
+        SetLocalInt(oTarget, concatenate, current);
+        return;//Don't have it trigger twice as often
+    }
+    //Put in a VFX here as well
+    effect eVis = EffectVisualEffect(VFX_DUR_AURA_PULSE_GREY_WHITE);
+    effect second = EffectIcon(EFFECT_ICON_WOUNDING);
+    eVis = EffectLinkEffects(eVis, second);
+    eVis = TagEffect(eVis, CONST_VOID_FADING_DEBUFF);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
+    SetLocalInt(oTarget, concatenate, rounds);
+    DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
+}
 
-        }
-    }
-    else
+void SMVoidConsumedDebuff(object oTarget, object oCaster)
+{
+    string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
+    int curr = GetLocalInt(oTarget, concatenated);
+    if (GetIsDead(oTarget) || curr < 1)
     {
-        for (nCnt = 1; nCnt <= nMissiles; nCnt++)
+        //This may not work if target is dead...
+        SetLocalInt(oTarget, concatenated, 0);
+        effect removeVisual = GetFirstEffect(oTarget);
+        while (GetIsEffectValid(removeVisual))
         {
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget);
+            if (GetEffectTag(removeVisual) == CONST_VOID_CONSUMED_DEBUFF)
+            {
+                RemoveEffect(oTarget, removeVisual);
+            }
+            removeVisual = GetNextEffect(oTarget);
         }
+        return;
     }
+    int chance = 75;
+    if (d100() > chance)
+    {
+        //Apply the Fading Debuff for a single round
+        SMApplyFadingDebuff(oTarget, oCaster, 1);
+    }
+    
+    SetLocalInt(oTarget, concatenated, curr - 1);
+    DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster));
+}
+
+void SMApplyVoidConsumed(object oTarget, object oCaster, int rounds = 1)
+{
+    string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
+    int nDuration = GetLocalInt(oTarget, concatenated);
+    if (nDuration < 1)
+    {
+        DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster));
+        //May remove this check, and then that should allow multiple people to hit and apply debuffs - it will spread the duration between them though
+        //That may be a bit fast though
+    }
+    SetLocalInt(oTarget, concatenated, nDuration + rounds);
+    effect eVis = EffectVisualEffect(VFX_DUR_GLOW_GREY);
+    effect second = EffectIcon(EFFECT_ICON_WOUNDING);
+    eVis = EffectLinkEffects(eVis, second);
+    eVis = TagEffect(eVis, CONST_VOID_FADING_DEBUFF);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
 }

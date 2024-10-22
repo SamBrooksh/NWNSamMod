@@ -239,7 +239,7 @@ Fade Out - After getting hit, gain AC Bonus for a short time (1 round) LVL 7    
 Improved Fade Out - Larger Bonus, Longer time (INT MOD rounds) LVL 11
 Void's Hatred - Increases the chance that Clones try to apply Void Scorn LVL 13
 Ravaging Swap - Deal Void Damage to creatures between Clone and Player - 1d10 + INT per 3 levels LVL 9?
-Empowering Swap - Gain Buff (Clone and Player) After Swapping for short time (+2 Atk Bonus, +10 temp HP, +10% to random modifiers - like clone applying debuffs?, +LVL to Void Damage for INT MOO turns) LVL 5
+Empowering Swap - Gain Buff (Clone and Player) After Swapping for short time (+2 Atk Bonus, +10 temp HP, +10% to random modifiers - like clone applying debuffs?, +LVL to Void Damage for INT MOD turns) LVL 5
 
 
 

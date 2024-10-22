@@ -88,3 +88,11 @@ const int VFX_IMP_MIRV_VOID         =   674;
 const int VFX_MIRV_VOID_IMPACT      =   675;
 const int VFX_IMP_VOID_RIP          =   676;
 const int VFX_IMP_RIP_IMPACT        =   677;
+
+const int EFFECT_ICON_VOID_FADING   =   130;
+const int EFFECT_ICON_VOID_CONSUMED =   131;
+const int EFFECT_ICON_CLONE_PENALTY =   132;
+const int EFFECT_ICON_VOID_EMPOWERED =  133;
+const int EFFECT_ICON_VOID_SCORN    =   134;
+const int EFFECT_ICON_CURSED_STRIKES =  135;
+const int EFFECT_ICON_VOID_FADE_OUT =   136;

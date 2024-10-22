@@ -2,6 +2,27 @@
 #include "nw_i0_spells"
 #include "nwnx_creature"
 
+int SMisArcane(int class);
+int SMisDivine(int class);
+int SMGetCasterLevel(object oCaster, int arcaneDivine);
+int SMMaximizeOrEmpower(object oCaster, int feat, int damage, int max = 6);
+float SMExtended(object oCaster, int feat, float duration);
+void SMIncreaseUsesPerDay(object oTarget);
+void SMRestFinishedFunctions(object oSleeper);
+void SMVoidFadingDebuff(object oTarget, object oCaster);
+void SMVoidConsumedDebuff(object oTarget, object oCaster);
+void SMApplyVoidConsumed(object oTarget, object oCaster, int rounds = 1);
+void SMVoidScornedDebuff(object oTarget, object oCaster);
+void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1);
+void SMVoidCursedStrikesDebuff(object oTarget, object oCaster);
+void SMReinivigoratedBuff(object oCaster, object oTarget);
+void SMFadeOutBuff(object oGotHit);
+int SMHasVoidDebuff(object oTarget, object oCaster, string base);
+void SMRemoveBuff(object oTarget, string DEBUFF);
+void SMSummonClone(object oCaster, Location lLocation);
+object SMNoDrops(object oCreature);
+void SMApplyVoidResistances(object oPlayer);
+
 //Return TRUE if is an arcane class 
 int SMisArcane(int class)
 {
@@ -151,38 +172,22 @@ void SMVoidFadingDebuff(object oTarget, object oCaster)
     if (GetIsDead(oTarget) || remaining < 1)
     {
         SetLocalInt(oTarget, concatenate, 0);
+        SMRemoveBuff(oTarget, concatenate);
         return;
     }
     int dc = 10 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
-    dc = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster) / fading_div;
+    dc = dc + GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster) / fading_div;
 
-    if (!MySavingThrow(SAVING_THROW_FORT, oTarget, dc, oCaster))
+    if (!MySavingThrow(SAVING_THROW_FORT, oTarget, dc, SAVING_THROW_TYPE_ALL, oCaster))
     {
         int nDamage = GetHitDice(oTarget);
         effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
-        effect eVis = EffectVisualEffect(); //Find visuals for this
+        //effect eVis = EffectVisualEffect(); //Find visuals for this
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        rounds = rounds + 1;    //This makes it so # of rounds successes are needed - May be too strong
+        //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        remaining = remaining + 1;    //This makes it so # of rounds successes are needed - May be too strong
     }
     SetLocalInt(oTarget, concatenate, remaining - 1);
-    DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
-}
-
-void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
-{
-    string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
-
-    if (GetLocalInt(oTarget, concatenate))
-    {   
-        //Should probably have something be said as well
-        //I think I'll just have it extend the duration
-        int current = GetLocalInt(oTarget, concatenate) + rounds;
-        SetLocalInt(oTarget, concatenate, current);
-        return;//Don't have it trigger twice as often
-    }
-    //Put in a VFX here as well
-    SetLocalInt(oTarget, concatenate, rounds);
     DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
 }
 
@@ -193,6 +198,7 @@ void SMVoidConsumedDebuff(object oTarget, object oCaster)
     if (GetIsDead(oTarget) || curr < 1)
     {
         //This may not work if target is dead...
+        SMRemoveBuff(oTarget, concatenated);
         SetLocalInt(oTarget, concatenated, 0);
         return;
     }
@@ -207,35 +213,28 @@ void SMVoidConsumedDebuff(object oTarget, object oCaster)
     DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster));
 }
 
-void SMApplyVoidConsumed(object oTarget, oCaster, int rounds = 1)
+void SMApplyVoidConsumed(object oTarget, object oCaster, int rounds = 1)
 {
     string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
     int nDuration = GetLocalInt(oTarget, concatenated);
     if (nDuration < 1)
     {
         DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster));
+        nDuration = 0;      //Make sure negative doesn't affect it
         //May remove this check, and then that should allow multiple people to hit and apply debuffs - it will spread the duration between them though
         //That may be a bit fast though
+        effect eVis = EffectVisualEffect(VFX_DUR_AURA_ODD);
+        eVis = EffectLinkEffects(eVis, EffectIcon(EFFECT_ICON_VOID_CONSUMED));
+        eVis = EffectLinkEffects(eVis, EffectRunScript());
+        eVis = TagEffect(eVis, concatenated);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
     }
     SetLocalInt(oTarget, concatenated, nDuration + rounds);
 }
 
-void SMVoidScornedDebuff(int rounds, object oTarget, object oCaster)
-{
-    string concatenated = CONST_VOID_SCORNED_DEBUFF + ObjectToString(oCaster);
-    int current = GetLocalInt(oTarget, concatenated);
-    if (GetIsDead(oTarget) || current < 1)
-    {
-        SetLocalInt(oTarget, concatenated, 0);
-        return;
-    }
-
-    DelayCommand(RoundsToSeconds(1), SMVoidScornedDebuff(oTarget, oCaster));
-}
-
 void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1)
 {
-
+    effect eApply = EffectRunScript("sm_s2_voidscorn", "sm_s2_voidscorn", "sm_s2_voidscorn", RoundsToSeconds(1), IntToString(rounds));
 }
 
 void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
@@ -254,7 +253,9 @@ void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         SetLocalInt(oTarget, concatenated, 0);
+        SMRemoveBuff(oTarget, concatenated);
     }
+    SetLocalInt(oTarget, concatenated, current - 1);
     DelayCommand(RoundsToSeconds(1), SMVoidCursedStrikesDebuff(oTarget, oCaster));
 }
 
@@ -264,12 +265,17 @@ void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 5)
     if (GetLocalInt(oTarget, concatenated))
     {
         SpeakString("Target already has Cursed Strikes!", 1);
+        IncrementRemainingFeatUses(oCaster, FEAT_VOID_CURSED_STRIKES);
         return;
     }
     SetLocalInt(oTarget, concatenated, rounds);
     effect eVis = EffectVisualEffect(VFX_DUR_AURA_PULSE_BLUE_BLACK);
+    effect eIcon = EffectIcon(EFFECT_ICON_CURSED_STRIKES); //Make new icon
+    eVis = EffectLinkEffects(eVis, eIcon);
+    eVis = EffectLinkEffects(eVis, EffectRunScript());
+    eVis = TagEffect(eVis, concatenated);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, IntToFloat(rounds));
-    DelayCommand(RoundsToSeconds(1), SMVoidCursedStrikesDebuff(oTarget, oCaster));
+    DelayCommand(0.0, SMVoidCursedStrikesDebuff(oTarget, oCaster));
 }
 
 void SMReinivigoratedBuff(object oCaster, object oTarget)
@@ -290,7 +296,9 @@ void SMFadeOutBuff(object oGotHit)
     //Need to figure out what to show on occurence
     effect eVis = EffectVisualEffect(VFX_DUR_AURA_PULSE_GREY_WHITE);
     effect eLink = EffectLinkEffects(eACBonus, eVis);
-    eLink = EffectTag(eLink, CONST_FADE_OUT_BUFF);
+    eLink = HideEffectIcon(eLink);
+    eLink = EffectLinkEffect(eLink, EffectIcon(EFFECT_ICON_VOID_FADE_OUT)); //Make new icon name/picture
+    eLink = TagEffect(eLink, CONST_FADE_OUT_BUFF);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oGotHit, RoundsToSeconds(nduration));
 }
 
@@ -322,8 +330,12 @@ void SMSummonClone(object oCaster, Location lLocation)
     eCombined = EffectLinkEffects(eRef, eCombined);
     eCombined = EffectLinkEffects(eWill, eCombined);
     eCombined = EffectLinkEffects(eFort, eCombined);
+    eCombined = HideEffectIcon(eCombined);
+    eCombined = EffectLinkEffect(eCombined, EffectIcon(EFFECT_ICON_CLONE_PENALTY)); //Make new icon name/picture
+    eCombined = EffectLinkEffects(eCombined, EffectRunScript());
     eCombined = SupernaturalEffect(eCombined);
-    eCombined = EffectTag(eCombined, CONST_VOID_SUMMON_DEBUFF);
+    eCombined = TagEffect(eCombined, CONST_VOID_SUMMON_DEBUFF);
+    
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oCaster);
 
     object oSummon2;
@@ -352,14 +364,14 @@ void SMSummonClone(object oCaster, Location lLocation)
 
 }
 
-void SMRemoveBuff(object oCaster, string DEBUFF)
+void SMRemoveBuff(object oTarget, string DEBUFF)
 {
-    effect eEffect = GetFirstEffect(oCaster);
+    effect eEffect = GetFirstEffect(oTarget);
     while(GetIsEffectValid(eEffect))
     {
         if(GetEffectTag(eEffect) == DEBUFF)
-            RemoveEffect(oCaster, eEffect);
-        eEffect = GetNextEffect(oCaster);
+            RemoveEffect(oTarget, eEffect);
+        eEffect = GetNextEffect(oTarget);
     }
 }
 
@@ -494,40 +506,8 @@ void SMApplyVoidResistances(object oPlayer)
     eLink = EffectLinkEffects(eSonicResist, eLink);
     eLink = EffectLinkEffects(eVoidResist, eLink);
     eLink = EffectLinkEffects(eDmgResist, eLink);
-    eLink = EffectTag(CONST_VOID_RESISTS, eLink);
+    eLink = TagEffect(CONST_VOID_RESISTS, eLink);
     eLink = SupernaturalEffect(eLink);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPlayer);
     //May need to reset on rest
-}
-
-void SMVoidSwap(object oCaster, object oTarget)
-{
-    int oClone1 = GetLocalInt(oCaster, VOID_CLONE_HEX_NUM);
-    int oClone2 = GetLocalInt(oCaster, VOID_CLONE_HEX_NUM2);
-    int target = ObjectToString(oTarget);
-    if (target != oClone1 && target != oClone2)
-    {
-        //TODO//Increment useage - specify target and return
-        return;
-    }
-    Location lCaster = GetLocation(oCaster);
-    Location lTarget = GetLocation(oTarget);    
-    int ravage = GetHasFeat(FEAT_VOID_RAVAGING_SWAP, oCaster);
-    int empower = GetHasFeat(FEAT_VOID_EMPOWERING_SWAP, oCaster);
-    float size = 30.0;
-    object inBetween = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
-    while (GetIsObjectValid(inBetween)) 
-    {
-        //Exclude caster and target
-        if (inBetween != oCaster && inBetween != oTarget)
-        {
-            //Don't hurt friends
-            if (spellIsTarget(inBetween, SPELL_TARGET_STANDARDHOSTILE, oCaster))
-            {
-                //Do the Ravage feat
-            }
-        }
-        GetNextObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
-    }
-    
 }
