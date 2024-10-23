@@ -1,10 +1,10 @@
 #include "sm_consts"
 
 void VoidScornedDebuff(object oTarget, object oCaster, int chance)
-{//Should have there be a chance for a random effect?
+{//Should have there be a chance for a random effect? Heal Caster?
     if (d100() > chance)
     {
-        SpeakString("Void Scorn!");
+        //SpeakString("Void Scorn!");
     }
 }
 
@@ -14,17 +14,19 @@ void ApplyVoidScorned(object oTarget, object oCaster, int rounds = 1)
     int currentInt = GetLocalInt(oTarget, concatenated);
     SetLocalInt(oTarget, concatenated, currentInt + 1);
     //-2 Will, AC, STR, DEX, Reflex
-    effect eWill = EffectSavingThrowDecrease(SAVING_THROW_WILL, -2);
-    effect eAC = EffectACDecrease(-2);
-    effect eSTR = EffectAbilityDecrease(ABILITY_STRENGTH, -2);
-    effect eDEX = EffectAbilityDecrease(ABILITY_DEXTERITY, -2);
-    effect eReflex = EffectSavingThrowDecrease(SAVING_THROW_REFLEX, -2);
-    effect eVis = EffectLinkEffects(eWill, eAc);
+    effect eWill = EffectSavingThrowDecrease(SAVING_THROW_WILL, 2);
+    effect eAC = EffectACDecrease(2);
+    effect eSTR = EffectAbilityDecrease(ABILITY_STRENGTH, 2);
+    effect eDEX = EffectAbilityDecrease(ABILITY_DEXTERITY, 2);
+    effect eReflex = EffectSavingThrowDecrease(SAVING_THROW_REFLEX, 2);
+    effect eVis = EffectLinkEffects(eWill, eAC);
     eVis = EffectLinkEffects(eVis, eSTR);
     eVis = EffectLinkEffects(eVis, eDEX);
     eVis = EffectLinkEffects(eVis, eReflex);
     eVis = HideEffectIcon(eVis);
     eVis = EffectLinkEffects(eVis, EffectIcon(EFFECT_ICON_VOID_SCORN));
+    eVis = EffectLinkEffects(eVis, EffectRunScript());
+    //Add Visual and Sound effects
     eVis = TagEffect(eVis, concatenated);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
 }
@@ -37,11 +39,12 @@ void RemoveVoidScorned(object oTarget, object oCaster)
     effect eRemove = GetFirstEffect(oTarget);
     while (GetIsEffectValid(eRemove))
     {
-        if (eRemove == concatenated)
+        if (GetEffectTag(eRemove) == concatenated)
         {
-            RemoveEffect(eRemove);
+            RemoveEffect(oTarget, eRemove);
             return;
         }
+        eRemove = GetNextEffect(oTarget);
     }
 }
 

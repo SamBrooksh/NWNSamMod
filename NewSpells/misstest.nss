@@ -1,6 +1,16 @@
 #include "nw_i0_spells"
 #include "sm_consts"
 // Persistent Debuff 
+void SMRemoveBuff(object oTarget, string DEBUFF)
+{
+    effect eEffect = GetFirstEffect(oTarget);
+    while(GetIsEffectValid(eEffect))
+    {
+        if(GetEffectTag(eEffect) == DEBUFF)
+            RemoveEffect(oTarget, eEffect);
+        eEffect = GetNextEffect(oTarget);
+    }
+}
 void SMVoidFadingDebuff(object oTarget, object oCaster)
 {   
     int fading_div = 2;
@@ -9,6 +19,7 @@ void SMVoidFadingDebuff(object oTarget, object oCaster)
     if (GetIsDead(oTarget) || remaining < 1)
     {
         SetLocalInt(oTarget, concatenate, 0);
+        SMRemoveBuff(oTarget, concatenate);
         return;
     }
     int dc = 10 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
@@ -18,10 +29,10 @@ void SMVoidFadingDebuff(object oTarget, object oCaster)
     {
         int nDamage = GetHitDice(oTarget);
         effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
-        effect eVis = EffectVisualEffect(VFX_IMP_MIRV_VOID); //Find visuals for this
+        //effect eVis = EffectVisualEffect(); //Find visuals for this
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        rounds = rounds + 1;    //This makes it so # of rounds successes are needed - May be too strong
+        //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        remaining = remaining + 1;    //This makes it so # of rounds successes are needed - May be too strong
     }
     SetLocalInt(oTarget, concatenate, remaining - 1);
     DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
@@ -30,7 +41,6 @@ void SMVoidFadingDebuff(object oTarget, object oCaster)
 void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
 {
     string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
-
     if (GetLocalInt(oTarget, concatenate))
     {   
         //Should probably have something be said as well
@@ -40,10 +50,10 @@ void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
         return;//Don't have it trigger twice as often
     }
     //Put in a VFX here as well
-    effect eVis = EffectVisualEffect(VFX_DUR_AURA_PULSE_GREY_WHITE);
-    effect second = EffectIcon(EFFECT_ICON_WOUNDING);
-    eVis = EffectLinkEffects(eVis, second);
-    eVis = TagEffect(eVis, CONST_VOID_FADING_DEBUFF);
+    effect eVis = EffectVisualEffect(VFX_DUR_AURA_PULSE_GREY_BLACK);
+    eVis = EffectLinkEffects(eVis, EffectIcon(EFFECT_ICON_VOID_FADING));
+    eVis = EffectLinkEffects(eVis, EffectRunScript());
+    eVis = TagEffect(eVis, concatenate);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
     SetLocalInt(oTarget, concatenate, rounds);
     DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
@@ -56,16 +66,8 @@ void SMVoidConsumedDebuff(object oTarget, object oCaster)
     if (GetIsDead(oTarget) || curr < 1)
     {
         //This may not work if target is dead...
+        SMRemoveBuff(oTarget, concatenated);
         SetLocalInt(oTarget, concatenated, 0);
-        effect removeVisual = GetFirstEffect(oTarget);
-        while (GetIsEffectValid(removeVisual))
-        {
-            if (GetEffectTag(removeVisual) == CONST_VOID_CONSUMED_DEBUFF)
-            {
-                RemoveEffect(oTarget, removeVisual);
-            }
-            removeVisual = GetNextEffect(oTarget);
-        }
         return;
     }
     int chance = 75;
@@ -86,13 +88,15 @@ void SMApplyVoidConsumed(object oTarget, object oCaster, int rounds = 1)
     if (nDuration < 1)
     {
         DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster));
+        nDuration = 0;      //Make sure negative doesn't affect it
         //May remove this check, and then that should allow multiple people to hit and apply debuffs - it will spread the duration between them though
         //That may be a bit fast though
+        effect eVis = EffectVisualEffect(VFX_DUR_AURA_ODD);
+        eVis = EffectLinkEffects(eVis, EffectIcon(EFFECT_ICON_VOID_CONSUMED));
+        eVis = EffectLinkEffects(eVis, EffectRunScript());
+        eVis = TagEffect(eVis, concatenated);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
     }
     SetLocalInt(oTarget, concatenated, nDuration + rounds);
-    effect eVis = EffectVisualEffect(VFX_DUR_GLOW_GREY);
-    effect second = EffectIcon(EFFECT_ICON_WOUNDING);
-    eVis = EffectLinkEffects(eVis, second);
-    eVis = TagEffect(eVis, CONST_VOID_FADING_DEBUFF);
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
 }
+

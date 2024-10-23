@@ -1,5 +1,9 @@
-const   int     IP_CONST_DAMAGETYPE_VOID    =   15;
-const   int     DAMAGE_TYPE_VOID            =   8192;
+const   int IP_CONST_DAMAGETYPE_VOID  =    15;
+
+const int IP_CONST_VOID_CLONE_HIT   =     141;
+const int IP_CONST_ONHIT_VOID_STRIKE=     142;
+
+const   int     DAMAGE_TYPE_VOID     =   8192;
 
 const int CLASS_MAX = 8;
 
@@ -59,6 +63,29 @@ const int FEAT_VOID_RAVAGING_SWAP =     1185;
 const int FEAT_VOID_EMPOWERING_SWAP =   1186;
 const int FEAT_COMBINED_SPELLS =        1187;
 
+const int SPELL_VOID_CLONE  =           850;
+const int SPELL_VOID_SWAP   =           851;
+const int SPELL_VOID_CURSE  =           852;
+const int SPELL_VOID_HOP    =           853;
+const int SPELL_VOID_SCORN  =           854;
+const int SPELL_VOID_REINVIGORATE   =   855;
+const int SPELL_VOID_SAPPING_STRIKE =   856;
+const int SPELL_IMPENDING_VOID      =   857;
+const int SPELL_VOID_RIP            =   858;
+const int SPELL_CURSED_STRIKE       =   859;
+const int SPELL_VOID_MISSLE         =   860;
+const int SPELL_FADING_DEBUFF       =   861;
+const int SPELL_CONSUMED_BY_VOID    =   862;
+const int SPELL_VOID_SCORNED        =   863;
+const int SPELL_COMBINED_SPELL      =   864;
+const int SPELL_SPELL_SYNTHESIS     =   865;
+const int SPELL_ARCANE_SYNTHESIS    =   866;
+const int SPELL_DIVINE_SYNTHESIS    =   867;
+const int SPELL_SYNTHESIS_CAST      =   868;
+const int SPELL_VOID_CLONE_ATTACK   =   869;
+const int SPELL_VOID_STRIKE         =   870;
+
+
 const float SPELL_REACTION_MULTIPLIER = 2.0;
 
 
@@ -81,7 +108,7 @@ const string VOID_CLONE_HEX_NUM2      = "SM_V_CLONE_HEX_NUM2";
 const string CONST_USES_VMISSILE     =  "SM_VMISS_USES";
 const string CONST_USES_VOID_RIP     =  "SM_VRIP_USES";
 
-const int SPELL_VOID_MISSLE         =   860;
+const string CONST_VOID_STRIKE_ITEM_TAG="SM_VOIDSTRIKE";
 
 const int VFX_IMP_MIRV_RED          =   673;
 const int VFX_IMP_MIRV_VOID         =   674;

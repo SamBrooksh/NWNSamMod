@@ -10,6 +10,7 @@ float SMExtended(object oCaster, int feat, float duration);
 void SMIncreaseUsesPerDay(object oTarget);
 void SMRestFinishedFunctions(object oSleeper);
 void SMVoidFadingDebuff(object oTarget, object oCaster);
+void SMApplyVoidFadingDebuff(object oTarget, object oCaster, int rounds);
 void SMVoidConsumedDebuff(object oTarget, object oCaster);
 void SMApplyVoidConsumed(object oTarget, object oCaster, int rounds = 1);
 void SMVoidScornedDebuff(object oTarget, object oCaster);
@@ -191,6 +192,27 @@ void SMVoidFadingDebuff(object oTarget, object oCaster)
     DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
 }
 
+void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
+{
+    string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
+    if (GetLocalInt(oTarget, concatenate))
+    {   
+        //Should probably have something be said as well
+        //I think I'll just have it extend the duration
+        int current = GetLocalInt(oTarget, concatenate) + rounds;
+        SetLocalInt(oTarget, concatenate, current);
+        return;//Don't have it trigger twice as often
+    }
+    //Put in a VFX here as well
+    effect eVis = EffectVisualEffect(VFX_DUR_AURA_PULSE_GREY_BLACK);
+    eVis = EffectLinkEffects(eVis, EffectIcon(EFFECT_ICON_VOID_FADING));
+    eVis = EffectLinkEffects(eVis, EffectRunScript());
+    eVis = TagEffect(eVis, concatenate);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
+    SetLocalInt(oTarget, concatenate, rounds);
+    DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
+}
+
 void SMVoidConsumedDebuff(object oTarget, object oCaster)
 {
     string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
@@ -254,6 +276,7 @@ void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         SetLocalInt(oTarget, concatenated, 0);
         SMRemoveBuff(oTarget, concatenated);
+        return;
     }
     SetLocalInt(oTarget, concatenated, current - 1);
     DelayCommand(RoundsToSeconds(1), SMVoidCursedStrikesDebuff(oTarget, oCaster));
@@ -274,7 +297,7 @@ void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 5)
     eVis = EffectLinkEffects(eVis, eIcon);
     eVis = EffectLinkEffects(eVis, EffectRunScript());
     eVis = TagEffect(eVis, concatenated);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, IntToFloat(rounds));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(rounds));
     DelayCommand(0.0, SMVoidCursedStrikesDebuff(oTarget, oCaster));
 }
 
