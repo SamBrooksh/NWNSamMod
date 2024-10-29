@@ -7,15 +7,23 @@ void main()
 
     object oCaster = GetMaster(oAttacker);
     int voidHatred = GetHasFeat(FEAT_VOID_HATRED, oAttacker);
+    int chance = 50;    //Change this when more accurate
     if (GetHasFeat(FEAT_VOID_SCORN, oCaster))
     {
         //Add Void Scorn Chance
-        SpeakString("Void Scorn Applied", 1);
+        if (d100() < chance)
+        {
+            SpeakString("Void Scorn Applied", 1);
+        }
     }
+    
     if (GetHasFeat(FEAT_VOID_CONSUMED_BY_VOID, oCaster))
     {
         //Add Consumed by void chance to be applied
-        SpeakString("Consumed by Void Applied", 1);
+        if (d100() < chance)
+        {
+            SpeakString("Consumed by Void Applied", 1);
+        }
     }
     if (GetHasFeat(FEAT_SAPPING_STRIKE, oCaster))
     {

@@ -123,3 +123,7 @@ const int EFFECT_ICON_VOID_EMPOWERED =  133;
 const int EFFECT_ICON_VOID_SCORN    =   134;
 const int EFFECT_ICON_CURSED_STRIKES =  135;
 const int EFFECT_ICON_VOID_FADE_OUT =   136;
+
+
+const int ARCANE = 0;
+const int DIVINE = 1;

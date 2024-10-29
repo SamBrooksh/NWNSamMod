@@ -14,8 +14,8 @@ void main()
         SpeakString("Can only swap with a clone!", 1);
         return;
     }
-    Location lCaster = GetLocation(oCaster);
-    Location lTarget = GetLocation(oTarget);    
+    location lCaster = GetLocation(oCaster);
+    location lTarget = GetLocation(oTarget);    
     int ravage = GetHasFeat(FEAT_VOID_RAVAGING_SWAP, oCaster);
     int empower = GetHasFeat(FEAT_VOID_EMPOWERING_SWAP, oCaster);
     float size = 30.0;
@@ -49,4 +49,7 @@ void main()
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, RoundsToSeconds(nDuration));
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, lTarget, RoundsToSeconds(nDuration));
     }
+    AssignCommand(oTarget, ClearAllActions());
+    AssignCommand(oTarget, ActionJumpToLocation(lCaster));
+    AssignCommand(oCaster, ActionJumpToLocation(lTarget));
 }

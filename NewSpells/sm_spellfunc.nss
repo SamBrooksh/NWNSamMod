@@ -37,10 +37,9 @@ int SMisArcane(int class)
         //case CLASS_PRES_PALE_MASTER:
         //case CLASS_TYPE_MYSTIC_THEURGE:
         //case CLASS_TYPE_ELDRITCH_KNIGHT:
-            return TRUE;
-        default:
-            return FALSE;
+            return TRUE;  
     }
+    return FALSE;
 }
 
 //Return TRUE if is divine class
@@ -55,34 +54,33 @@ int SMisDivine(int class)
 
         //Add the additional classes here
             return TRUE;
-        default:
-            return FALSE;
     }
+    return FALSE;
 }
 
 //Returns the modified level for spells
 //class should be 0 for Arcane, and 1 for Divine I think
 int SMGetCasterLevel(object oCaster, int arcaneDivine)
 {
-    const int ARCANE = 0;
-    const int DIVINE = 1;
+    
     int total = 0;
     //Only doing if more than one class
-    if (GetClassByPosition(oCaster, 2) != CLASS_TYPE_INVALID)
+    if (GetClassByPosition(2, oCaster) != CLASS_TYPE_INVALID)
     {
-        for (int i = 0; i < CLASS_MAX; i += 1)  //May change if 
+        int i = 0;
+        for (i = 0; i < CLASS_MAX; i += 1)  //May change if 
         {
             //Go through and add the various levels of arcane if class is arcane, and divine if divine
             int pClass = GetClassByPosition(i, oCaster);
             if (pClass != CLASS_TYPE_INVALID)
             {
                 //Arcane Spellcaster
-                if (SM_isArcane(pClass) && arcaneDivine == ARCANE)
+                if (SMisArcane(pClass) && arcaneDivine == ARCANE)
                 {
                     total += GetLevelByClass(pClass, oCaster);
                 }
                 //Divine Spellcaster
-                else if (SM_isDivine(pClass) && arcaneDivine == DIVINE)
+                else if (SMisDivine(pClass) && arcaneDivine == DIVINE)
                 {
                     total += GetLevelByClass(pClass, oCaster);
                 }
@@ -100,7 +98,7 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
                     }
                     else
                     {
-                        string DivineSpellMod = Get2DAString("classes", "DivSpellLvlMod", PClass);
+                        string DivineSpellMod = Get2DAString("classes", "DivSpellLvlMod", pClass);
                         int DivBonus = StringToInt(DivineSpellMod);
                         if (DivineSpellMod != "" && DivBonus > 0)
                         {
@@ -112,6 +110,19 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
             }
             else    //Break out a little early
                 return total;
+        }
+    }
+    else
+    {
+        //Arcane Spellcaster
+        if (SMisArcane(GetClassByPosition(1, oCaster)) && arcaneDivine == ARCANE)
+        {
+            total += GetLevelByPosition(1, oCaster);
+        }
+        //Divine Spellcaster
+        else if (SMisDivine(GetClassByPosition(1, oCaster)) && arcaneDivine == DIVINE)
+        {
+            total += GetLevelByPosition(1, oCaster);
         }
     }
     return total;
