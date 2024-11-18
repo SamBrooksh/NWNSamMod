@@ -4,13 +4,14 @@
 const string NUI_TUTORIAL_HELLO_WORLD_WINDOW = "nui_tutorial_hello_world_window";
 const string NUI_SAM_ALL_SPELLS             =   "nui_sam_all_spells";
 const string NUI_SM_LEARN_ARCANE_SPELLS     =   "nui_sm_learn_arcane_spells";
+const string NUI_SM_ADDITIONAL_SCREEN       =   "nui_sm_additional_screen";
 
 const string SM_SPELL_CRITICAL_CONST        =   "SM_SPELL_CRITICAL";
 const string SM_SPELL_CRITICAL2_CONST       =   "SM_SPELL_CRITICAL2";
 const string SM_SPELL_CRITICAL3_CONST       =   "SM_SPELL_CRITICAL3";
 
-const int ARCANE = 0;
-const int DIVINE = 1;
+const int ARCANE_CLASS = 0;
+const int DIVINE_CLASS = 1;
 const int CLASS_MAX = 8;
 
 int SMisArcane(int class)
@@ -62,19 +63,19 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
             if (pClass != CLASS_TYPE_INVALID)
             {
                 //Arcane Spellcaster
-                if (SMisArcane(pClass) && arcaneDivine == ARCANE)
+                if (SMisArcane(pClass) && arcaneDivine == ARCANE_CLASS)
                 {
                     total += GetLevelByClass(pClass, oCaster);
                 }
                 //Divine Spellcaster
-                else if (SMisDivine(pClass) && arcaneDivine == DIVINE)
+                else if (SMisDivine(pClass) && arcaneDivine == DIVINE_CLASS)
                 {
                     total += GetLevelByClass(pClass, oCaster);
                 }
                 //Check for Prestige Classes Modifications
                 else
                 {
-                    if (arcaneDivine == ARCANE)
+                    if (arcaneDivine == ARCANE_CLASS)
                     {
                         string ArcaneSpellMod = Get2DAString("classes", "ArcSpellLvlMod", pClass);
                         int ArcBonus = StringToInt(ArcaneSpellMod);
@@ -102,12 +103,12 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
     else
     {
         //Arcane Spellcaster
-        if (SMisArcane(GetClassByPosition(1, oCaster)) && arcaneDivine == ARCANE)
+        if (SMisArcane(GetClassByPosition(1, oCaster)) && arcaneDivine == ARCANE_CLASS)
         {
             total += GetLevelByPosition(1, oCaster);
         }
         //Divine Spellcaster
-        else if (SMisDivine(GetClassByPosition(1, oCaster)) && arcaneDivine == DIVINE)
+        else if (SMisDivine(GetClassByPosition(1, oCaster)) && arcaneDivine == DIVINE_CLASS)
         {
             total += GetLevelByPosition(1, oCaster);
         }
@@ -342,7 +343,10 @@ void NuiAllSpells(object oPlayer)
         wizard = Get2DAString("spells", "Wiz_Sorc", pos);
     }
 
-    json information = NuiLabel(JsonString("Choose 3 spells to have!\nGreen is 1st priority\nBlue is 2nd Priority\nRed is 3rd Priority"), NUI_HALIGN_CENTER, NUI_VALIGN_MIDDLE);
+    json information = NuiText(JsonString("Choose 3 spells to have!\nGreen is 1st priority\nBlue is 2nd Priority\nRed is 3rd Priority"), FALSE, NUI_SCROLLBARS_NONE);
+    information = NuiHeight(information, 80.0);    
+    information = NuiWidth(information, 200.0);
+    information = JsonArrayInsert(JsonArray(), information);
     information = NuiRow(information);
 
     jLevel0 = NuiRow(jLevel0);
@@ -423,9 +427,11 @@ void LearnNewArcaneSpells(object oPlayer)
     int pos = 0;
     string name = Get2DAString("spells", "Name", pos);
     string label = Get2DAString("spells", "Label", pos);
+    string desc = Get2DAString("spells", "SpellDesc", pos);
     int nArcaneCasterLevel = (SMGetCasterLevel(oPlayer, 0) + 1) / 2;
     int bard = GetLevelByClass(CLASS_TYPE_BARD, oPlayer);
     int wizSorc = GetLevelByClass(CLASS_TYPE_WIZARD, oPlayer);
+    int count = Get2DARowCount("spells");
     int classType = CLASS_TYPE_WIZARD;
     string classTypeName = "Wiz_Sorc";
     if (wizSorc < 1)
@@ -440,14 +446,12 @@ void LearnNewArcaneSpells(object oPlayer)
     }
 
     string spellLevel = Get2DAString("spells", classTypeName, pos);
-    json jAccept = NuiButton(JsonString("Accept"));
-    jAccept = NuiId(jButtonm "ACCEPT");
-    jAccept = NuiRow(jAccept);
-    while (label != "")
+    while (pos < count)
     {
         json jButton = NuiButton(JsonString(GetStringByStrRef(StringToInt(name))));
+        jButton = NuiTooltip(jButton, JsonString(GetStringByStrRef(StringToInt(desc))));
         jButton = NuiId(jButton, "spell_"+IntToString(pos + 1));
-        jButton = NuiStyleForegroundColor(jButton, NuiBind(IntToString(pos+1)));
+        jButton = NuiStyleForegroundColor(jButton, NuiBind("spell_"+IntToString(pos+1)));
 
         if (StringToInt(spellLevel) <= nArcaneCasterLevel && !GetIsInKnownSpellList(oPlayer, classType, pos))
         {
@@ -489,6 +493,7 @@ void LearnNewArcaneSpells(object oPlayer)
         name = Get2DAString("spells", "Name", pos);
         spellLevel = Get2DAString("spells", classTypeName, pos);
         label = Get2DAString("spells", "Label", pos);
+        desc = Get2DAString("spells", "SpellDesc", pos);
 
     }
     jLevel0 = NuiRow(jLevel0);
@@ -512,7 +517,11 @@ void LearnNewArcaneSpells(object oPlayer)
     jRoot = JsonArrayInsert(jRoot, jLevel7);
     jRoot = JsonArrayInsert(jRoot, jLevel8);
     jRoot = JsonArrayInsert(jRoot, jLevel9);
-    jRoot = JsonArrayInsert(jRoot, jAccept);
+
+    json jAccept = NuiButton(JsonString("Accept"));
+    jAccept = NuiId(jAccept, "spell_ACCEPT");
+    jAccept = JsonArrayInsert(JsonArray(), jAccept);
+    jRoot = JsonArrayInsert(jRoot, NuiRow(jAccept));
 
     jRoot = NuiCol(jRoot);
     json nui = NuiWindow(jRoot, JsonString("Choose two spells"), NuiBind("geometry"), NuiBind("resizable"), NuiBind("collapsed"), NuiBind("closable"), NuiBind("transparent"), NuiBind("border"));
@@ -524,5 +533,44 @@ void LearnNewArcaneSpells(object oPlayer)
     NuiSetBind(oPlayer, nToken, "closable", JsonBool(TRUE));
     NuiSetBind(oPlayer, nToken, "transparent", JsonBool(FALSE));
     NuiSetBind(oPlayer, nToken, "border", JsonBool(TRUE));
+
+    int iterate = 0;
+    for (iterate = 0; iterate < pos; iterate += 1)
+    {
+        NuiSetBind(oPlayer, nToken, "spell_"+IntToString(iterate), NuiColor(100,100,100));
+    }
+    NuiSetBind(oPlayer, nToken, "spell_ACCEPT", NuiColor(100,100,100));
 }
 
+void AdditionalScreen(object oPlayer)
+{
+    int nPreviousToken = NuiFindWindow(oPlayer, NUI_SM_ADDITIONAL_SCREEN);
+    if (nPreviousToken != 0)
+    {
+        NuiDestroy(oPlayer, nPreviousToken);
+    }
+    json jRoot = JsonArray();
+    json jLevel0 = JsonArray();
+    json jLevel1 = JsonArray();
+    json jLevel2 = JsonArray();
+    json jLevel3 = JsonArray();
+    json jLevel4 = JsonArray();
+    json jLevel5 = JsonArray();
+    json jLevel6 = JsonArray();
+    json jLevel7 = JsonArray();
+    json jLevel8 = JsonArray();
+    json jLevel9 = JsonArray();
+
+
+
+    jRoot = NuiCol(jRoot);
+    json nui = NuiWindow(jRoot, JsonString("Sample Test"), NuiBind("geometry"), NuiBind("resizable"), NuiBind("collapsed"), NuiBind("closable"), NuiBind("transparent"), NuiBind("border"));
+    int nToken = NuiCreate(oPlayer, nui, NUI_SM_ADDITIONAL_SCREEN);
+
+    NuiSetBind(oPlayer, nToken, "geometry", NuiRect(-1.0f, -1.0f, 480.0f, 240.0f));
+    NuiSetBind(oPlayer, nToken, "collapsed", JsonBool(FALSE));
+    NuiSetBind(oPlayer, nToken, "resizable", JsonBool(TRUE));
+    NuiSetBind(oPlayer, nToken, "closable", JsonBool(TRUE));
+    NuiSetBind(oPlayer, nToken, "transparent", JsonBool(FALSE));
+    NuiSetBind(oPlayer, nToken, "border", JsonBool(TRUE));
+}
