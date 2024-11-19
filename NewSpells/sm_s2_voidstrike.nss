@@ -1,11 +1,12 @@
 #include "sm_consts"
-//Eventually Remove this
+// Eventually Remove this
 int SMHasVoidDebuff(object oTarget, object oCaster, string base)
 {
     string concat = base + ObjectToString(oCaster);
     return GetLocalInt(oTarget, concat);
 }
 
+// On hit for item, deal Void damage
 void main()
 {
     object oCaster = OBJECT_SELF;

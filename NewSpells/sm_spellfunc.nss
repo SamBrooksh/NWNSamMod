@@ -24,7 +24,7 @@ void SMSummonClone(object oCaster, Location lLocation);
 object SMNoDrops(object oCreature);
 void SMApplyVoidResistances(object oPlayer);
 
-//Return TRUE if is an arcane class 
+// Return TRUE if is an arcane class 
 int SMisArcane(int class)
 {
     switch(class)
@@ -33,16 +33,16 @@ int SMisArcane(int class)
         case CLASS_TYPE_SORCERER:
         case CLASS_TYPE_WIZARD:
         
-        //Add the additional classes here
-        //case CLASS_PRES_PALE_MASTER:
-        //case CLASS_TYPE_MYSTIC_THEURGE:
-        //case CLASS_TYPE_ELDRITCH_KNIGHT:
+        // Add the additional classes here
+        // case CLASS_PRES_PALE_MASTER:
+        // case CLASS_TYPE_MYSTIC_THEURGE:
+        // case CLASS_TYPE_ELDRITCH_KNIGHT:
             return TRUE;  
     }
     return FALSE;
 }
 
-//Return TRUE if is divine class
+// Return TRUE if is divine class
 int SMisDivine(int class)
 {
     switch(class)
@@ -52,42 +52,42 @@ int SMisDivine(int class)
         case CLASS_TYPE_RANGER:
         case CLASS_TYPE_PALADIN:
 
-        //Add the additional classes here
+        // Add the additional classes here
             return TRUE;
     }
     return FALSE;
 }
 
-//Returns the modified level for spells
-//class should be 0 for Arcane, and 1 for Divine I think
+// Returns the modified level for spells
+// Class should be 0 for Arcane, and 1 for Divine I think
 int SMGetCasterLevel(object oCaster, int arcaneDivine)
 {
     
     int total = 0;
-    //Only doing if more than one class
+    // Only doing if more than one class
     if (GetClassByPosition(2, oCaster) != CLASS_TYPE_INVALID)
     {
         int i = 0;
-        for (i = 0; i < CLASS_MAX; i += 1)  //May change if 
+        for (i = 0; i < CLASS_MAX; i += 1)  // May change if 
         {
-            //Go through and add the various levels of arcane if class is arcane, and divine if divine
+            // Go through and add the various levels of arcane if class is arcane, and divine if divine
             int pClass = GetClassByPosition(i, oCaster);
             if (pClass != CLASS_TYPE_INVALID)
             {
-                //Arcane Spellcaster
-                if (SMisArcane(pClass) && arcaneDivine == ARCANE)
+                // Arcane Spellcaster
+                if (SMisArcane(pClass) && arcaneDivine == ARCANE_CLASS)
                 {
                     total += GetLevelByClass(pClass, oCaster);
                 }
-                //Divine Spellcaster
-                else if (SMisDivine(pClass) && arcaneDivine == DIVINE)
+                // Divine Spellcaster
+                else if (SMisDivine(pClass) && arcaneDivine == DIVINE_CLASS)
                 {
                     total += GetLevelByClass(pClass, oCaster);
                 }
-                //Check for Prestige Classes Modifications
+                // Check for Prestige Classes Modifications
                 else 
                 {
-                    if (arcaneDivine == ARCANE)
+                    if (arcaneDivine == ARCANE_CLASS)
                     {
                         string ArcaneSpellMod = Get2DAString("classes", "ArcSpellLvlMod", pClass);
                         int ArcBonus = StringToInt(ArcaneSpellMod);
@@ -108,19 +108,19 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
                     
                 }
             }
-            else    //Break out a little early
+            else    // Break out a little early
                 return total;
         }
     }
     else
     {
-        //Arcane Spellcaster
-        if (SMisArcane(GetClassByPosition(1, oCaster)) && arcaneDivine == ARCANE)
+        // Arcane Spellcaster
+        if (SMisArcane(GetClassByPosition(1, oCaster)) && arcaneDivine == ARCANE_CLASS)
         {
             total += GetLevelByPosition(1, oCaster);
         }
-        //Divine Spellcaster
-        else if (SMisDivine(GetClassByPosition(1, oCaster)) && arcaneDivine == DIVINE)
+        // Divine Spellcaster
+        else if (SMisDivine(GetClassByPosition(1, oCaster)) && arcaneDivine == DIVINE_CLASS)
         {
             total += GetLevelByPosition(1, oCaster);
         }
@@ -129,7 +129,7 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
 }
 
 // Returns the updated damage if the caster used Maximize or Empower
-//Needs max in case of Maximize - otherwise just assumes 6 arbitraily
+// Needs max in case of Maximize - otherwise just assumes 6 arbitraily
 int SMMaximizeOrEmpower(object oCaster, int feat, int damage, int max = 6)
 {
     if (feat == METAMAGIC_MAXIMIZE)
@@ -139,8 +139,8 @@ int SMMaximizeOrEmpower(object oCaster, int feat, int damage, int max = 6)
     return damage;
 }
 
-//Returns the Extended amount of a spell if the extended feat
-//Should be able to call regardless
+// Returns the Extended amount of a spell if the extended feat
+// Should be able to call regardless
 float SMExtended(object oCaster, int feat, float duration)
 {
     if (feat == METAMAGIC_EXTEND)
@@ -148,7 +148,8 @@ float SMExtended(object oCaster, int feat, float duration)
     return duration;
 }
 
-//Used on rest to manually add modifier to uses for a specific feat?
+// Used on rest to manually add modifier to uses for a specific feat?
+// Currently Need to modify the specific feats with more uses
 void SMIncreaseUsesPerDay(object oTarget)
 {
     int chaMod = GetAbilityModifier(ABILITY_CHARISMA, oTarget);
@@ -175,7 +176,10 @@ void SMRestFinishedFunctions(object oSleeper)
     SMIncreaseUsesPerDay(oSleeper);
 }
 
-// Persistent Debuff 
+// Void Fading Persistent Debuff
+// On a failed Fortitude save takes HD VOID damage
+// Requires the duration of saves to remove 
+// Need the Fading number of successes to remove  
 void SMVoidFadingDebuff(object oTarget, object oCaster)
 {   
     int fading_div = 2;
@@ -203,6 +207,8 @@ void SMVoidFadingDebuff(object oTarget, object oCaster)
     DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
 }
 
+// Applies the Fading Debuff, and starts the calling of the function as well
+// If the target has the debuff already, simply extends the duration
 void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
 {
     string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
@@ -224,6 +230,8 @@ void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
     DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
 }
 
+// Void Consumed Persistent Debuff
+// Target with Void Consumed has a chance to gain Fading for a round, or to extend the current one 
 void SMVoidConsumedDebuff(object oTarget, object oCaster)
 {
     string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
@@ -246,6 +254,7 @@ void SMVoidConsumedDebuff(object oTarget, object oCaster)
     DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster));
 }
 
+// Applies the Void Consumed, and makes sure to not double stack the effects
 void SMApplyVoidConsumed(object oTarget, object oCaster, int rounds = 1)
 {
     string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
@@ -265,11 +274,15 @@ void SMApplyVoidConsumed(object oTarget, object oCaster, int rounds = 1)
     SetLocalInt(oTarget, concatenated, nDuration + rounds);
 }
 
+// Apply the Void Scorn Script
 void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1)
 {
     effect eApply = EffectRunScript("sm_s2_voidscorn", "sm_s2_voidscorn", "sm_s2_voidscorn", RoundsToSeconds(1), IntToString(rounds));
 }
 
+// Cursed Strikes Debuff
+// Once the delay is over, deal LVL d12 VOID damage
+// Otherwise wait in the shadows
 void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
 {
     string concatenated = CONST_VOID_CURSED_S_DEBUFF + ObjectToString(oCaster);
@@ -293,6 +306,7 @@ void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
     DelayCommand(RoundsToSeconds(1), SMVoidCursedStrikesDebuff(oTarget, oCaster));
 }
 
+// Apply the Cursed Strikes, and prevent double uses
 void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 5)
 {
     string concatenated = CONST_VOID_CURSED_S_DEBUFF + ObjectToString(oCaster);
@@ -317,6 +331,9 @@ void SMReinivigoratedBuff(object oCaster, object oTarget)
     
 }
 
+// Fade Out Feat Persistent
+// If Target is hit, gain 2 AC bonus for 1 round 
+// If Improved for 2 * INT bonus for 
 void SMFadeOutBuff(object oGotHit)
 {
     int nduration = 1;
@@ -336,12 +353,16 @@ void SMFadeOutBuff(object oGotHit)
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oGotHit, RoundsToSeconds(nduration));
 }
 
+// Helper function to identify if target has void debuff
 int SMHasVoidDebuff(object oTarget, object oCaster, string base)
 {
     string concat = base + ObjectToString(oCaster);
     return GetLocalInt(oTarget, concat);
 }
 
+// User takes a large penalty
+// Then creates a shadow version, with no items and reduced health
+// 
 void SMSummonClone(object oCaster, Location lLocation)
 {
     int nDuration = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);    //10 minutes per level I think
@@ -398,6 +419,7 @@ void SMSummonClone(object oCaster, Location lLocation)
 
 }
 
+// Helper function to remove Debuff's easily
 void SMRemoveBuff(object oTarget, string DEBUFF)
 {
     effect eEffect = GetFirstEffect(oTarget);
@@ -409,6 +431,7 @@ void SMRemoveBuff(object oTarget, string DEBUFF)
     }
 }
 
+// Helper Function to remove drops from target
 object SMNoDrops(object oCreature)
 {
     object oGear = GetItemInSlot(INVENTORY_SLOT_ARMS, oCreature);   
@@ -492,6 +515,8 @@ object SMNoDrops(object oCreature)
     return oCreature;
 }
 
+// Void Resistance Feat
+// Applies the resistances to player
 void SMApplyVoidResistances(object oPlayer)
 {
     int nFireResist = 0;

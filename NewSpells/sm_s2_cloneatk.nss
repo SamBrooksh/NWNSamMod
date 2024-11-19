@@ -1,5 +1,5 @@
 #include "sm_spellfunc"
-
+// Give this to the Clone to identify additional clone 
 void main()
 {
     object oAttacker = OBJECT_SELF;

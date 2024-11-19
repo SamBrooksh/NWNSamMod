@@ -1,5 +1,9 @@
 #include "sm_consts"
 
+
+// Void Swap
+// Target one of the player's clones (saved by id on the oCaster)
+// Change places, and if have additional feats, apply them
 void main()
 {
     object oCaster = OBJECT_SELF;

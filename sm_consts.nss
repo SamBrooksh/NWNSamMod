@@ -1,12 +1,24 @@
+/////////////////////////////
+// Item Property Constants //
+/////////////////////////////
 const   int IP_CONST_DAMAGETYPE_VOID  =    15;
 
 const int IP_CONST_VOID_CLONE_HIT   =     141;
 const int IP_CONST_ONHIT_VOID_STRIKE=     142;
 
+///////////////////////////
+// Damage Type Constants //
+///////////////////////////
 const   int     DAMAGE_TYPE_VOID     =   8192;
 
+///////////////////////
+// Module Constants //
+//////////////////////
 const int CLASS_MAX = 8;
 
+/////////////////////
+// Feat Constants //
+////////////////////
 const int FEAT_PRECISE_STRIKE =         1132;
 const int FEAT_CANNY_DEFENSE =          1133;
 const int FEAT_IMPROVED_REACTION_1 =    1134;
@@ -63,6 +75,9 @@ const int FEAT_VOID_RAVAGING_SWAP =     1185;
 const int FEAT_VOID_EMPOWERING_SWAP =   1186;
 const int FEAT_COMBINED_SPELLS =        1187;
 
+/////////////////////
+// Spell Constants //
+/////////////////////
 const int SPELL_VOID_CLONE  =           850;
 const int SPELL_VOID_SWAP   =           851;
 const int SPELL_VOID_CURSE  =           852;
@@ -85,15 +100,22 @@ const int SPELL_SYNTHESIS_CAST      =   868;
 const int SPELL_VOID_CLONE_ATTACK   =   869;
 const int SPELL_VOID_STRIKE         =   870;
 
-
+////////////////////////////
+// Custom Class Constants //
+////////////////////////////
 const float SPELL_REACTION_MULTIPLIER = 2.0;
 
-
+//////////////////////////
+// Class Type Constants //
+//////////////////////////
 const int CLASS_TYPE_DUELIST =          59;
 const int CLASS_TYPE_MYSTIC_THERUGE =   60;
 const int CLASS_TYPE_ELDRITCH_KNIGHT =  61;
 const int CLASS_TYPE_VOID_SCARRED    =  62;
 
+//////////////////////
+// String Constants //
+//////////////////////
 const string CONST_FADE_OUT_BUFF    =   "SM_FADE_OUT_BUFF";
 const string CONST_VOID_FADING_DEBUFF = "SM_V_FADING_DEBUFF";
 const string CONST_VOID_CONSUMED_DEBUFF="SM_V_CONSUMED_DEBUFF";
@@ -110,12 +132,18 @@ const string CONST_USES_VOID_RIP     =  "SM_VRIP_USES";
 
 const string CONST_VOID_STRIKE_ITEM_TAG="SM_VOIDSTRIKE";
 
+//////////////////////
+// VFX Constants    //
+//////////////////////
 const int VFX_IMP_MIRV_RED          =   673;
 const int VFX_IMP_MIRV_VOID         =   674;
 const int VFX_MIRV_VOID_IMPACT      =   675;
 const int VFX_IMP_VOID_RIP          =   676;
 const int VFX_IMP_RIP_IMPACT        =   677;
 
+////////////////////////////
+// Effect Icons Constants //
+////////////////////////////
 const int EFFECT_ICON_VOID_FADING   =   130;
 const int EFFECT_ICON_VOID_CONSUMED =   131;
 const int EFFECT_ICON_CLONE_PENALTY =   132;
@@ -124,6 +152,8 @@ const int EFFECT_ICON_VOID_SCORN    =   134;
 const int EFFECT_ICON_CURSED_STRIKES =  135;
 const int EFFECT_ICON_VOID_FADE_OUT =   136;
 
-
-const int ARCANE = 0;
-const int DIVINE = 1;
+//////////////////////
+// Script Constants //
+//////////////////////
+const int ARCANE_CLASS = 0;
+const int DIVINE_CLASS = 1;
