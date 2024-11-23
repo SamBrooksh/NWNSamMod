@@ -102,20 +102,24 @@ Also will want to a on level up script that starts a dialog with the player that
 Combined Spells - Allow spells to learn from other?
 #### 2nd Level
 #### 3rd Level
+Bonus Feat
 #### 4th Level
++1 Wis
 #### 5th Level
 #### 6th Level
++1 Int/Cha
 #### 7th Level
+Bonus Feat
 #### 8th Level
 #### 9th Level
 #### 10th Level
 Spell Synthesis - Somehow need to let creation of putting two spells into one? (And then make it so it can go up a level every other level)
 May need to do as ability, then choose two spells somehow as well - I think I should be able to do this one using the castactionspell with instant spell on - probably will need a dummy feat or two? - this will probably be a hassle
 ### Bonus Feats
-Probably do at like 4 and 8 - something to help at least
+Probably do at like 4 and 8 - something to help at least - Doing 3rd and 7th
 
 ### Stats
-Maybe bonuses to INT/CHA/WIS?
+Maybe bonuses to INT/CHA/WIS? - Adding +1 Wis at 4th, and +1 Int/Cha at 6th
 
 # Eldritch Knight
 # TODO
@@ -175,7 +179,7 @@ Any Chaotic
 
 ### Class Skills
 Disable Trap, Heal, Hide, Listen, Lore, Move Silently, Open Lock, Search, Set Trap, Use Magic Device, Tumble, Craft Trap, Bluff, Intimidate, Craft Armor, Craft Weapon
-I'm thinking 6 + INT
+I'm thinking 6 + INT - Changing to 4 since INT should help with the others
 ### BAB
 3/4 - Rogue speed
 

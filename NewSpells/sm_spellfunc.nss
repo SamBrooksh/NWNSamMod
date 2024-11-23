@@ -570,3 +570,11 @@ void SMApplyVoidResistances(object oPlayer)
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPlayer);
     //May need to reset on rest
 }
+
+// 
+int SMPrestigeArcaneSpellIncrease(int nClass)
+{
+    string ArcaneSpellMod = Get2DAString("classes", "ArcSpellLvlMod", nClass);
+    int ArcBonus = StringToInt(ArcaneSpellMod);
+    return ArcBonus != 0;
+}
