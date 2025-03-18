@@ -1,4 +1,4 @@
-#include "sm_consts"
+#include "sm_spellfunc"
 
 
 // Void Swap
@@ -8,10 +8,9 @@ void main()
 {
     object oCaster = OBJECT_SELF;
     object oTarget = GetSpellTargetObject(); 
-    int oClone1 = GetLocalInt(oCaster, VOID_CLONE_HEX_NUM);
-    int oClone2 = GetLocalInt(oCaster, VOID_CLONE_HEX_NUM2);
-    int target = ObjectToString(oTarget);
-    if (target != oClone1 && target != oClone2)
+    object oClone1 = GetLocalObject(oCaster, VOID_CLONE_HEX_NUM);
+    object oClone2 = GetLocalObject(oCaster, VOID_CLONE_HEX_NUM2);
+    if (oTarget != oClone1 && oTarget != oClone2)
     {
         //TODO//Increment useage - specify target and return
         IncrementRemainingFeatUses(oCaster, FEAT_VOID_SWAP);
@@ -31,7 +30,7 @@ void main()
         if (inBetween != oCaster && inBetween != oTarget)
         {
             //Don't hurt friends
-            if (spellIsTarget(inBetween, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+            if (spellsIsTarget(inBetween, SPELL_TARGET_STANDARDHOSTILE, oCaster))
             {
                 //Do the Ravage feat
             }
@@ -51,7 +50,7 @@ void main()
         int nDuration = GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster) + 1;
         eBuff = EffectLinkEffects(eBuff, eTemp);
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, RoundsToSeconds(nDuration));
-        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, lTarget, RoundsToSeconds(nDuration));
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oTarget, RoundsToSeconds(nDuration));
     }
     AssignCommand(oTarget, ClearAllActions());
     AssignCommand(oTarget, ActionJumpToLocation(lCaster));

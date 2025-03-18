@@ -14,7 +14,7 @@ void main()
     int nVoidLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
     int nDamage = nVoidLevel / 3;
     int bFading = SMHasVoidDebuff(oTarget, oCaster, CONST_VOID_FADING_DEBUFF);
-    if (GetHadFeat(FEAT_VOID_DEFT_DAMAGE, oCaster))
+    if (GetHasFeat(FEAT_VOID_DEFT_DAMAGE, oCaster))
     {
         if (bFading)
             nDamage = nVoidLevel * 2;

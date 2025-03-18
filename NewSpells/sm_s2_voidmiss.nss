@@ -86,7 +86,7 @@ void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel,
             if (NULL_MISSILE)
             {
                 //Have them try to resist - with delay I assume
-                //DelayCommand(fTime, SMApplyVoidScornDebuff(oTarget, oCaster));
+                //DelayCommand(fTime, SMApplyVoidScorned(oTarget, oCaster));
             }
             if (CRACKLING)
             {

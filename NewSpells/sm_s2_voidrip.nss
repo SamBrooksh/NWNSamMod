@@ -16,7 +16,7 @@ void main()
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTarget, FALSE, OBJECT_TYPE_CREATURE);
     int nUsesLeft = GetLocalInt(oCaster, CONST_USES_VOID_RIP) - 1;
     SetLocalInt(oCaster, CONST_USES_VOID_RIP, nUsesLeft);
-    
+
     if (nUsesLeft > 1)
     {
         IncrementRemainingFeatUses(oCaster, FEAT_VOID_RIP);
@@ -26,7 +26,7 @@ void main()
     {
         //Need to skip over the clones
         //SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_VOID_RIP));  //Maybe should have this
-        if (SpellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
         {
             nDamage = d6(nCasterLvl);
             nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nReflexDC);
@@ -34,7 +34,7 @@ void main()
             if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nReflexDC, SAVING_THROW_TYPE_NONE, oCaster, 0.0))
             {
                 int dur = 2 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
-                SMApplyConsumedByVoid(oTarget, oCaster, dur);
+                SMApplyVoidConsumed(oTarget, oCaster, dur);
             }
         }
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTarget, FALSE, OBJECT_TYPE_CREATURE);

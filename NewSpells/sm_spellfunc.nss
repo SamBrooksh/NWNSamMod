@@ -1,6 +1,8 @@
 #include "sm_consts"
 #include "nw_i0_spells"
+#include "x0_i0_spells"
 #include "nwnx_creature"
+#include "nw_i0_generic"
 
 int SMisArcane(int class);
 int SMisDivine(int class);
@@ -20,7 +22,7 @@ void SMReinivigoratedBuff(object oCaster, object oTarget);
 void SMFadeOutBuff(object oGotHit);
 int SMHasVoidDebuff(object oTarget, object oCaster, string base);
 void SMRemoveBuff(object oTarget, string DEBUFF);
-void SMSummonClone(object oCaster, Location lLocation);
+void SMSummonClone(object oCaster, location lLocation);
 object SMNoDrops(object oCreature);
 void SMApplyVoidResistances(object oPlayer);
 
@@ -135,7 +137,7 @@ int SMMaximizeOrEmpower(object oCaster, int feat, int damage, int max = 6)
     if (feat == METAMAGIC_MAXIMIZE)
         return max;
     if (feat == METAMAGIC_EMPOWER)
-        return damage * 1.5;
+        return FloatToInt(IntToFloat(damage) * 1.5);
     return damage;
 }
 
@@ -348,7 +350,7 @@ void SMFadeOutBuff(object oGotHit)
     effect eVis = EffectVisualEffect(VFX_DUR_AURA_PULSE_GREY_WHITE);
     effect eLink = EffectLinkEffects(eACBonus, eVis);
     eLink = HideEffectIcon(eLink);
-    eLink = EffectLinkEffect(eLink, EffectIcon(EFFECT_ICON_VOID_FADE_OUT)); //Make new icon name/picture
+    eLink = EffectLinkEffects(eLink, EffectIcon(EFFECT_ICON_VOID_FADE_OUT)); //Make new icon name/picture
     eLink = TagEffect(eLink, CONST_FADE_OUT_BUFF);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oGotHit, RoundsToSeconds(nduration));
 }
@@ -363,7 +365,7 @@ int SMHasVoidDebuff(object oTarget, object oCaster, string base)
 // User takes a large penalty
 // Then creates a shadow version, with no items and reduced health
 // 
-void SMSummonClone(object oCaster, Location lLocation)
+void SMSummonClone(object oCaster, location lLocation)
 {
     int nDuration = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);    //10 minutes per level I think
     int chaPen = 3;
@@ -386,7 +388,7 @@ void SMSummonClone(object oCaster, Location lLocation)
     eCombined = EffectLinkEffects(eWill, eCombined);
     eCombined = EffectLinkEffects(eFort, eCombined);
     eCombined = HideEffectIcon(eCombined);
-    eCombined = EffectLinkEffect(eCombined, EffectIcon(EFFECT_ICON_CLONE_PENALTY)); //Make new icon name/picture
+    eCombined = EffectLinkEffects(eCombined, EffectIcon(EFFECT_ICON_CLONE_PENALTY)); //Make new icon name/picture
     eCombined = EffectLinkEffects(eCombined, EffectRunScript());
     eCombined = SupernaturalEffect(eCombined);
     eCombined = TagEffect(eCombined, CONST_VOID_SUMMON_DEBUFF);
@@ -394,21 +396,21 @@ void SMSummonClone(object oCaster, Location lLocation)
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oCaster);
 
     object oSummon2;
-    object oSummon = ObjectCopy(oCaster, lLocation);
+    object oSummon = CopyObject(oCaster, lLocation, OBJECT_INVALID, "testid");
     int bVoidPerf = GetHasFeat(FEAT_VOID_PERFECTION, oCaster); 
     oSummon = SMNoDrops(oSummon);//This may do what I want exactly
     ForceRefreshObjectUUID(oSummon);
     NWNX_Creature_AddAssociate(oCaster, oSummon, ASSOCIATE_TYPE_SUMMONED);
-    SetLocalInt(oCaster, VOID_CLONE_HEX_NUM, ObjectToString(oSummon));
+    SetLocalObject(oCaster, VOID_CLONE_HEX_NUM, oSummon);
     //These should be all the Feat modifications
     //Set Max HP to 75%, -2 to all Base Stats I think, unless Void Perfection
     if (bVoidPerf)
     {
-        oSummon2 = ObjectCopy(oCaster, lLocation);
+        oSummon2 = CopyObject(oCaster, lLocation, OBJECT_INVALID, "testid2");
         oSummon2 = SMNoDrops(oSummon2); //This may do what I want exactly
         ForceRefreshObjectUUID(oSummon2);
         NWNX_Creature_AddAssociate(oCaster, oSummon2, ASSOCIATE_TYPE_SUMMONED);
-        SetLocalInt(oCaster, VOID_CLONE_HEX_NUM2, ObjectToString(oSummon2));
+        SetLocalObject(oCaster, VOID_CLONE_HEX_NUM2, oSummon2);
     }
     else 
     {
@@ -565,7 +567,7 @@ void SMApplyVoidResistances(object oPlayer)
     eLink = EffectLinkEffects(eSonicResist, eLink);
     eLink = EffectLinkEffects(eVoidResist, eLink);
     eLink = EffectLinkEffects(eDmgResist, eLink);
-    eLink = TagEffect(CONST_VOID_RESISTS, eLink);
+    eLink = TagEffect(eLink, CONST_VOID_RESISTS);
     eLink = SupernaturalEffect(eLink);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPlayer);
     //May need to reset on rest
