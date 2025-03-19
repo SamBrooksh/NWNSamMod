@@ -126,6 +126,8 @@ const string CONST_VOID_RESISTS =       "VOID_RESISTS";
 
 const string VOID_CLONE_HEX_NUM     =   "SM_V_CLONE_HEX_NUM";
 const string VOID_CLONE_HEX_NUM2      = "SM_V_CLONE_HEX_NUM2";
+const string VOID_CLONE_TAG           = "SM_CLONE";
+const string VOID_CLONE_TAG_2         = "SM_CLONE_2";
 
 const string CONST_USES_VMISSILE     =  "SM_VMISS_USES";
 const string CONST_USES_VOID_RIP     =  "SM_VRIP_USES";

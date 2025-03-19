@@ -1,0 +1,86 @@
+#include "sm_spellfunc"
+#include "nwnx_chat"
+
+void SMSummonClone(object oCaster, location lLocation);
+//TODO: Add Death Script to clone to remove penalty - maybe unsummon script
+//      Graphics
+//      Feat modifications
+void main()
+{
+    object oCaster = OBJECT_SELF;
+    location lClone = GetSpellTargetLocation();
+
+    SMSummonClone(oCaster, lClone);
+}
+
+// User takes a large penalty
+// Then creates a shadow version, with no items and reduced health
+//
+void SMSummonClone(object oCaster, location lLocation)
+{
+    int nDuration = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);    //10 minutes per level I think
+    int chaPen = 3;
+    int strPen = 4;
+    int refPen = 2;
+    int willPen = 2;
+    int fortPen = 2;
+    if (GetHasFeat(FEAT_VOID_ASSIMILATION, oCaster))
+    {
+        //Reduce penalties
+    }
+
+    effect eCha = EffectAbilityDecrease(ABILITY_CHARISMA, chaPen);
+    effect eStr = EffectAbilityDecrease(ABILITY_STRENGTH, strPen);
+    effect eRef = EffectSavingThrowDecrease(SAVING_THROW_REFLEX, refPen);
+    effect eWill = EffectSavingThrowDecrease(SAVING_THROW_WILL, willPen);
+    effect eFort = EffectSavingThrowDecrease(SAVING_THROW_FORT, fortPen);
+    effect eCombined = EffectLinkEffects(eCha, eStr);
+    eCombined = EffectLinkEffects(eRef, eCombined);
+    eCombined = EffectLinkEffects(eWill, eCombined);
+    eCombined = EffectLinkEffects(eFort, eCombined);
+    eCombined = HideEffectIcon(eCombined);
+    eCombined = EffectLinkEffects(eCombined, EffectIcon(EFFECT_ICON_CLONE_PENALTY)); //Make new icon name/picture
+    eCombined = EffectLinkEffects(eCombined, EffectRunScript());
+    eCombined = SupernaturalEffect(eCombined);
+    eCombined = TagEffect(eCombined, CONST_VOID_SUMMON_DEBUFF);
+
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oCaster);
+
+    object oSummon2;
+    object oSummon = CopyObject(oCaster, lLocation, OBJECT_INVALID, VOID_CLONE_TAG);
+    int bVoidPerf = GetHasFeat(FEAT_VOID_PERFECTION, oCaster);
+    SMNoDrops(oSummon);     //This may do what I want exactly
+    ForceRefreshObjectUUID(oSummon);
+    NWNX_Creature_AddAssociate(oCaster, oSummon, ASSOCIATE_TYPE_SUMMONED);
+    SMSetHenchmanScripts(oSummon);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oSummon);
+
+    SetLocalObject(oCaster, VOID_CLONE_HEX_NUM, oSummon);
+    //These should be all the Feat modifications
+    //Set Max HP to 75%, -2 to all Base Stats I think - will leave stats alone for now, unless Void Perfection
+    //Need to make On death script for clone - and probably apply colored effects/Summoning in
+    if (bVoidPerf)
+    {
+        oSummon2 = CopyObject(oCaster, lLocation, OBJECT_INVALID, VOID_CLONE_TAG_2);
+        SMNoDrops(oSummon2); //This may do what I want exactly
+        ForceRefreshObjectUUID(oSummon2);
+        NWNX_Creature_AddAssociate(oCaster, oSummon2, ASSOCIATE_TYPE_SUMMONED);
+        SMSetHenchmanScripts(oSummon2);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oSummon2);
+        SetLocalObject(oCaster, VOID_CLONE_HEX_NUM2, oSummon2);
+    }
+    else
+    {
+        int nSummonHealth = NWNX_Object_GetCurrentHitPoints(oSummon);
+        nSummonHealth = nSummonHealth * 3 / 4;
+        int nSummonHealthMax = GetMaxHitPoints(oSummon);
+        int nLevel = SMGetLevel(oCaster);
+        int nConMod = GetAbilityModifier(ABILITY_CONSTITUTION, oSummon);
+        nSummonHealthMax = nSummonHealthMax * 3 / 4 - (nLevel * nConMod);
+        NWNX_Object_SetMaxHitPoints(oSummon, nSummonHealthMax);
+        NWNX_Object_SetCurrentHitPoints(oSummon, nSummonHealth);
+    }
+    //Need to modify weapon on hit modifier, and potentially scripts attached to the creature?
+    //Probably just add the one
+
+}

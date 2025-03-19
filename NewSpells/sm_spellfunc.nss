@@ -2,6 +2,7 @@
 #include "nw_i0_spells"
 #include "x0_i0_spells"
 #include "nwnx_creature"
+#include "nwnx_object"
 #include "nw_i0_generic"
 
 int SMisArcane(int class);
@@ -23,10 +24,11 @@ void SMFadeOutBuff(object oGotHit);
 int SMHasVoidDebuff(object oTarget, object oCaster, string base);
 void SMRemoveBuff(object oTarget, string DEBUFF);
 void SMSummonClone(object oCaster, location lLocation);
-object SMNoDrops(object oCreature);
+void SMNoDrops(object oCreature);
+void SMSetHenchmanScripts(object oCreature);
 void SMApplyVoidResistances(object oPlayer);
 
-// Return TRUE if is an arcane class 
+// Return TRUE if is an arcane class
 int SMisArcane(int class)
 {
     switch(class)
@@ -34,12 +36,12 @@ int SMisArcane(int class)
         case CLASS_TYPE_BARD:
         case CLASS_TYPE_SORCERER:
         case CLASS_TYPE_WIZARD:
-        
+
         // Add the additional classes here
         // case CLASS_PRES_PALE_MASTER:
         // case CLASS_TYPE_MYSTIC_THEURGE:
         // case CLASS_TYPE_ELDRITCH_KNIGHT:
-            return TRUE;  
+            return TRUE;
     }
     return FALSE;
 }
@@ -64,13 +66,13 @@ int SMisDivine(int class)
 // Class should be 0 for Arcane, and 1 for Divine I think
 int SMGetCasterLevel(object oCaster, int arcaneDivine)
 {
-    
+
     int total = 0;
     // Only doing if more than one class
     if (GetClassByPosition(2, oCaster) != CLASS_TYPE_INVALID)
     {
         int i = 0;
-        for (i = 0; i < CLASS_MAX; i += 1)  // May change if 
+        for (i = 0; i < CLASS_MAX; i += 1)  // May change if
         {
             // Go through and add the various levels of arcane if class is arcane, and divine if divine
             int pClass = GetClassByPosition(i, oCaster);
@@ -87,7 +89,7 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
                     total += GetLevelByClass(pClass, oCaster);
                 }
                 // Check for Prestige Classes Modifications
-                else 
+                else
                 {
                     if (arcaneDivine == ARCANE_CLASS)
                     {
@@ -107,7 +109,7 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
                             total += (GetLevelByClass(pClass, oCaster) + DivBonus - 1) / DivBonus;
                         }
                     }
-                    
+
                 }
             }
             else    // Break out a little early
@@ -180,10 +182,10 @@ void SMRestFinishedFunctions(object oSleeper)
 
 // Void Fading Persistent Debuff
 // On a failed Fortitude save takes HD VOID damage
-// Requires the duration of saves to remove 
-// Need the Fading number of successes to remove  
+// Requires the duration of saves to remove
+// Need the Fading number of successes to remove
 void SMVoidFadingDebuff(object oTarget, object oCaster)
-{   
+{
     int fading_div = 2;
     string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
     int remaining = GetLocalInt(oTarget, concatenate);
@@ -215,7 +217,7 @@ void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
 {
     string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
     if (GetLocalInt(oTarget, concatenate))
-    {   
+    {
         //Should probably have something be said as well
         //I think I'll just have it extend the duration
         int current = GetLocalInt(oTarget, concatenate) + rounds;
@@ -233,7 +235,7 @@ void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
 }
 
 // Void Consumed Persistent Debuff
-// Target with Void Consumed has a chance to gain Fading for a round, or to extend the current one 
+// Target with Void Consumed has a chance to gain Fading for a round, or to extend the current one
 void SMVoidConsumedDebuff(object oTarget, object oCaster)
 {
     string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
@@ -251,7 +253,7 @@ void SMVoidConsumedDebuff(object oTarget, object oCaster)
         //Apply the Fading Debuff for a single round
         SMApplyFadingDebuff(oTarget, oCaster, 1);
     }
-    
+
     SetLocalInt(oTarget, concatenated, curr - 1);
     DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster));
 }
@@ -330,12 +332,12 @@ void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 5)
 
 void SMReinivigoratedBuff(object oCaster, object oTarget)
 {
-    
+
 }
 
 // Fade Out Feat Persistent
-// If Target is hit, gain 2 AC bonus for 1 round 
-// If Improved for 2 * INT bonus for 
+// If Target is hit, gain 2 AC bonus for 1 round
+// If Improved for 2 * INT bonus for
 void SMFadeOutBuff(object oGotHit)
 {
     int nduration = 1;
@@ -362,65 +364,6 @@ int SMHasVoidDebuff(object oTarget, object oCaster, string base)
     return GetLocalInt(oTarget, concat);
 }
 
-// User takes a large penalty
-// Then creates a shadow version, with no items and reduced health
-// 
-void SMSummonClone(object oCaster, location lLocation)
-{
-    int nDuration = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);    //10 minutes per level I think
-    int chaPen = 3;
-    int strPen = 4;
-    int refPen = 2;
-    int willPen = 2;
-    int fortPen = 2;
-    if (GetHasFeat(FEAT_VOID_ASSIMILATION, oCaster))
-    {
-        //Reduce penalties
-    }
-    
-    effect eCha = EffectAbilityDecrease(ABILITY_CHARISMA, chaPen);
-    effect eStr = EffectAbilityDecrease(ABILITY_STRENGTH, strPen);
-    effect eRef = EffectSavingThrowDecrease(SAVING_THROW_REFLEX, refPen);
-    effect eWill = EffectSavingThrowDecrease(SAVING_THROW_WILL, willPen);
-    effect eFort = EffectSavingThrowDecrease(SAVING_THROW_FORT, fortPen);
-    effect eCombined = EffectLinkEffects(eCha, eStr);
-    eCombined = EffectLinkEffects(eRef, eCombined);
-    eCombined = EffectLinkEffects(eWill, eCombined);
-    eCombined = EffectLinkEffects(eFort, eCombined);
-    eCombined = HideEffectIcon(eCombined);
-    eCombined = EffectLinkEffects(eCombined, EffectIcon(EFFECT_ICON_CLONE_PENALTY)); //Make new icon name/picture
-    eCombined = EffectLinkEffects(eCombined, EffectRunScript());
-    eCombined = SupernaturalEffect(eCombined);
-    eCombined = TagEffect(eCombined, CONST_VOID_SUMMON_DEBUFF);
-    
-    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oCaster);
-
-    object oSummon2;
-    object oSummon = CopyObject(oCaster, lLocation, OBJECT_INVALID, "testid");
-    int bVoidPerf = GetHasFeat(FEAT_VOID_PERFECTION, oCaster); 
-    oSummon = SMNoDrops(oSummon);//This may do what I want exactly
-    ForceRefreshObjectUUID(oSummon);
-    NWNX_Creature_AddAssociate(oCaster, oSummon, ASSOCIATE_TYPE_SUMMONED);
-    SetLocalObject(oCaster, VOID_CLONE_HEX_NUM, oSummon);
-    //These should be all the Feat modifications
-    //Set Max HP to 75%, -2 to all Base Stats I think, unless Void Perfection
-    if (bVoidPerf)
-    {
-        oSummon2 = CopyObject(oCaster, lLocation, OBJECT_INVALID, "testid2");
-        oSummon2 = SMNoDrops(oSummon2); //This may do what I want exactly
-        ForceRefreshObjectUUID(oSummon2);
-        NWNX_Creature_AddAssociate(oCaster, oSummon2, ASSOCIATE_TYPE_SUMMONED);
-        SetLocalObject(oCaster, VOID_CLONE_HEX_NUM2, oSummon2);
-    }
-    else 
-    {
-        
-    }
-    //Need to modify weapon on hit modifier, and potentially scripts attached to the creature?
-    //Probably just add the one 
-
-}
-
 // Helper function to remove Debuff's easily
 void SMRemoveBuff(object oTarget, string DEBUFF)
 {
@@ -433,10 +376,12 @@ void SMRemoveBuff(object oTarget, string DEBUFF)
     }
 }
 
+
+
 // Helper Function to remove drops from target
-object SMNoDrops(object oCreature)
+void SMNoDrops(object oCreature)
 {
-    object oGear = GetItemInSlot(INVENTORY_SLOT_ARMS, oCreature);   
+    object oGear = GetItemInSlot(INVENTORY_SLOT_ARMS, oCreature);
     if(GetIsObjectValid(oGear))
     {
         SetDroppableFlag(oGear, FALSE);
@@ -514,7 +459,27 @@ object SMNoDrops(object oCreature)
         SetDroppableFlag(oGear, FALSE);
         oGear = GetNextItemInInventory(oCreature);
     }
-    return oCreature;
+    int nGold = GetGold(oCreature);
+    TakeGoldFromCreature(nGold, oCreature, TRUE);
+}
+
+// SetHenchmanScripts
+void SMSetHenchmanScripts(object oCreature)
+{
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_END_COMBATROUND, "x2_def_endcombat");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_DEATH, "nw_ch_ac7");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_DAMAGED, "x2_def_ondamage");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_DISTURBED, "x2_def_ondisturb");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_HEARTBEAT, "nw_ch_ac1");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_NOTICE, "nw_ch_ac2");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_MELEE_ATTACKED, "x2_def_attacked");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_RESTED, "x2_def_rested");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_SPAWN_IN, "nw_ch_ac9");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_SPELLCASTAT, "nw_ch_acb");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_USER_DEFINED_EVENT, "nw_ch_acd");
+    SetAssociateListenPatterns(oCreature);
+    SetLocalInt(oCreature,"NW_COM_MODE_COMBAT",ASSOCIATE_COMMAND_ATTACKNEAREST);
+    SetLocalInt(oCreature,"NW_COM_MODE_MOVEMENT",ASSOCIATE_COMMAND_FOLLOWMASTER);
 }
 
 // Void Resistance Feat
@@ -547,7 +512,7 @@ void SMApplyVoidResistances(object oPlayer)
         nAcidResist += 4;
         nSonicResist += 4;
         nVoidResist += 4;
-        nDmgResist += 2;    
+        nDmgResist += 2;
     }
     if (nFireResist == 0)//Should make this more conclusive in the future I think
     {
@@ -573,10 +538,23 @@ void SMApplyVoidResistances(object oPlayer)
     //May need to reset on rest
 }
 
-// 
+//
 int SMPrestigeArcaneSpellIncrease(int nClass)
 {
     string ArcaneSpellMod = Get2DAString("classes", "ArcSpellLvlMod", nClass);
     int ArcBonus = StringToInt(ArcaneSpellMod);
     return ArcBonus != 0;
+}
+
+int SMGetLevel(object oTarget)
+{
+    int i = 1;
+    int nTotal = 0;
+    for (i; i < CLASS_MAX; i+=1)
+    {
+        if (GetClassByPosition(i, oTarget) == CLASS_TYPE_INVALID)
+            return nTotal;
+        nTotal += GetLevelByPosition(i, oTarget);
+    }
+    return nTotal;
 }

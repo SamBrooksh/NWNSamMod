@@ -3,8 +3,6 @@
 #include "sm_spellfunc"
 #include "sm_nui_build"
 
-
-
 int SMGetLevel(object oCreature)
 {
     int nLevel = 0;
