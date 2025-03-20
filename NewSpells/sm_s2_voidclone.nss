@@ -26,6 +26,11 @@ void SMSummonClone(object oCaster, location lLocation)
     int fortPen = 2;
     if (GetHasFeat(FEAT_VOID_ASSIMILATION, oCaster))
     {
+        chaPen = chaPen - 2;
+        strPen = strPen - 2;
+        refPen = refPen - 1;
+        willPen = willPen - 1;
+        fortPen = fortPen - 1;
         //Reduce penalties
     }
 
@@ -43,7 +48,6 @@ void SMSummonClone(object oCaster, location lLocation)
     eCombined = EffectLinkEffects(eCombined, EffectRunScript());
     eCombined = SupernaturalEffect(eCombined);
     eCombined = TagEffect(eCombined, CONST_VOID_SUMMON_DEBUFF);
-
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oCaster);
 
     object oSummon2;
@@ -71,6 +75,20 @@ void SMSummonClone(object oCaster, location lLocation)
     }
     else
     {
+        int nClonePenalty = 2;
+        effect eCloneCha = EffectAbilityDecrease(ABILITY_CHARISMA, nClonePenalty);
+        effect eCloneStr = EffectAbilityDecrease(ABILITY_STRENGTH, nClonePenalty);
+        effect eCloneDex = EffectAbilityDecrease(ABILITY_DEXTERITY, nClonePenalty);
+        effect eCloneCon = EffectAbilityDecrease(ABILITY_CONSTITUTION, nClonePenalty);
+        effect eCloneInt = EffectAbilityDecrease(ABILITY_INTELLIGENCE, nClonePenalty);
+        effect eCloneWis = EffectAbilityDecrease(ABILITY_WISDOM, nClonePenalty);
+        effect eCloneCombine = EffectLinkEffects(eCloneCha, eCloneStr);
+        eCloneCombine = EffectLinkEffects(eCloneCombine, eCloneDex);
+        eCloneCombine = EffectLinkEffects(eCloneCombine, eCloneCon);
+        eCloneCombine = EffectLinkEffects(eCloneCombine, eCloneInt);
+        eCloneCombine = EffectLinkEffects(eCloneCombine, eCloneWis);
+        eCloneCombine = SupernaturalEffect(eCloneCombine);
+
         int nSummonHealth = NWNX_Object_GetCurrentHitPoints(oSummon);
         nSummonHealth = nSummonHealth * 3 / 4;
         int nSummonHealthMax = GetMaxHitPoints(oSummon);
@@ -79,8 +97,9 @@ void SMSummonClone(object oCaster, location lLocation)
         nSummonHealthMax = nSummonHealthMax * 3 / 4 - (nLevel * nConMod);
         NWNX_Object_SetMaxHitPoints(oSummon, nSummonHealthMax);
         NWNX_Object_SetCurrentHitPoints(oSummon, nSummonHealth);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCloneCombine, oSummon);
     }
     //Need to modify weapon on hit modifier, and potentially scripts attached to the creature?
-    //Probably just add the one
+    //Probably just add the one - I think I need to add a script to the weapon
 
 }

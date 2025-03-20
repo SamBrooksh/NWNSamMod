@@ -464,10 +464,11 @@ void SMNoDrops(object oCreature)
 }
 
 // SetHenchmanScripts
+//Should change this to just SetCloneScripts
 void SMSetHenchmanScripts(object oCreature)
 {
     SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_END_COMBATROUND, "x2_def_endcombat");
-    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_DEATH, "nw_ch_ac7");
+    SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_DEATH, "sm_s2_clonedeath");
     SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_DAMAGED, "x2_def_ondamage");
     SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_DISTURBED, "x2_def_ondisturb");
     SetEventScript(oCreature, EVENT_SCRIPT_CREATURE_ON_HEARTBEAT, "nw_ch_ac1");

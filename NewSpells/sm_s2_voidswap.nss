@@ -35,7 +35,7 @@ void main()
                 //Do the Ravage feat
             }
         }
-        GetNextObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
+        inBetween = GetNextObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
     }
     
     if (empower)
@@ -52,7 +52,7 @@ void main()
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, RoundsToSeconds(nDuration));
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oTarget, RoundsToSeconds(nDuration));
     }
-    AssignCommand(oTarget, ClearAllActions());
+    AssignCommand(oTarget, ClearAllActions(TRUE));
     AssignCommand(oTarget, ActionJumpToLocation(lCaster));
     AssignCommand(oCaster, ActionJumpToLocation(lTarget));
 }

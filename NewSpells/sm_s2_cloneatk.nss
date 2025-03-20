@@ -6,7 +6,7 @@ void main()
     object oTarget = GetSpellTargetObject();
 
     object oCaster = GetMaster(oAttacker);
-    int voidHatred = GetHasFeat(FEAT_VOID_HATRED, oAttacker);
+    int voidHatred = GetHasFeat(FEAT_VOID_HATRED, oCaster);
     int chance = 50;    //Change this when more accurate
     if (GetHasFeat(FEAT_VOID_SCORN, oCaster))
     {

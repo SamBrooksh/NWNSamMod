@@ -189,8 +189,8 @@ D4 I think - but may need to may it D6 if they are too squishy
 #### 1st Level
 Weapon Finesse
 #### 2nd Level
-Void Clone - Suffer a penalty to summon a clone that does less dmg and a debuff - It gets bonus damage from player INT (Debuff is -4 STR, -3 CON, -2 REF/WILL/FORT, -3 CHA, until Clone is unsummoned - may too big of a debuff - maybe have it deal 1 void dmg to player every couple of rounds)- Once per day, lasts until unsummoned I think
-Clone has 1/2 hp, and does 1d4+INT dmg - Same AC
+Void Clone - Suffer a penalty to summon a clone that does less dmg and a debuff - It gets bonus damage from player INT (Debuff is -4 STR, -3 CON, -2 REF/WILL/FORT, -3 CHA, until Clone is unsummoned - may too big of a debuff - maybe have it deal 1 void dmg to player every couple of rounds - that seems a bit extreme)- Once per day, lasts until unsummoned I think
+Clone has 1/2 hp(Currently at 75% for the moment), and does 1d4+INT dmg - Same AC
 #### 3rd Level
 Void Strike - After hitting an enemy with melee weapon, deal 1/3 Void Scarred Level in void damamge - if they are fading, deal Level instead
 #### 4th Level
@@ -208,7 +208,7 @@ Void Shadowed - Ability to cast Incorporeal 1 + INT times/day
 #### 10th Level
 Void Renewall - Clone grants temp HP to player on it dealing damage
 #### 11st Level
-Void Assimilation - Reduce the Penalty of summoning a clone
+Void Assimilation - Reduce the Penalty of summoning a clone - -1 REF/WILL/FORT -2 STR -1 CHA?
 #### 12nd Level
 Curse (Consumed by Void) - Clone attempts to Void Curse on hit (lower DC), player can activate it 3+INT number of times
 #### 13rd Level
