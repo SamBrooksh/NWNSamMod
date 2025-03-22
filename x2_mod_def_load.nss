@@ -36,6 +36,9 @@
 
 #include "x2_inc_switches"
 #include "x2_inc_restsys"
+#include "nwnx_events"
+#include "nwnx_damage"
+
 void main()
 {
    if (GetGameDifficulty() ==  GAME_DIFFICULTY_CORE_RULES || GetGameDifficulty() ==  GAME_DIFFICULTY_DIFFICULT)
@@ -116,5 +119,9 @@ void main()
        //* Do not change this line.
        WMBuild2DACache();
    }
-   SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_NUI_EVENT, "nui_sm_events");
+
+    NWNX_Events_SubscribeEvent("NWNX_ON_REMOVE_ASSOCIATE_BEFORE", "sm_s2_cloneunsum");
+    SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_NUI_EVENT, "nui_sm_events"); 
+    NWNX_Damage_SetDamageEventScript("sm_on_damage");
+    NWNX_Damage_SetAttackEventScript("sm_on_attack");
 }
