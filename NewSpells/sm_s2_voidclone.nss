@@ -63,6 +63,7 @@ void SMSummonClone(object oCaster, location lLocation)
     //These should be all the Feat modifications
     //Set Max HP to 75%, -2 to all Base Stats I think - will leave stats alone for now, unless Void Perfection
     //Need to make On death script for clone - and probably apply colored effects/Summoning in
+    //Need to remove held items - and give clone a weapon with the onhit cast sm_s2_cloneatk script I think
     if (bVoidPerf)
     {
         oSummon2 = CopyObject(oCaster, lLocation, OBJECT_INVALID, VOID_CLONE_TAG_2);
