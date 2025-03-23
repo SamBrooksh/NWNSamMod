@@ -10,11 +10,7 @@ void main()
     object oDamager = data.oDamager;    //Attacker
     object oTarget = OBJECT_SELF;       //Getting hit
 
-    if (GetLevelByClass(CLASS_TYPE_DUELIST, oDamager))
-    {
-        //Handle Precise Strike
-    }
-
+    
     if (GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oTarget))
     {
         //Handle Void Touched

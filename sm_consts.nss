@@ -105,6 +105,14 @@ const int SPELL_VOID_STRIKE         =   870;
 ////////////////////////////
 const float SPELL_REACTION_MULTIPLIER = 2.0;
 
+const string CRIPPLING_CRITICAL_LOCAL_NAME =    "CRIP_CRIT_CHOICE"
+const int CRIPPLING_CRITICAL_SPEED_PENALTY =    1;
+const int CRIPPLING_CRITICAL_AC_PENALTY =       2;
+const int CRIPPLING_CRITICAL_DEX_DAMAGE =       3;
+const int CRIPPLING_CRITICAL_STR_DAMAGE =       4;
+const int CRIPPLING_CRITICAL_SV_THROW_PENALTY = 5;
+const int CRIPPLING_CRITICAL_BLEED_DMG =        6;
+
 //////////////////////////
 // Class Type Constants //
 //////////////////////////

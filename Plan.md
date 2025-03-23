@@ -60,6 +60,7 @@ Deflect Arrows - Requires a light or one handed piercing weapon (Check to see if
 No Retreat - Maybe an Additional BAB increase? (Should be force enemies to provoke an attack... Seems doubtful to be able to occur)
 #### 10th Level
 Crippling Critical - Able to deal a penalty to target on crit (reduce speed to 10ft, 1d4 STR or DEX dmg, -4 to saving throws, -4 penalty to AC, or 2d6 bleed dmg - last 1 minute) - Probably should use some radial option to choose which one to be used in general. Should be able to with NWNX
+Looks like speed reduction is percent based - so I'll make it 75% for now (about the same against 30ft move - albeit a bit better, worse against faster, but shouldn't be too big of a deal)
 
 ### Bonus Feats
 8th Level only I think
