@@ -57,8 +57,10 @@ void main()
                     case CRIPPLING_CRITICAL_AC_PENALTY:
                         eCrit = EffectACDecrease(4);
                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCrit, OBJECT_SELF, RoundsToSeconds(10));
+                        PrintString("CRIPPLING_CRITICAL HIT WITH AC DAMAGE");
                         break;
                     case CRIPPLING_CRITICAL_BLEED_DMG:
+                        PrintString("CRIPPLING_CRITICAL HIT WITH BLEED DAMAGE");
                         //eCrit = Bleed
                         //implement complicated reoccuring bleed check - and hook in before turn maybe to check if healed?
                         //NWNX_ON_START_COMBAT_ROUND_BEFORE should be the event I think 
@@ -68,20 +70,25 @@ void main()
                     case CRIPPLING_CRITICAL_DEX_DAMAGE:
                         eCrit = EffectAbilityDecrease(ABILITY_DEXTERITY, d4());
                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCrit, OBJECT_SELF, RoundsToSeconds(10));
+                        PrintString("CRIPPLING_CRITICAL HIT WITH DEX DAMAGE");
                         break;
                     case CRIPPLING_CRITICAL_STR_DAMAGE:
                         eCrit = EffectAbilityDecrease(ABILITY_STRENGTH, d4());
                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCrit, OBJECT_SELF, RoundsToSeconds(10));
+                        PrintString("CRIPPLING_CRITICAL HIT WITH STR DAMAGE");
                         break;
                     case CRIPPLING_CRITICAL_SPEED_PENALTY:
                         eCrit = EffectMovementSpeedDecrease(75);
                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCrit, OBJECT_SELF, RoundsToSeconds(10));
+                        PrintString("CRIPPLING_CRITICAL HIT WITH MOVEMENT DAMAGE");
                         break;
                     case CRIPPLING_CRITICAL_SV_THROW_PENALTY
                         eCrit = EffectSavingThrowDecrease(SAVING_THROW_ALL, 4);
                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCrit, OBJECT_SELF, RoundsToSeconds(10));
+                        PrintString("CRIPPLING_CRITICAL HIT WITH SAVE DAMAGE");
                         break;
                     default:
+                        PrintString("CRIPPLING_CRITICAL Hit and used, but no VALUE"+IntToString(nCripChoice));
                         break; 
                 }                
             }

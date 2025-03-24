@@ -485,58 +485,61 @@ void SMSetHenchmanScripts(object oCreature)
 
 // Void Resistance Feat
 // Applies the resistances to player
+//I think I'm going to put these Resistances in NWNX? I'll keep this 
 void SMApplyVoidResistances(object oPlayer)
 {
-    int nFireResist = 0;
+    /*int nFireResist = 0;
     int nColdResist = 0;
     int nElecResist = 0;
     int nAcidResist = 0;
     int nSonicResist = 0;
-    int nVoidResist = 0;
+    int nVoidResist = 0;*/
     int nDmgResist  = 0;
 
     if (GetHasFeat(FEAT_VOID_TOUCHED, oPlayer))
     {
-        nFireResist += 1;
+        /*nFireResist += 1;
         nColdResist += 1;
         nElecResist += 1;
         nAcidResist += 1;
         nSonicResist += 1;
-        nVoidResist += 1;
+        nVoidResist += 1;*/
         nDmgResist += 1;
     }
     if (GetHasFeat(FEAT_VOID_STRENGTHEN, oPlayer))
     {
-        nFireResist += 4;
-        nColdResist += 4;
-        nElecResist += 4;
-        nAcidResist += 4;
-        nSonicResist += 4;
-        nVoidResist += 4;
-        nDmgResist += 2;
+        /*nFireResist += VOID_STRENGTHEN_RES_BUFF_AMT;
+        nColdResist += VOID_STRENGTHEN_RES_BUFF_AMT;
+        nElecResist += VOID_STRENGTHEN_RES_BUFF_AMT;
+        nAcidResist += VOID_STRENGTHEN_RES_BUFF_AMT;
+        nSonicResist += VOID_STRENGTHEN_RES_BUFF_AMT;
+        nVoidResist += VOID_STRENGTHEN_RES_BUFF_AMT;*/
+        nDmgResist += VOID_STRENGTHEN_DR_BUFF_AMT;
     }
-    if (nFireResist == 0)//Should make this more conclusive in the future I think
+    if (nDmgResist == 0)//Should make this more conclusive in the future I think
     {
         return;
     }
-    effect eFireResist = EffectDamageResistance(DAMAGE_TYPE_FIRE, nFireResist);
+    /*effect eFireResist = EffectDamageResistance(DAMAGE_TYPE_FIRE, nFireResist);
     effect eColdResist = EffectDamageResistance(DAMAGE_TYPE_COLD, nColdResist);
     effect eElecResist = EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, nElecResist);
     effect eAcidResist = EffectDamageResistance(DAMAGE_TYPE_ACID, nAcidResist);
     effect eSonicResist = EffectDamageResistance(DAMAGE_TYPE_SONIC, nSonicResist);
     effect eVoidResist = EffectDamageResistance(DAMAGE_TYPE_VOID, nVoidResist);
-    effect eDmgResist = EffectDamageResistance(DAMAGE_POWER_PLUS_FIVE, nDmgResist);
 
     effect eLink = EffectLinkEffects(eFireResist, eColdResist);
     eLink = EffectLinkEffects(eElecResist, eLink);
     eLink = EffectLinkEffects(eAcidResist, eLink);
     eLink = EffectLinkEffects(eSonicResist, eLink);
     eLink = EffectLinkEffects(eVoidResist, eLink);
-    eLink = EffectLinkEffects(eDmgResist, eLink);
-    eLink = TagEffect(eLink, CONST_VOID_RESISTS);
+    eLink = EffectLinkEffects(eDmgResist, eLink);*/
+    
+    effect eDmgResist = EffectDamageResistance(DAMAGE_POWER_PLUS_FIVE, nDmgResist);
+
+    eLink = TagEffect(eDmgResist, CONST_VOID_RESISTS);
     eLink = SupernaturalEffect(eLink);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPlayer);
-    //May need to reset on rest
+    //May need to reset on Rest/Resurrection
 }
 
 //

@@ -200,6 +200,8 @@ Evasion
 Void Swap - Swap positions with Void clone
 #### 6th Level
 Gain DR/1 and Energy Resist 1 - Void Touched
+###### I am not sure if I want to apply it through an effect or with NWNX - Have both setup
+###### Going to stick with NWNX for now except for Damage Resistance 
 #### 7th Level
 Ability to cast Invisibility 2 + INT times/day - Void Cloak
 #### 8th Level

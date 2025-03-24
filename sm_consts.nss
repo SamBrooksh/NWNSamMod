@@ -113,6 +113,9 @@ const int CRIPPLING_CRITICAL_STR_DAMAGE =       4;
 const int CRIPPLING_CRITICAL_SV_THROW_PENALTY = 5;
 const int CRIPPLING_CRITICAL_BLEED_DMG =        6;
 
+const int VOID_STRENGTHEN_RES_BUFF_AMT =        4;
+const int VOID_STRENGTHEN_DR_BUFF_AMT =         2;
+
 //////////////////////////
 // Class Type Constants //
 //////////////////////////
