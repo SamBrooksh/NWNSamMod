@@ -20,7 +20,9 @@ void SMVoidScornedDebuff(object oTarget, object oCaster);
 void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1);
 void SMVoidCursedStrikesDebuff(object oTarget, object oCaster);
 void SMReinivigoratedBuff(object oCaster, object oTarget);
+void SMApplySappingStrike(object oCaster, object oTarget);
 void SMFadeOutBuff(object oGotHit);
+string SMVoidDebuffString(object oTarget, object oCaster, string base);
 int SMHasVoidDebuff(object oTarget, object oCaster, string base);
 void SMRemoveBuff(object oTarget, string DEBUFF);
 void SMSummonClone(object oCaster, location lLocation);
@@ -187,7 +189,7 @@ void SMRestFinishedFunctions(object oSleeper)
 void SMVoidFadingDebuff(object oTarget, object oCaster)
 {
     int fading_div = 2;
-    string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
+    string concatenate = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_CONSUMED_DEBUFF);
     int remaining = GetLocalInt(oTarget, concatenate);
     if (GetIsDead(oTarget) || remaining < 1)
     {
@@ -215,7 +217,7 @@ void SMVoidFadingDebuff(object oTarget, object oCaster)
 // If the target has the debuff already, simply extends the duration
 void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
 {
-    string concatenate = CONST_VOID_FADING_DEBUFF + ObjectToString(oCaster);
+    string concatenate = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_FADING_DEBUFF);
     if (GetLocalInt(oTarget, concatenate))
     {
         //Should probably have something be said as well
@@ -238,7 +240,7 @@ void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
 // Target with Void Consumed has a chance to gain Fading for a round, or to extend the current one
 void SMVoidConsumedDebuff(object oTarget, object oCaster)
 {
-    string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
+    string concatenated = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_CONSUMED_DEBUFF);
     int curr = GetLocalInt(oTarget, concatenated);
     if (GetIsDead(oTarget) || curr < 1)
     {
@@ -261,7 +263,7 @@ void SMVoidConsumedDebuff(object oTarget, object oCaster)
 // Applies the Void Consumed, and makes sure to not double stack the effects
 void SMApplyVoidConsumed(object oTarget, object oCaster, int rounds = 1)
 {
-    string concatenated = CONST_VOID_CONSUMED_DEBUFF + ObjectToString(oCaster);
+    string concatenated = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_CONSUMED_DEBUFF);
     int nDuration = GetLocalInt(oTarget, concatenated);
     if (nDuration < 1)
     {
@@ -289,7 +291,7 @@ void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1)
 // Otherwise wait in the shadows
 void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
 {
-    string concatenated = CONST_VOID_CURSED_S_DEBUFF + ObjectToString(oCaster);
+    string concatenated = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_CURSED_S_DEBUFF);
     int current = GetLocalInt(oTarget, concatenated);
     if (GetIsDead(oTarget))
     {
@@ -313,7 +315,7 @@ void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
 // Apply the Cursed Strikes, and prevent double uses
 void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 5)
 {
-    string concatenated = CONST_VOID_CURSED_S_DEBUFF + ObjectToString(oCaster);
+    string concatenated = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_CURSED_S_DEBUFF);
     if (GetLocalInt(oTarget, concatenated))
     {
         SpeakString("Target already has Cursed Strikes!", 1);
@@ -332,7 +334,41 @@ void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 5)
 
 void SMReinivigoratedBuff(object oCaster, object oTarget)
 {
+    int nFading = SMHasVoidDebuff(oTarget, oCaster, CONST_VOID_FADING_DEBUFF);
+    if (nFading == 0)
+    {
+        SpeakString("Target does not have Fading!");
+        return;
+    }
+    int nLvl = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
+    effect eDex = EffectAbilityIncrease(ABILITY_DEXTERITY, 4);
+    effect eStr = EffectAbilityIncrease(ABILITY_STRENGTH, 4);
+    effect eTmpHp = EffectTemporaryHitpoints(2*nLvl);
+    effect eFort = EffectSavingThrowIncrease(SAVING_THROW_FORT, 2);
+    effect eRef = EffectSavingThrowIncrease(SAVING_THROW_REFLEX, 2);
+    effect eWill = EffectSavingThrowIncrease(SAVING_THROW_WILL, 2);
+    
+    effect eCombined = EffectLinkEffects(eDex, eStr);
+    eCombined = EffectLinkEffects(eCombined, eTmpHp);
+    eCombined = EffectLinkEffects(eCombined, eFort);
+    eCombined = EffectLinkEffects(eCombined, eRef);
+    eCombined = EffectLinkEffects(eCombined, eWill);
+    eCombined = TagEffect(eCombined, CONST_VOID_REINVIGORATED);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCombined, oCaster, RoundsToSeconds(2*nLvl));
+    effect eHeal = EffectHeal(GetMaxHitPoints(oCaster));
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oCaster);
+    string sDebuffString = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_FADING_DEBUFF);
+    SMRemoveBuff(oTarget, sDebuffString);
+}
 
+void SMApplySappingStrike(object oCaster, object oTarget)
+{
+    int nDC = 10 + GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster) + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
+    if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_NONE, oCaster))
+    {
+        effect eFort = EffectSavingThrowDecrease(SAVING_THROW_FORT, 4, SAVING_THROW_ALL);
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFort, oTarget, RoundsToSeconds(GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster)));
+    }
 }
 
 // Fade Out Feat Persistent
@@ -364,6 +400,13 @@ int SMHasVoidDebuff(object oTarget, object oCaster, string base)
     return GetLocalInt(oTarget, concat);
 }
 
+//Helper function in case I need to change how this works later
+string SMVoidDebuffString(object oTarget, object oCaster, string base)
+{
+    string concat = base + ObjectToString(oCaster);
+    return concat;
+}
+
 // Helper function to remove Debuff's easily
 void SMRemoveBuff(object oTarget, string DEBUFF)
 {
@@ -375,8 +418,6 @@ void SMRemoveBuff(object oTarget, string DEBUFF)
         eEffect = GetNextEffect(oTarget);
     }
 }
-
-
 
 // Helper Function to remove drops from target
 void SMNoDrops(object oCreature)

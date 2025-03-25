@@ -1,10 +1,4 @@
-#include "sm_consts"
-// Eventually Remove this
-int SMHasVoidDebuff(object oTarget, object oCaster, string base)
-{
-    string concat = base + ObjectToString(oCaster);
-    return GetLocalInt(oTarget, concat);
-}
+#include "sm_spellfunc"
 
 // On hit for item, deal Void damage
 void main()

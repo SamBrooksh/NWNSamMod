@@ -209,7 +209,7 @@ Ability to cast Haste 1 + INT times/day
 #### 9th Level
 Void Shadowed - Ability to cast Incorporeal 1 + INT times/day
 #### 10th Level
-Void Renewall - Clone grants temp HP to player on it dealing damage
+Void Renewall - Clone grants temp HP to player on it dealing damage - For now going to try doing it with effects and just be 2d6 temp hit points for 1 minute
 #### 11st Level
 Void Assimilation - Reduce the Penalty of summoning a clone - -1 REF/WILL/FORT -2 STR -1 CHA?
 #### 12nd Level
@@ -219,8 +219,11 @@ Void Hop = Short Range Teleport (Essentially Spell - with small penalty) 1 + INT
 Void Scorn - Target Debuff for a while (Clone has small chance to try and apply)
 #### 14th Level
 Reinvigorate - Remove Fading from target to get buffs
++4 DEX + STR - 2*LVL temp HP +2 Fort/Will/Ref for 2*lvl rnds
+Heal To Full as well? (For now)
 #### 15th Level
 Sapping Strkes - Clone's on hit attempts to apply a Fort reduction debuff, Player can attempt as well
+DC 10 + VoidScarred Level + INT mod for now - Duration 1/round per level
 #### 16th Level
 Impending Void - Player can deal massive dmg (1d6 per level) to target with Curse, Fading and Void Scorn other debuff VOID damage
 #### 17th Level

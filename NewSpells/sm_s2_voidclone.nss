@@ -50,6 +50,8 @@ void SMSummonClone(object oCaster, location lLocation)
     eCombined = TagEffect(eCombined, CONST_VOID_SUMMON_DEBUFF);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oCaster);
 
+    effect eShadowEffect = EffectVisualEffect(VFX_DUR_AURA_BLUE_DARK);
+
     object oSummon2;
     object oSummon = CopyObject(oCaster, lLocation, OBJECT_INVALID, VOID_CLONE_TAG);
     int bVoidPerf = GetHasFeat(FEAT_VOID_PERFECTION, oCaster);
@@ -58,6 +60,7 @@ void SMSummonClone(object oCaster, location lLocation)
     NWNX_Creature_AddAssociate(oCaster, oSummon, ASSOCIATE_TYPE_SUMMONED);
     SMSetHenchmanScripts(oSummon);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oSummon);
+    ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadowEffect, oSummon);
 
     SetLocalObject(oCaster, VOID_CLONE_HEX_NUM, oSummon);
     //These should be all the Feat modifications
@@ -71,7 +74,8 @@ void SMSummonClone(object oCaster, location lLocation)
         ForceRefreshObjectUUID(oSummon2);
         NWNX_Creature_AddAssociate(oCaster, oSummon2, ASSOCIATE_TYPE_SUMMONED);
         SMSetHenchmanScripts(oSummon2);
-        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oSummon2);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eCombined, oSummon2);    
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eShadowEffect, oSummon2);
         SetLocalObject(oCaster, VOID_CLONE_HEX_NUM2, oSummon2);
     }
     else
