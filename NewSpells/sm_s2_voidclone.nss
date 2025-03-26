@@ -106,5 +106,12 @@ void SMSummonClone(object oCaster, location lLocation)
     }
     //Need to modify weapon on hit modifier, and potentially scripts attached to the creature?
     //Probably just add the one - I think I need to add a script to the weapon
-
+    //I made a creature weapon - we will see if I can add it to the equipped
+    /*
+    item iWeapon = CreateItemOnObject("s2cloneatk", oSummon);
+    ActionEquipItem(iWeapon, oSummon);
+    item iWeapon2 = CreateItemOnObject("s2cloneatk", oSummon2);
+    ActionEquipItem(iWeapon2, oSummon2);
+    //Also need to give and do the same with oSummon2 if exists
+    */
 }
