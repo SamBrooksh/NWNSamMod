@@ -252,7 +252,6 @@ Ravaging Swap - Deal Void Damage to creatures between Clone and Player - 1d10 + 
 Empowering Swap - Gain Buff (Clone and Player) After Swapping for short time (+2 Atk Bonus, +10 temp HP, +10% to random modifiers - like clone applying debuffs?, +LVL to Void Damage for INT MOD turns) LVL 5
 
 
-
 Fading DC 10 + INT + 1/4 lvl (maybe 1/2) target suffers HD void dmg max HD amount/2 turns (possible only 2)
 Consumed By Void - DC 10 + Reapply Fading every so often (no save)
 Void Scorned Debuff -2 Will, AC, STR, DEX, Reflex

@@ -105,7 +105,6 @@ const int SPELL_VOID_STRIKE         =   870;
 ////////////////////////////
 const float SPELL_REACTION_MULTIPLIER = 2.0;
 
-const string CRIPPLING_CRITICAL_LOCAL_NAME =    "CRIP_CRIT_CHOICE"
 const int CRIPPLING_CRITICAL_SPEED_PENALTY =    1;
 const int CRIPPLING_CRITICAL_AC_PENALTY =       2;
 const int CRIPPLING_CRITICAL_DEX_DAMAGE =       3;
@@ -127,6 +126,8 @@ const int CLASS_TYPE_VOID_SCARRED    =  62;
 //////////////////////
 // String Constants //
 //////////////////////
+const string CRIPPLING_CRITICAL_LOCAL_NAME =    "CRIP_CRIT_CHOICE"
+
 const string CONST_FADE_OUT_BUFF    =   "SM_FADE_OUT_BUFF";
 const string CONST_VOID_FADING_DEBUFF = "SM_V_FADING_DEBUFF";
 const string CONST_VOID_CONSUMED_DEBUFF="SM_V_CONSUMED_DEBUFF";
@@ -145,6 +146,13 @@ const string CONST_USES_VMISSILE     =  "SM_VMISS_USES";
 const string CONST_USES_VOID_RIP     =  "SM_VRIP_USES";
 
 const string CONST_VOID_STRIKE_ITEM_TAG="SM_VOIDSTRIKE";
+
+
+const string NUI_SM_LEARN_ARCANE_SPELLS     =   "nui_sm_learn_arcane_spells";
+const string SM_SPELL_CRITICAL_CONST        =   "SM_SPELL_CRITICAL";
+const string SM_SPELL_CRITICAL2_CONST       =   "SM_SPELL_CRITICAL2";
+const string SM_SPELL_CRITICAL3_CONST       =   "SM_SPELL_CRITICAL3";
+
 
 //////////////////////
 // VFX Constants    //

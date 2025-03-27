@@ -24,17 +24,24 @@ void main()
 
     while (GetIsObjectValid(oTarget))
     {
-        //Need to skip over the clones
-        //SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_VOID_RIP));  //Maybe should have this
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+        if (GetTag(oTarget) == VOID_CLONE_TAG || GetTag(oTarget) == VOID_CLONE_TAG_2)
         {
-            nDamage = d6(nCasterLvl);
-            nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nReflexDC);
-            eDam = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
-            if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nReflexDC, SAVING_THROW_TYPE_NONE, oCaster, 0.0))
+            //Don't do anything to the clones
+        }
+        else 
+        {
+            //Need to skip over the clones
+            SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_VOID_RIP));  //Maybe should have this
+            if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
             {
-                int dur = 2 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
-                SMApplyVoidConsumed(oTarget, oCaster, dur);
+                nDamage = d6(nCasterLvl);
+                nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nReflexDC);
+                eDam = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
+                if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nReflexDC, SAVING_THROW_TYPE_NONE, oCaster, 0.0))
+                {
+                    int dur = 2 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
+                    SMApplyVoidConsumed(oTarget, oCaster, dur);
+                }
             }
         }
         oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTarget, FALSE, OBJECT_TYPE_CREATURE);

@@ -68,7 +68,6 @@ int SMisDivine(int class)
 // Class should be 0 for Arcane, and 1 for Divine I think
 int SMGetCasterLevel(object oCaster, int arcaneDivine)
 {
-
     int total = 0;
     // Only doing if more than one class
     if (GetClassByPosition(2, oCaster) != CLASS_TYPE_INVALID)

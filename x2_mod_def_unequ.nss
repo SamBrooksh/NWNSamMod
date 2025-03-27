@@ -60,7 +60,7 @@ void main()
         }
     }
     // -------------------------------------------------------------------------
-    // Sam Mod Item Equippment needed
+    // Sam Mod Item Equipment needed
     // 
     // -------------------------------------------------------------------------
     if (GetWeaponRanged(oItem) || IPGetIsMeleeWeapon(oItem))

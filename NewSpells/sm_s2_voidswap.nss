@@ -22,22 +22,29 @@ void main()
     int ravage = GetHasFeat(FEAT_VOID_RAVAGING_SWAP, oCaster);
     int empower = GetHasFeat(FEAT_VOID_EMPOWERING_SWAP, oCaster);
     float size = 30.0;
+    int nLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
     object inBetween = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
     
-    while (GetIsObjectValid(inBetween)) 
+    if (ravage)
     {
-        //Exclude caster and target
-        if (inBetween != oCaster && inBetween != oTarget)
+        while (GetIsObjectValid(inBetween)) 
         {
-            //Don't hurt friends
-            if (spellsIsTarget(inBetween, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+            //Exclude caster and target
+            if (inBetween != oCaster && inBetween != oTarget)
             {
-                //Do the Ravage feat
+                //Don't hurt friends
+                if (spellsIsTarget(inBetween, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+                {
+                    //Do the Ravage feat
+                    int nDmg = d10(nLevel / 3) + (nLevel / 3);
+                    effect eDmg = EffectDamage(nDmg, DAMAGE_TYPE_VOID);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, inBetween);
+                }
             }
+            inBetween = GetNextObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
         }
-        inBetween = GetNextObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
     }
-    
+
     if (empower)
     {
         //Gain Buff (Clone and Player) After Swapping for short time 
