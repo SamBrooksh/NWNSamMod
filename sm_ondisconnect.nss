@@ -29,7 +29,7 @@ if (NWNX_SQL_PrepareQuery(sSQL)) {
 }
 return 0;
 the ? states where something will be filled in
-So if I am saving spells, character, spell level, class id it would be
+So if I am saving spells, character-uuid, spell level, class id it would be
 First time
 string sSql = "INSERT spellid, spelllvl, character, classid INTO TABLE VALUES (?, ?, ?, ?);""
 if (NWNX_SQL_PrepareQuery(sSql))
@@ -43,4 +43,5 @@ if (NWNX_SQL_PrepareQuery(sSql))
 SELECT spellid, spelllvl, character, classid FROM TABLE WHERE 
 spellid=? AND character=? AND spelllvl=? AND classid=?;
 }
+
 */
