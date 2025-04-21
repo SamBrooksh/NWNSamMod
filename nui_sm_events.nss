@@ -163,13 +163,13 @@ void main()
             }
             NWNX_Creature_AddKnownSpell(oPlayer, nClass, nSpellLevel1, nSpell1 - 1);
             NWNX_Creature_AddKnownSpell(oPlayer, nClass, nSpellLevel2, nSpell2 - 1);
-            int oPUUID = GetObjectUUID(oPlayer);
-            string sSql = "INSERT spellid, spelllvl, uuid, classid INTO TABLE VALUES (?, ?, ?, ?);"
+            string oPCUUID = GetObjectUUID(oPlayer);
+            string sSql = "INSERT INTO spellid, spelllvl, uuid, classid INTO TABLE VALUES (?, ?, ?, ?);"
             if (NWNX_SQL_PrepareQuery(sSql))
             {
                 NWNX_SQL_PreparedInt(0, nSpell1 - 1);
                 NWNX_SQL_PreparedInt(1, nSpellLevel1);
-                NWNX_SQL_PreparedInt(2, oPUUID);
+                NWNX_SQL_PreparedString(2, oPCUUID);
                 NWNX_SQL_PreparedInt(3, nClass);
                 //Might want to just use the SQL in NWN right now? Need to look into it
             }
