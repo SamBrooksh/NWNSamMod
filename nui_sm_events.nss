@@ -1,7 +1,7 @@
 #include "nw_inc_nui"
 #include "sm_nui_build"
-#include "nwnx_creature"
 #include "sm_spellfunc"
+#include "sm_learnspellsql"
 
 const string LEARN_SPELL_1 = "LEARNSPELL1";
 const string LEARN_SPELL_2 = "LEARNSPELL2";
@@ -161,18 +161,8 @@ void main()
                 SpeakString("ERROR: SPELLLEVEL RETURNED -1 [nui_sm_events] [nSpell2]");
                 return;
             }
-            NWNX_Creature_AddKnownSpell(oPlayer, nClass, nSpellLevel1, nSpell1 - 1);
-            NWNX_Creature_AddKnownSpell(oPlayer, nClass, nSpellLevel2, nSpell2 - 1);
-            string oPCUUID = GetObjectUUID(oPlayer);
-            string sSql = "INSERT INTO spellid, spelllvl, uuid, classid INTO TABLE VALUES (?, ?, ?, ?);"
-            if (NWNX_SQL_PrepareQuery(sSql))
-            {
-                NWNX_SQL_PreparedInt(0, nSpell1 - 1);
-                NWNX_SQL_PreparedInt(1, nSpellLevel1);
-                NWNX_SQL_PreparedString(2, oPCUUID);
-                NWNX_SQL_PreparedInt(3, nClass);
-                //Might want to just use the SQL in NWN right now? Need to look into it
-            }
+            SMSQLLearnSpell(oPlayer, nClass, nSpellLevel1, nSpell1-1);
+            SMSQLLearnSpell(oPlayer, nClass, nSpellLevel2, nSpell2-1);
             SendMessageToPC(oPlayer, "ACCEPTED");
         }
         else 
