@@ -122,7 +122,8 @@ void main()
 
     NWNX_Events_SubscribeEvent("NWNX_ON_REMOVE_ASSOCIATE_BEFORE", "sm_s2_cloneunsum");
     NWNX_Events_SubscribeEvent("NWNX_ON_LEVEL_AFTER", "sm_arcspelllearn");
-    NWNX_Events_SubscribeEvent("NWNX_ON_CLIENT_DISCONNECT_BEFORE", "sm_ondisconnect")
+    NWNX_Events_SubscribeEvent("NWNX_ON_CLIENT_DISCONNECT_BEFORE", "sm_ondisconnect");
+    NWNX_Events_SubscribeEvent("NWNX_ON_CLIENT_CONNECT_BEFORE", "sm_onconnect");
     SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_NUI_EVENT, "nui_sm_events"); 
 
     NWNX_Damage_SetDamageEventScript("sm_on_damage");
