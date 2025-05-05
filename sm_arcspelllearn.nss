@@ -1,5 +1,6 @@
-#include "sm_consts"
+#include "sm_spellfunc"
 #include "nwnx_creature"
+#include "nw_inc_nui"
 
 int GetLevel(object oCaster)
 {
@@ -47,7 +48,7 @@ void LearnNewArcaneSpells(object oPlayer)
     string name = Get2DAString("spells", "Name", pos);
     string label = Get2DAString("spells", "Label", pos);
     string desc = Get2DAString("spells", "SpellDesc", pos);
-    int nArcaneCasterLevel = (SMGetCasterLevel(oPlayer, 0) + 1) / 2;
+    int nArcaneCasterLevel = (SMGetCasterLevel(oPlayer, ARCANE_CLASS) + 1) / 2;
     int bard = GetLevelByClass(CLASS_TYPE_BARD, oPlayer);
     int wizSorc = GetLevelByClass(CLASS_TYPE_WIZARD, oPlayer);
     int count = Get2DARowCount("spells");

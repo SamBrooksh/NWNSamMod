@@ -72,7 +72,7 @@ void main()
             {
                 if (GetItemPropertyTag(toRemove) == CONST_VOID_STRIKE_ITEM_TAG)
                 {
-                    RemoveItemProperty(toRemove);
+                    RemoveItemProperty(oItem, toRemove);
                 }
             }
         }

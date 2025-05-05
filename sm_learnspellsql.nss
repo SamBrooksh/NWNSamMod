@@ -1,7 +1,7 @@
 /*
 For a sample of how it would work without NWNX
 */
-#include "nwnx_monster"
+#include "nwnx_creature"
 void SMSQLCreateSpellTable(object oPC)
 {
     sqlquery s = SqlPrepareQueryObject(oPC, "CREATE TABLE IF NOT EXISTS spellslearned (spellid INT NOT NULL, spelllvl INT NOT NULL, uuid INT NOT NULL, classid INT NOT NULL, PRIMARY KEY (spellid, uuid));");
@@ -31,7 +31,7 @@ void SMSQLRelearnSpells(object oTarget)
     
     SMSQLCreateSpellTable(oPC); //Creates table just in case
     //uuid may not be useful here at all if it's stored on the player...
-    sqlquery s = SqlPrepareQueryObject(oPC, "select spellid, spelllvl, uuid, classid from spellslearned;")
+    sqlquery s = SqlPrepareQueryObject(oPC, "select spellid, spelllvl, uuid, classid from spellslearned;");
     while (SqlStep(s))
     {
         /*

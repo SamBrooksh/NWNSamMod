@@ -10,18 +10,20 @@ const int ATTACK_CRITICAL_HIT_VALUE = 3; //Just a hardcoded number
 void main()
 {
     struct NWNX_Damage_AttackEventData data = NWNX_Damage_GetAttackEventData();
-    int nAtkRes = data.iAttackResult; 
-    if (nAtkRes == ATTACK_HIT_VALUE 
-    || nAtkRes == ATTACK_AUTOMATIC_HIT_VALUE 
-    || nAtkRes == ATTACK_DEVASTATING_CRIT_VALUE 
+    int nAtkRes = data.iAttackResult;
+    object oDamager = OBJECT_SELF;
+
+    if (nAtkRes == ATTACK_HIT_VALUE
+    || nAtkRes == ATTACK_AUTOMATIC_HIT_VALUE
+    || nAtkRes == ATTACK_DEVASTATING_CRIT_VALUE
     || nAtkRes == ATTACK_CRITICAL_HIT_VALUE)
     {
         if (GetLevelByClass(CLASS_TYPE_ELDRITCH_KNIGHT, oDamager) > 0)
         {
-            
-            if (nAtkRes == ATTACK_CRITICAL_HIT_VALUE)  
+
+            if (nAtkRes == ATTACK_CRITICAL_HIT_VALUE)
             {
-                //Handle Spell Critical    
+                //Handle Spell Critical
             }
         }
 
@@ -29,29 +31,29 @@ void main()
         {
             // Handle Precise Strike
             // Check if light 1 handed... Somehow
-            
-            item iHeld = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oDamager);
-            item iOffhand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oDamager);
-            
+
+            object iHeld = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oDamager);
+            object iOffhand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oDamager);
+
             int nBaseItem = GetBaseItemType(iHeld);
             int nOffhand = GetBaseItemType(iOffhand);
             if (nBaseItem != BASE_ITEM_INVALID && nOffhand == BASE_ITEM_INVALID)
             {
-                int nWeaponType = StringToInt(Get2DAString("baseitem", "WeaponType", iHeld));
+                int nWeaponType = StringToInt(Get2DAString("baseitem", "WeaponType", nBaseItem));
                 if ((nWeaponType == 1 || nWeaponType == 4) && Get2DAString("baseitem", "WeaponWield", nBaseItem) != "0")
                 {
                     data.iPierce += GetLevelByClass(CLASS_TYPE_DUELIST, oDamager);
                     //May also specify That this is happening somehow
                     //May need to check Damage Resistances somehow? Needs testing
 
-                }   
+                }
             }
 
-            if (nAtkRes == ATTACK_CRITICAL_HIT_VALUE && GetHasFeat(FEAT_CRIPPLING_CRITICAL, oDamager))  
+            if (nAtkRes == ATTACK_CRITICAL_HIT_VALUE && GetHasFeat(FEAT_CRIPPLING_CRITICAL, oDamager))
             {
                 //Handle Crippling Critical
                 effect eCrit;
-                int nCripChoice = GetLocalInt(oDamager, CRIPPLING_CRITICAL_LOCAL_NAME); 
+                int nCripChoice = GetLocalInt(oDamager, CRIPPLING_CRITICAL_LOCAL_NAME);
                 switch (nCripChoice)
                 {
                     case CRIPPLING_CRITICAL_AC_PENALTY:
@@ -63,7 +65,7 @@ void main()
                         PrintString("CRIPPLING_CRITICAL HIT WITH BLEED DAMAGE");
                         //eCrit = Bleed
                         //implement complicated reoccuring bleed check - and hook in before turn maybe to check if healed?
-                        //NWNX_ON_START_COMBAT_ROUND_BEFORE should be the event I think 
+                        //NWNX_ON_START_COMBAT_ROUND_BEFORE should be the event I think
                         //Wound
                         //For now just treat as Dex Damage
                         //break;
@@ -82,18 +84,18 @@ void main()
                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCrit, OBJECT_SELF, RoundsToSeconds(10));
                         PrintString("CRIPPLING_CRITICAL HIT WITH MOVEMENT DAMAGE");
                         break;
-                    case CRIPPLING_CRITICAL_SV_THROW_PENALTY
+                    case CRIPPLING_CRITICAL_SV_THROW_PENALTY:
                         eCrit = EffectSavingThrowDecrease(SAVING_THROW_ALL, 4);
                         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCrit, OBJECT_SELF, RoundsToSeconds(10));
                         PrintString("CRIPPLING_CRITICAL HIT WITH SAVE DAMAGE");
                         break;
                     default:
                         PrintString("CRIPPLING_CRITICAL Hit and used, but no VALUE"+IntToString(nCripChoice));
-                        break; 
-                }                
+                        break;
+                }
             }
         }
 
     }
-    NWNX_SetAttackEventData(data);
+    NWNX_Damage_SetAttackEventData(data);
 }

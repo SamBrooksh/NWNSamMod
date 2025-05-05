@@ -126,7 +126,7 @@ const int CLASS_TYPE_VOID_SCARRED    =  62;
 //////////////////////
 // String Constants //
 //////////////////////
-const string CRIPPLING_CRITICAL_LOCAL_NAME =    "CRIP_CRIT_CHOICE"
+const string CRIPPLING_CRITICAL_LOCAL_NAME =    "CRIP_CRIT_CHOICE";
 
 const string CONST_FADE_OUT_BUFF    =   "SM_FADE_OUT_BUFF";
 const string CONST_VOID_FADING_DEBUFF = "SM_V_FADING_DEBUFF";

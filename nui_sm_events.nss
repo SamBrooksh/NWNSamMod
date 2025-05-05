@@ -1,10 +1,13 @@
 #include "nw_inc_nui"
-#include "sm_nui_build"
 #include "sm_spellfunc"
 #include "sm_learnspellsql"
 
 const string LEARN_SPELL_1 = "LEARNSPELL1";
 const string LEARN_SPELL_2 = "LEARNSPELL2";
+
+//Need to change this (and everything with it)
+const string NUI_SAM_ALL_SPELLS = "nui_sam_all_spells";
+
 
 //Used to identify what class to add the spells to when learning from a prestige
 //Will give it to just the first one found
@@ -21,7 +24,7 @@ int SpellLearnClass(object oPlayer, int nARCANEDIVINE = ARCANE_CLASS)
                     return nClass;
                 break;
             case DIVINE_CLASS:
-                if (SM_isDivine(nClass))
+                if (SMisDivine(nClass))
                     return nClass;
                 break;
             default:
@@ -48,9 +51,8 @@ int SpellLevel(int nClass, int nSpellId)
         case CLASS_TYPE_WIZARD:
         case CLASS_TYPE_SORCERER:
             return StringToInt(Get2DAString("spells", "Wiz_Sorc", nSpellId));
-        default:
-            return -1;
     }
+    return -1;
 }
 
 void main()
@@ -172,6 +174,7 @@ void main()
             switch (nButton)
             {
                 case NUI_MOUSE_BUTTON_LEFT:
+                {    
                     int curr1 = GetLocalInt(oPlayer, LEARN_SPELL_1);
                     int curr2 = GetLocalInt(oPlayer, LEARN_SPELL_2);
                     if (curr1 > 0 && curr1 != nSpell)
@@ -205,6 +208,7 @@ void main()
                     NuiSetBind(oPlayer, nToken, "spell_"+IntToString(curr1), NuiColor(255,0,0));
                     NuiSetBind(oPlayer, nToken, "spell_"+IntToString(curr2), NuiColor(255,0,0));
                     break;
+                }
                 case NUI_MOUSE_BUTTON_MIDDLE:
                 case NUI_MOUSE_BUTTON_RIGHT:
                 default:
