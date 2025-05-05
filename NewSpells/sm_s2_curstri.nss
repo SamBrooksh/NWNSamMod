@@ -1,4 +1,4 @@
-#include "sm_spell_func"
+#include "sm_spellfunc"
 
 void main()
 {

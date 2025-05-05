@@ -14,8 +14,7 @@
 
 #include "NW_I0_SPELLS"    
 #include "x2_inc_spellhook" 
-#include "sm_consts"
-//#include "sm_spellfunc"
+#include "sm_spellfunc"
 
 void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel, int NULL_MISSILE = FALSE, int CRACKLING = FALSE);
 

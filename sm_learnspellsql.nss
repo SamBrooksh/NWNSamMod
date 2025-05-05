@@ -13,6 +13,8 @@ void SMSQLCreateSpellTable(object oPC)
 */
 void SMSQLLearnSpell(object oTarget, int nClass, int nSpellLvl, int nSpellID)
 {
+    //Add check here to make sure that target doesn't have spell in class already
+    
     object oPC = oTarget;
     SMSQLCreateSpellTable(oPC); //Creates table just in case it doesn't exist and throw error
     string oPCUUID = GetObjectUUID(oPC);
@@ -46,3 +48,8 @@ void SMSQLRelearnSpells(object oTarget)
 }
 //Looks like This will be a better way
 //May need to keep track of the hotbar as well...
+
+void testlearnspell(object oPC)
+{
+    SMSQLLearnSpell(oPC, CLASS_TYPE_WIZARD, 9, 185);
+}

@@ -1,4 +1,4 @@
-#include "sm_spell_func"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -29,9 +29,10 @@ void main()
     else 
     {
         SpeakString("Target doesn't have appropriate Void Scarred Debuffs", 1);
-        IncrementRemainingFeatUses(OCaster, FEAT_IMPENDING_VOID);
+        IncrementRemainingFeatUses(oCaster, FEAT_IMPENDING_VOID);
         return;
         
         //Reset, specify that target doesn't have 
     }
+    return;
 }

@@ -576,7 +576,7 @@ void SMApplyVoidResistances(object oPlayer)
     
     effect eDmgResist = EffectDamageResistance(DAMAGE_POWER_PLUS_FIVE, nDmgResist);
 
-    eLink = TagEffect(eDmgResist, CONST_VOID_RESISTS);
+    effect eLink = TagEffect(eDmgResist, CONST_VOID_RESISTS);
     eLink = SupernaturalEffect(eLink);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPlayer);
     //May need to reset on Rest/Resurrection
