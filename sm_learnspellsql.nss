@@ -10,32 +10,43 @@ void SMSQLCreateSpellTable(object oPC)
 
 /***
 * Adds the spell to the creatures SQL as well as adds the known spell
+
+Need to change the table to be a module one that is saved - currently loses all information when server shuts down
+I think... Maybe not actually
 */
 void SMSQLLearnSpell(object oTarget, int nClass, int nSpellLvl, int nSpellID)
 {
     //Add check here to make sure that target doesn't have spell in class already
-    
     object oPC = oTarget;
     SMSQLCreateSpellTable(oPC); //Creates table just in case it doesn't exist and throw error
     string oPCUUID = GetObjectUUID(oPC);
     sqlquery s = SqlPrepareQueryObject(oPC, "insert into spellslearned (spellid, spelllvl, uuid, classid) values (@spellid, @spelllvl, @uuid, @classid);");
+    /*
     SqlBindString(s, "@uuid", oPCUUID);
     SqlBindInt(s, "@classid", nClass);
     SqlBindInt(s, "@spellid", nSpellID+1);  //Saving at +1 for tracking 0
     SqlBindInt(s, "@spelllvl", nSpellLvl);
+    */
     SqlStep(s);
     NWNX_Creature_AddKnownSpell(oPC, nClass, nSpellLvl, nSpellID);
 }
 
+/*
+Looks like wizards learn it properly from so relearning 
+should only apply those that needed to 
+
+*/
 void SMSQLRelearnSpells(object oTarget)
 {
     object oPC = oTarget;
-    
+    PrintString("Relearning Spells");
+    PrintObject(oPC);
     SMSQLCreateSpellTable(oPC); //Creates table just in case
     //uuid may not be useful here at all if it's stored on the player...
     sqlquery s = SqlPrepareQueryObject(oPC, "select spellid, spelllvl, uuid, classid from spellslearned;");
     while (SqlStep(s))
     {
+        PrintString("Spell Found");
         /*
         SpeakString("spellid: " + IntToString(SqlGetInt(s, 0)));
         SpeakString("spelllvl: " + IntToString(SqlGetInt(s, 1)));
@@ -49,7 +60,9 @@ void SMSQLRelearnSpells(object oTarget)
 //Looks like This will be a better way
 //May need to keep track of the hotbar as well...
 
+
 void testlearnspell(object oPC)
 {
-    SMSQLLearnSpell(oPC, CLASS_TYPE_WIZARD, 9, 185);
+    SMSQLLearnSpell(oPC, GetClassByPosition(1, oPC), 1, 0);
+    //Acid Fog works!
 }
