@@ -2,6 +2,8 @@
 For a sample of how it would work without NWNX
 */
 #include "nwnx_creature"
+#include "sm_consts"
+
 void SMSQLCreateSpellTable(object oPC)
 {
     sqlquery s = SqlPrepareQueryObject(oPC, "CREATE TABLE IF NOT EXISTS spellslearned (spellid INT NOT NULL, spelllvl INT NOT NULL, uuid INT NOT NULL, classid INT NOT NULL, PRIMARY KEY (spellid, uuid));");
@@ -96,6 +98,16 @@ void SMSQLRelearnSpells(object oTarget)
 //Looks like This will be a better way
 //May need to keep track of the hotbar as well...
 
+
+/* 
+Check if object needs to learn more spells
+*/
+void SMTriggerLearnSpells(object oTarget)
+{
+    //Will eventually have it something like this I believe
+    if (GetLocalInt(oTarget, SM_LEARN_ARCANE_COUNT) > 0)
+        ExecuteScript("sm_arcspelllearn", oTarget);
+}
 
 void testlearnspell(object oPC)
 {

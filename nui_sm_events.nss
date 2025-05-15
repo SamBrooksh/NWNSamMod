@@ -2,12 +2,10 @@
 #include "sm_spellfunc"
 #include "sm_learnspellsql"
 
-const string LEARN_SPELL_1 = "LEARNSPELL1";
-const string LEARN_SPELL_2 = "LEARNSPELL2";
+const string LEARN_SPELL = "LEARNSPELL";
 
 //Need to change this (and everything with it)
 const string NUI_SAM_ALL_SPELLS = "nui_sam_all_spells";
-
 
 //Used to identify what class to add the spells to when learning from a prestige
 //Will give it to just the first one found
@@ -57,7 +55,6 @@ int SpellLevel(int nClass, int nSpellId)
 
 void main()
 {
-
     object oPlayer   = NuiGetEventPlayer();
     int nToken       = NuiGetEventWindow();
     string sEvent    = NuiGetEventType();
@@ -133,16 +130,17 @@ void main()
         json jKeys = JsonObjectKeys(jPayload);
         json jButton = JsonObjectGet(jPayload, "mouse_btn");
         int nButton = JsonGetInt(jButton);
+        int nSpellsToLearn = GetLocalInt(oPlayer, SM_LEARN_ARCANE_COUNT);
         //string msg = "Button Pressed: " + IntToString(nButton);
         //SendMessageToPC(oPlayer, msg);
-        //Get button pressed, left is choose, right is deselect, middle is see spell description
+        //Get button pressed, right is see spell description
         if (sElement == "spell_ACCEPT")
         {
-            int nSpell1 = GetLocalInt(oPlayer, LEARN_SPELL_1);
-            int nSpell2 = GetLocalInt(oPlayer, LEARN_SPELL_2);
-            if (nSpell1 == 0 || nSpell2 == 0)
+            /* Change this to accept the currently chosen spell*/
+            int nSpell1 = GetLocalInt(oPlayer, LEARN_SPELL);
+            if (nSpell == 0)
             {
-                SpeakString("NEED 2 SPELLS TO LEARN");
+                SpeakString("NEED TO SELECT SPELL TO LEARN");
                 return;
             }
             int nClass = SpellLearnClass(oPlayer, ARCANE_CLASS);
@@ -157,14 +155,14 @@ void main()
                 SpeakString("ERROR: SPELLLEVEL RETURNED -1 [nui_sm_events] [nSpell1]");
                 return;
             }
-            int nSpellLevel2 = SpellLevel(nClass, nSpell2 - 1);
-            if (nClass == -1)
-            {
-                SpeakString("ERROR: SPELLLEVEL RETURNED -1 [nui_sm_events] [nSpell2]");
-                return;
-            }
+
             SMSQLLearnSpell(oPlayer, nClass, nSpellLevel1, nSpell1-1);
-            SMSQLLearnSpell(oPlayer, nClass, nSpellLevel2, nSpell2-1);
+            SetLocalInt(oPlayer, SM_LEARN_ARCANE_COUNT, nSpellsToLearn - 1);
+            if (nSpellsToLearn - 1 < 1)
+            {
+                NuiDestroy(oPlayer, nToken);
+                //Close window
+            }
             SendMessageToPC(oPlayer, "ACCEPTED");
         }
         else 
@@ -175,38 +173,11 @@ void main()
             {
                 case NUI_MOUSE_BUTTON_LEFT:
                 {    
-                    int curr1 = GetLocalInt(oPlayer, LEARN_SPELL_1);
-                    int curr2 = GetLocalInt(oPlayer, LEARN_SPELL_2);
-                    if (curr1 > 0 && curr1 != nSpell)
-                    {
-                        if (curr2 > 0 && curr2 != nSpell)
-                        {
-                            curr1 = curr2;
-                            curr2 = nSpell;
-                        }
-                        else if (curr2 == nSpell)
-                        {
-                            return;
-                        }
-                        else 
-                        {
-                            curr2 = nSpell;
-                        }
-                    }
-                    else if (curr1 == nSpell)
-                    {
-                        return;
-                    }
-                    else 
-                    {
-                        curr1 = nSpell;
-                        curr2 = 0;
-                    }
-
-                    SetLocalInt(oPlayer, LEARN_SPELL_1, curr1);
-                    SetLocalInt(oPlayer, LEARN_SPELL_2, curr2);
+                    int curr1 = GetLocalInt(oPlayer, LEARN_SPELL);
+                    NuiSetBind(oPlayer, nToken, "spell_"+IntToString(curr1), NuiColor(100,100,100));
+                    curr1 = nSpell;
+                    SetLocalInt(oPlayer, LEARN_SPELL, curr1);
                     NuiSetBind(oPlayer, nToken, "spell_"+IntToString(curr1), NuiColor(255,0,0));
-                    NuiSetBind(oPlayer, nToken, "spell_"+IntToString(curr2), NuiColor(255,0,0));
                     break;
                 }
                 case NUI_MOUSE_BUTTON_MIDDLE:
