@@ -8,6 +8,38 @@ void SMSQLCreateSpellTable(object oPC)
     SqlStep(s);
 }
 
+/*
+This should get if a creature has a spell learned (To prevent duplicates)
+Just being used for WIZARD/SORC/BARD currently
+Could probably make it a bit more efficient by using the class id to switch instead...
+*/
+int SMGetHasSpellLearned(object oPC, int nSpellIdToFind, int nClass)
+{
+    int nSpellId, nIndex, nCount, nSpellLevel;
+    
+    switch (nClass) 
+    {
+        case CLASS_TYPE_WIZARD:
+            for (nSpellLevel = 9; nSpellLevel > 0; nSpellLevel--) {
+                nCount = GetKnownSpellCount(oPC, CLASS_TYPE_WIZARD, nSpellLevel);
+                //This finds it if learned for Wizards
+                for (nIndex = 0; nIndex <= nCount; nIndex++) {
+                    nSpellId = GetKnownSpellId(oPC, CLASS_TYPE_WIZARD, nSpellLevel, nIndex);
+                    if(nSpellId > -1) {
+                        if (nSpellId == nSpellIdToFind)
+                            return TRUE;
+                    }
+                }
+            }
+            return FALSE;
+        case CLASS_TYPE_SORCERER:
+        case CLASS_TYPE_BARD: 
+            return GetHasSpell(nSpellIdToFind, oPC) > 0;
+    }
+    //Should probably specify that a different class was found
+    return FALSE;
+}
+
 /***
 * Adds the spell to the creatures SQL as well as adds the known spell
 
@@ -46,14 +78,18 @@ void SMSQLRelearnSpells(object oTarget)
     sqlquery s = SqlPrepareQueryObject(oPC, "select spellid, spelllvl, uuid, classid from spellslearned;");
     while (SqlStep(s))
     {
+        int nSpellId = SqlGetInt(s, 0)-1;
         PrintString("Spell Found");
         /*
-        SpeakString("spellid: " + IntToString(SqlGetInt(s, 0)));
+        SpeakString("spellid: " + IntToString(nSpellId));
         SpeakString("spelllvl: " + IntToString(SqlGetInt(s, 1)));
         SpeakString("uuid: " + SqlGetString(s, 2));
         SpeakString("classid: " + IntToString(SqlGetInt(s, 3)));
         */
-        NWNX_Creature_AddKnownSpell(oPC, SqlGetInt(s, 3), SqlGetInt(s, 1), SqlGetInt(s, 0)-1);
+        if (!SMGetHasSpellLearned(oPC, nSpellId, SqlGetInt(s, 3)))
+            NWNX_Creature_AddKnownSpell(oPC, SqlGetInt(s, 3), SqlGetInt(s, 1), nSpellId);
+        else
+            SpeakString("Found Spell already");
         //Need to adjust spellid be 1 to account for spellid == 0 
     }
 }
