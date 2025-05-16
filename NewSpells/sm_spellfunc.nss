@@ -73,7 +73,7 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
     if (GetClassByPosition(2, oCaster) != CLASS_TYPE_INVALID)
     {
         int i = 0;
-        for (i = 0; i < CLASS_MAX; i += 1)  // May change if
+        for (i = 1; i < CLASS_MAX; i += 1)  // May change if
         {
             // Go through and add the various levels of arcane if class is arcane, and divine if divine
             int pClass = GetClassByPosition(i, oCaster);
@@ -113,8 +113,11 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
 
                 }
             }
-            else    // Break out a little early
+            else    // Break out a little early - with a note for just in case
+            {
+                PrintString("Got an invalid class type in SMGetCasterLevel");
                 return total;
+            }
         }
     }
     else

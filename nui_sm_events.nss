@@ -3,6 +3,7 @@
 #include "sm_learnspellsql"
 
 const string LEARN_SPELL = "LEARNSPELL";
+const string NUI_SPELL_HELPER = "SPELLHELPER";
 
 //Need to change this (and everything with it)
 const string NUI_SAM_ALL_SPELLS = "nui_sam_all_spells";
@@ -51,6 +52,30 @@ int SpellLevel(int nClass, int nSpellId)
             return StringToInt(Get2DAString("spells", "Wiz_Sorc", nSpellId));
     }
     return -1;
+}
+
+void CreateSpellHelper(object oPC, int nSpell)
+{
+    int nPreviousToken = NuiFindWindow(oPC, NUI_SPELL_HELPER);
+    if (nPreviousToken != 0)
+    {
+        NuiDestroy(oPC, nPreviousToken);
+    }
+    string desc = Get2DAString("spells", "SpellDesc", nSpell);
+    string name = Get2DAString("spells", "Name", nSpell);
+    json jRoot = JsonArray();
+    json jDesc = NuiText(NuiStrRef(StringToInt(desc)));
+    jRoot = NuiRow(JsonArrayInsert(jRoot, jDesc));
+    json nui = NuiWindow(jRoot, NuiStrRef(StringToInt(name)), NuiBind("geometry"), NuiBind("resizable"), NuiBind("collapsed"), NuiBind("closable"), NuiBind("transparent"), NuiBind("border"));
+
+    int nToken = NuiCreate(oPC, nui, NUI_SPELL_HELPER);
+    //Increase size 
+    NuiSetBind(oPC, nToken, "geometry", NuiRect(-1.0f, -1.0f, 480.0f, 480.0f));
+    NuiSetBind(oPC, nToken, "collapsed", JsonBool(FALSE));
+    NuiSetBind(oPC, nToken, "resizable", JsonBool(TRUE));
+    NuiSetBind(oPC, nToken, "closable", JsonBool(TRUE));
+    NuiSetBind(oPC, nToken, "transparent", JsonBool(FALSE));
+    NuiSetBind(oPC, nToken, "border", JsonBool(TRUE));
 }
 
 void main()
@@ -155,9 +180,10 @@ void main()
                 SpeakString("ERROR: SPELLLEVEL RETURNED -1 [nui_sm_events] [nSpell]");
                 return;
             }
-            
+
             SMSQLLearnSpell(oPlayer, nClass, nSpellLevel1, nSpell-1);
             SetLocalInt(oPlayer, SM_LEARN_ARCANE_COUNT, nSpellsToLearn - 1);
+            DeleteLocalInt()
             if (nSpellsToLearn - 1 < 1)
             {
                 NuiDestroy(oPlayer, nToken);
@@ -181,7 +207,14 @@ void main()
                     break;
                 }
                 case NUI_MOUSE_BUTTON_MIDDLE:
+                {
+                    break;
+                }
                 case NUI_MOUSE_BUTTON_RIGHT:
+                {//Make a helper window with the details in it?
+                    CreateSpellHelper(oPlayer, nSpell-1);
+                    break;
+                }
                 default:
                     return;
             }

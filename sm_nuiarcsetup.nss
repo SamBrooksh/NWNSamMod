@@ -21,8 +21,7 @@ int GetLevel(object oCaster)
 /*
 Makes the screen to allow the player to learn new spells
 
-TODO: Add a section where it can display the description of the clicked spell
-Also probably make it look nicer
+TODO: Make it so that each row has seperate scrollbars?
 */
 void NUILearnNewArcaneSpells(object oPlayer, int nSpellsToLearn)
 {
@@ -45,7 +44,6 @@ void NUILearnNewArcaneSpells(object oPlayer, int nSpellsToLearn)
     int pos = 0;
     string name = Get2DAString("spells", "Name", pos);
     string label = Get2DAString("spells", "Label", pos);
-    string desc = Get2DAString("spells", "SpellDesc", pos);
     int nArcaneCasterLevel = (SMGetCasterLevel(oPlayer, ARCANE_CLASS) + 1) / 2;
     int bard = GetLevelByClass(CLASS_TYPE_BARD, oPlayer);
     int wizSorc = GetLevelByClass(CLASS_TYPE_WIZARD, oPlayer);
@@ -62,15 +60,17 @@ void NUILearnNewArcaneSpells(object oPlayer, int nSpellsToLearn)
         classType = CLASS_TYPE_BARD;
         classTypeName = "Bard";
     }
-
+    // Doesn't work with Wiz Fight Arcane archer
     string spellLevel = Get2DAString("spells", classTypeName, pos);
+    PrintInteger(nArcaneCasterLevel);
     while (pos < count)
     {
         json jButton = NuiButton(JsonString(GetStringByStrRef(StringToInt(name))));
-        jButton = NuiTooltip(jButton, JsonString(GetStringByStrRef(StringToInt(desc))));
+        jButton = NuiTooltip(jButton, JsonString("Right Click to View"));
         jButton = NuiId(jButton, "spell_"+IntToString(pos + 1));
         jButton = NuiStyleForegroundColor(jButton, NuiBind("spell_"+IntToString(pos+1)));
-
+        
+        //This If statement only catches it for Wizards
         if (StringToInt(spellLevel) <= nArcaneCasterLevel && !GetIsInKnownSpellList(oPlayer, classType, pos))
         {
             switch (StringToInt(spellLevel))
@@ -111,8 +111,6 @@ void NUILearnNewArcaneSpells(object oPlayer, int nSpellsToLearn)
         name = Get2DAString("spells", "Name", pos);
         spellLevel = Get2DAString("spells", classTypeName, pos);
         label = Get2DAString("spells", "Label", pos);
-        desc = Get2DAString("spells", "SpellDesc", pos);
-
     }
     jLevel0 = NuiRow(jLevel0);
     jLevel1 = NuiRow(jLevel1);
@@ -144,7 +142,8 @@ void NUILearnNewArcaneSpells(object oPlayer, int nSpellsToLearn)
 
     jRoot = NuiCol(jRoot);
     // Change the Json String to be different
-    json nui = NuiWindow(jRoot, JsonString("Choose spells"), NuiBind("geometry"), NuiBind("resizable"), NuiBind("collapsed"), NuiBind("closable"), NuiBind("transparent"), NuiBind("border"));
+    json jTitle = JsonString("Choose spells");
+    json nui = NuiWindow(jRoot, jTitle, NuiBind("geometry"), NuiBind("resizable"), NuiBind("collapsed"), NuiBind("closable"), NuiBind("transparent"), NuiBind("border"));
     int nToken = NuiCreate(oPlayer, nui, NUI_SM_LEARN_ARCANE_SPELLS);
 
     NuiSetBind(oPlayer, nToken, "geometry", NuiRect(-1.0f, -1.0f, 480.0f, 240.0f));
