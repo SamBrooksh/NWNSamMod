@@ -137,7 +137,7 @@ void main()
         if (sElement == "spell_ACCEPT")
         {
             /* Change this to accept the currently chosen spell*/
-            int nSpell1 = GetLocalInt(oPlayer, LEARN_SPELL);
+            int nSpell = GetLocalInt(oPlayer, LEARN_SPELL);
             if (nSpell == 0)
             {
                 SpeakString("NEED TO SELECT SPELL TO LEARN");
@@ -149,14 +149,14 @@ void main()
                 SpeakString("ERROR: SPELLLEARNCLASS RETURNED -1 [nui_sm_events]");
                 return;
             }
-            int nSpellLevel1 = SpellLevel(nClass, nSpell1 - 1);
+            int nSpellLevel1 = SpellLevel(nClass, nSpell - 1);
             if (nSpellLevel1 == -1)
             {
-                SpeakString("ERROR: SPELLLEVEL RETURNED -1 [nui_sm_events] [nSpell1]");
+                SpeakString("ERROR: SPELLLEVEL RETURNED -1 [nui_sm_events] [nSpell]");
                 return;
             }
-
-            SMSQLLearnSpell(oPlayer, nClass, nSpellLevel1, nSpell1-1);
+            
+            SMSQLLearnSpell(oPlayer, nClass, nSpellLevel1, nSpell-1);
             SetLocalInt(oPlayer, SM_LEARN_ARCANE_COUNT, nSpellsToLearn - 1);
             if (nSpellsToLearn - 1 < 1)
             {

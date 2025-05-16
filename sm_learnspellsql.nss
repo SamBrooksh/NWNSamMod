@@ -6,7 +6,7 @@ For a sample of how it would work without NWNX
 
 void SMSQLCreateSpellTable(object oPC)
 {
-    sqlquery s = SqlPrepareQueryObject(oPC, "CREATE TABLE IF NOT EXISTS spellslearned (spellid INT NOT NULL, spelllvl INT NOT NULL, uuid INT NOT NULL, classid INT NOT NULL, PRIMARY KEY (spellid, uuid));");
+    sqlquery s = SqlPrepareQueryObject(oPC, "CREATE TABLE IF NOT EXISTS spellslearned (spellid INT NOT NULL, spelllvl INT NOT NULL, uuid STRING NOT NULL, classid INT NOT NULL, PRIMARY KEY (spellid, uuid));");
     SqlStep(s);
 }
 
