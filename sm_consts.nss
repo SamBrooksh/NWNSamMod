@@ -148,6 +148,8 @@ const string CONST_USES_VOID_RIP     =  "SM_VRIP_USES";
 const string CONST_VOID_STRIKE_ITEM_TAG="SM_VOIDSTRIKE";
 
 const string NUI_SM_LEARN_ARCANE_SPELLS     =   "nui_sm_learn_arcane_spells";
+const string NUI_SM_ELDRITCH_SPELL_CRIT     =   "nui_sm_eldritchspellcrit"
+
 const string SM_LEARN_ARCANE_COUNT          =   "sm_learn_arcspell_count";
 const string SM_SPELL_CRITICAL_CONST        =   "SM_SPELL_CRITICAL";
 const string SM_SPELL_CRITICAL2_CONST       =   "SM_SPELL_CRITICAL2";

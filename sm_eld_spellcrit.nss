@@ -1,5 +1,6 @@
 #include "nwnx_events"
 #include "nwnx_damage"
+#include "sm_consts"
 
 /*
 This needs a whole lot of reworking and the likes
@@ -75,7 +76,36 @@ void CastSpell(int spellID)
     //May need to change Action Cast Spells to change which classtype to use
 }
 
+/*
+Have some way to rate which one to use? - Prioritze s1 > s2 > s3
+Needs the spell in oPC regardless - will return 0 as a default
+if all three are unusable or detrimental
+*/
+int RateSpell(int nSpell, object oPC)
+{
+    if (!GetHasSpell(nSpell, oPC))
+        return -1;
+    
+}
 
+int BestSpell(int s1, int s2, int s3, object oPC)
+{
+    int rS1, rS2, rS3;
+    rS1 = RateSpell(s1, oPC) * 3;   //May not be necessary   
+    rS2 = RateSpell(s2, oPC) * 2;
+    rS3 = RateSpell(s3, oPC);
+
+    if (rS1 >= rS2 && rS1 > rS3 && rS1 > -1)
+        return s1;
+    if (rS2 >= rS3 && rS2 > -1)
+        return s2;
+    if (rS3 > -1)
+        return s3;
+    return -1;
+}
+
+const int CRITICAL = 3;
+const int DEVASTATING_CRITICAL = 10;
 
 void main()
 {
@@ -89,7 +119,26 @@ void main()
             "Target -> " + GetName(attack.oTarget));
         if (attack.iAttackResult == 3)
         {
-            WriteTimestampedLogEntry("Critical!");
+            WriteTimestampedLogEntry("Spell Critical!");
         }
     }
+
+    if ((attack.iAttackResult == CRITICAL || attack.iAttackResult == DEVASTATING_CRITICAL) && GetHasFeat(FEAT_SPELL_CRITICAL, oAttacker))
+    {
+        //Need to decrement what it was so that it reflects the actual spell instead of the modified one - -1 means no spell was there
+        int nSpell1 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL_CONST) - 1;
+        int nSpell2 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL_CONST2) - 1;
+        int nSpell3 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL_CONST3) - 1;
+        nSpell1 = BestSpell(nSpell1, nSpell2, nSpell3, oAttacker);
+        //If 
+        if (nSpell1 != -1)
+        {
+            CastSpell(nSpell1);
+        }
+        else 
+        {
+            //Deal some bonus damage instead?
+        }
+    }
+
 }

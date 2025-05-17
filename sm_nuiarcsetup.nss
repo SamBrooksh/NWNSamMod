@@ -22,6 +22,8 @@ int GetLevel(object oCaster)
 Makes the screen to allow the player to learn new spells
 
 TODO: Make it so that each row has seperate scrollbars?
+
+THIS DOES REST THE PLAYER COMPLETELY
 */
 void NUILearnNewArcaneSpells(object oPlayer, int nSpellsToLearn)
 {
@@ -62,16 +64,17 @@ void NUILearnNewArcaneSpells(object oPlayer, int nSpellsToLearn)
     }
     // Doesn't work with Wiz Fight Arcane archer
     string spellLevel = Get2DAString("spells", classTypeName, pos);
-    PrintInteger(nArcaneCasterLevel);
+    ForceRest(oPlayer);
+    //PrintInteger(nArcaneCasterLevel);
     while (pos < count)
     {
         json jButton = NuiButton(JsonString(GetStringByStrRef(StringToInt(name))));
         jButton = NuiTooltip(jButton, JsonString("Right Click to View"));
         jButton = NuiId(jButton, "spell_"+IntToString(pos + 1));
         jButton = NuiStyleForegroundColor(jButton, NuiBind("spell_"+IntToString(pos+1)));
-        
-        //This If statement only catches it for Wizards
-        if (StringToInt(spellLevel) <= nArcaneCasterLevel && !GetIsInKnownSpellList(oPlayer, classType, pos))
+        //I need to refresh all the spells of the user...
+
+        if (StringToInt(spellLevel) <= nArcaneCasterLevel && !GetIsInKnownSpellList(oPlayer, classType, pos) && !GetHasSpell(pos, oPlayer))
         {
             switch (StringToInt(spellLevel))
             {
@@ -142,7 +145,7 @@ void NUILearnNewArcaneSpells(object oPlayer, int nSpellsToLearn)
 
     jRoot = NuiCol(jRoot);
     // Change the Json String to be different
-    json jTitle = JsonString("Choose spells");
+    json jTitle = JsonString("Choose " + IntToString(nSpellsToLearn) + " spells to learn");
     json nui = NuiWindow(jRoot, jTitle, NuiBind("geometry"), NuiBind("resizable"), NuiBind("collapsed"), NuiBind("closable"), NuiBind("transparent"), NuiBind("border"));
     int nToken = NuiCreate(oPlayer, nui, NUI_SM_LEARN_ARCANE_SPELLS);
 

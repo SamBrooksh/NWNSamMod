@@ -1,5 +1,4 @@
-#include "nw_inc_nui"
-#include "sm_spellfunc"
+#include "sm_nuiarcsetup"
 #include "sm_learnspellsql"
 
 const string LEARN_SPELL = "LEARNSPELL";
@@ -183,12 +182,11 @@ void main()
 
             SMSQLLearnSpell(oPlayer, nClass, nSpellLevel1, nSpell-1);
             SetLocalInt(oPlayer, SM_LEARN_ARCANE_COUNT, nSpellsToLearn - 1);
-            DeleteLocalInt()
-            if (nSpellsToLearn - 1 < 1)
-            {
-                NuiDestroy(oPlayer, nToken);
-                //Close window
-            }
+            DeleteLocalInt(oPlayer, LEARN_SPELL);
+            NuiDestroy(oPlayer, nToken);
+            if (nSpellsToLearn - 1 > 0)
+                NUILearnNewArcaneSpells(oPlayer, nSpellsToLearn - 1);
+            //I think I need to destroy and remake it the screen to remove the ones already learned
             SendMessageToPC(oPlayer, "ACCEPTED");
         }
         else 
