@@ -115,7 +115,7 @@ Bonus Feat
 #### 9th Level
 #### 10th Level
 Spell Synthesis - Somehow need to let creation of putting two spells into one? (And then make it so it can go up a level every other level)
-May need to do as ability, then choose two spells somehow as well - I think I should be able to do this one using the castactionspell with instant spell on - probably will need a dummy feat or two? - this will probably be a hassle
+May need to do as ability, then choose two spells somehow as well - I think I should be able to do this one using the castactionspell with instant spell on - probably will need a dummy feat or two? - this will probably be a hassle to do fast...
 ### Bonus Feats
 Probably do at like 4 and 8 - something to help at least - Doing 3rd and 7th
 
@@ -124,8 +124,8 @@ Maybe bonuses to INT/CHA/WIS? - Adding +1 Wis at 4th, and +1 Int/Cha at 6th
 
 # Eldritch Knight
 # TODO
-Create Menu for Spell Reaction
-Create NWNX effects to let Sorcerer and Wizard learn spells when leveling up
+Create Menu for Spell Critical - Should be done - needs testing
+Create NWNX effects to let Sorcerer and Wizard learn spells when leveling up - Should be done
 
 ### Prerequisites
 #### Alignment

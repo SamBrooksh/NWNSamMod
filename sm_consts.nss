@@ -155,6 +155,9 @@ const string SM_SPELL_CRITICAL_CONST        =   "SM_SPELL_CRITICAL";
 const string SM_SPELL_CRITICAL2_CONST       =   "SM_SPELL_CRITICAL2";
 const string SM_SPELL_CRITICAL3_CONST       =   "SM_SPELL_CRITICAL3";
 
+const string SM_SPELLSYNTHESIS_ARCANE        =   "SM_SPELLSYNTHESIS_ARCANE";
+const string SM_SPELLSYNTHESIS_DIVINE        =   "SM_SPELLSYNTHESIS_DIVINE";
+
 
 //////////////////////
 // VFX Constants    //
