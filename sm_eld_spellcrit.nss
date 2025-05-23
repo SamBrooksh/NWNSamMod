@@ -26,7 +26,7 @@ int GetSpellTargetType(int spell_id)
 }
 
 /***
-Have a lot to do with this
+This should probably just choose the point for where the spell should be cast
 ***/
 void CastSpell(int spellID)
 {
@@ -35,7 +35,7 @@ void CastSpell(int spellID)
     int target = GetSpellTargetType(spellID);
     if (! GetIsObjectValid(oTarget))
         return;
-    int spellID = GetLocalInt(OBJECT_SELF, "ELDRITCHSPELL");
+    /* For now, should probably just leave if an error
     if (spellID == 0)   //Doesn't have a valid spellID to cast - choose one
     {
         int classUse = GetLastSpellCastClass();     //May want to change this to the highest arcane level class?
@@ -44,7 +44,8 @@ void CastSpell(int spellID)
         spellID = GetKnownSpellId(OBJECT_SELF, classUse, spellLevel, 0);
     }
     else
-        spellID = spellID - 1;  //Need to add one to it so that Acid Fog is caught and not an error
+    */
+    spellID = spellID - 1;  //Need to add one to it so that Acid Fog is caught and not an error
 
 
     if (harmOrBenef == CAT_HARMFUL_SPELL)
@@ -85,7 +86,8 @@ int RateSpell(int nSpell, object oPC)
 {
     if (!GetHasSpell(nSpell, oPC))
         return -1;
-    
+
+    return 1;
 }
 
 int BestSpell(int s1, int s2, int s3, object oPC)
@@ -112,17 +114,6 @@ void main()
     struct NWNX_Damage_AttackEventData attack = NWNX_Damage_GetAttackEventData();
     object oAttacker = OBJECT_SELF;
 
-    if (GetIsPC(oAttacker) || GetIsPC(attack.oTarget))
-    {
-        WriteTimestampedLogEntry("OnAttack: " +
-            "Damager -> " + GetName(oAttacker) +
-            "Target -> " + GetName(attack.oTarget));
-        if (attack.iAttackResult == 3)
-        {
-            WriteTimestampedLogEntry("Spell Critical!");
-        }
-    }
-
     if ((attack.iAttackResult == CRITICAL || attack.iAttackResult == DEVASTATING_CRITICAL) && GetHasFeat(FEAT_SPELL_CRITICAL, oAttacker))
     {
         //Need to decrement what it was so that it reflects the actual spell instead of the modified one - -1 means no spell was there
@@ -138,6 +129,7 @@ void main()
         else 
         {
             //Deal some bonus damage instead?
+            SpeakString("No Spell selected for Spell Critical!");
         }
     }
 
