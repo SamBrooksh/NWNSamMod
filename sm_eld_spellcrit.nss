@@ -118,8 +118,8 @@ void main()
     {
         //Need to decrement what it was so that it reflects the actual spell instead of the modified one - -1 means no spell was there
         int nSpell1 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL_CONST) - 1;
-        int nSpell2 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL_CONST2) - 1;
-        int nSpell3 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL_CONST3) - 1;
+        int nSpell2 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL2_CONST) - 1;
+        int nSpell3 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL3_CONST) - 1;
         nSpell1 = BestSpell(nSpell1, nSpell2, nSpell3, oAttacker);
         //If 
         if (nSpell1 != -1)
