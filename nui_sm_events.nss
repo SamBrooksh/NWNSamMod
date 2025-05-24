@@ -86,7 +86,7 @@ void main()
     int nIndex       = NuiGetEventArrayIndex();
     string sWindowId = NuiGetWindowId(oPlayer, nToken);
     //SendMessageToPC(oPlayer, sWindowId);
-    if (sWindowId != NUI_SAM_ALL_SPELLS && sWindowId != NUI_SM_LEARN_ARCANE_SPELLS)
+    if (sWindowId != NUI_SAM_ALL_SPELLS && sWindowId != NUI_SM_LEARN_ARCANE_SPELLS && sWindowId != NUI_ARCANE_SPELL_SYNTH && NUI_DIVINE_SPELL_SYNTH)
     {
         return;
     }
@@ -145,7 +145,6 @@ void main()
                 NuiSetBind(oPlayer, nToken, IntToString(GetLocalInt(oPlayer, SM_SPELL_CRITICAL3_CONST)), NuiColor(100,100,100));
                 NuiSetBind(oPlayer, nToken, sElement, NuiColor(255,0,0));
                 SetLocalInt(oPlayer, SM_SPELL_CRITICAL3_CONST, StringToInt(sElement));
-
         }
     }
     else if (sWindowId == NUI_SM_LEARN_ARCANE_SPELLS)
@@ -216,8 +215,46 @@ void main()
                 default:
                     return;
             }
-            SendMessageToPC(oPlayer, "OTHER "+sElement);
+            //SendMessageToPC(oPlayer, "OTHER "+sElement);
         }
-
+    }
+    else if (sWindowId == NUI_ARCANE_SPELL_SYNTH || sWindowId == NUI_DIVINE_SPELL_SYNTH)
+    {
+        json jPayload = NuiGetEventPayload();
+        json jKeys = JsonObjectKeys(jPayload);
+        json jButton = JsonObjectGet(jPayload, "mouse_btn");
+        int nButton = JsonGetInt(jButton);
+        int nArcaneSpell = GetLocalInt(oPlayer, SM_SPELLSYNTHESIS_ARCANE);
+        int nDivineSpell = GetLocalInt(oPlayer, SM_SPELLSYNTHESIS_DIVINE);
+        if (sElement == nui_sm_switch_arcanedivine)
+        {
+            if (sWindowId == NUI_ARCANE_SPELL_SYNTH)
+            {
+                ExecuteScript("sm_s2_arcspellsynth", oPlayer);
+            }
+            else 
+            {
+                ExecuteScript("sm_s2_divspellsynth", oPlayer);
+            }
+            return;
+        }
+        string number = GetStringRight(sElement, GetStringLength(sElement) - 6);//The spell_ addon
+        
+        int nSpell = StringToInt(number);
+        int nCurrSpell;
+        if (sWindowId == NUI_ARCANE_SPELL_SYNTH)
+        {
+            nCurrSpell = nArcaneSpell - 1;
+            SetLocalInt(oPlayer, SM_SPELLSYNTHESIS_ARCANE, nSpell + 1);
+        }
+        else {
+            nCurrSpell = nDivineSpell - 1;
+            SetLocalInt(oPlayer, SM_SPELLSYNTHESIS_DIVINE, nSpell + 1);
+        }
+        NuiSetBind(oPlayer, nToken, "spell_"+IntToString(nCurrSpell), NuiColor(100, 100, 100, 255));
+        NuiSetBind(oPlayer, nToken, "spell_"+IntToString(nCurrSpell), NuiColor(255, 0, 0, 255));
+        int nCurrentName = Get2DAString("spells", "Name", nCurrSpell);
+        json jCurrentSpell = JsonString(GetStringByStrRef(StringToInt(nCurrentName)));
+        NuiSetBind(oPlayer, nToken, "CURRENTLYCHOSEN", jCurrentSpell);
     }
 }
