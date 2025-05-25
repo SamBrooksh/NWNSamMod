@@ -13,8 +13,10 @@ int PrestigeArcaneClass(int nClass)
 void main()
 {
     object oCaster = OBJECT_SELF;
+    //SendMessageToPC(GetFirstPC(), "After Level");
     int nClass = NWNX_Creature_GetClassByLevel(oCaster, GetLevel(oCaster));
     int nSpellToLearn = GetLocalInt(oCaster, SM_LEARN_ARCANE_COUNT);
+    
     if (PrestigeArcaneClass(nClass))
     {
         nSpellToLearn += 2;

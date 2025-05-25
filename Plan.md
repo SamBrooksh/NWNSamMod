@@ -301,9 +301,9 @@ Add Void Energy type
 - [x] Make Spell Radial Menu for Spell Synthesis
     - [x] Test as well - execution by using it
     - [ ] Needs more conclusive testing - Healing Spells need a check for sure
-- [ ] Spell Menu for Spell Critical (Able to choose)
-    - [ ] Test
-- [ ] Figure out Spell Critical for dealing bonus damage
+- [ ] Spell Menu Feat for Spell Critical (Able to choose)
+    - [ ] Test - Needs lots of testing
+- [ ] Figure out Spell Critical (Nat 20 rolls) for dealing bonus damage
     - [ ] May want to rewrite using nwnx for all of them
 - [ ] Check and Fine Tune Duelist
 - [ ] Fill out TLK fields

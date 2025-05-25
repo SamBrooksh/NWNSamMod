@@ -115,7 +115,7 @@ int SMGetCasterLevel(object oCaster, int arcaneDivine)
             }
             else    // Break out a little early - with a note for just in case
             {
-                PrintString("Got an invalid class type in SMGetCasterLevel");
+                PrintString("Got an invalid class type in SMGetCasterLevel - May not be a problem - Classes Gone Through: "+ IntToString(pClass));
                 return total;
             }
         }
