@@ -293,3 +293,30 @@ Add Void Energy type
 
 
 ### Stats
+
+
+
+# 5/25/2025 Todo List To "Completion"
+
+- [x] Make Spell Radial Menu for Spell Synthesis
+    - [x] Test as well - execution by using it
+    - [] Needs more conclusive testing - Healing Spells need a check for sure
+- [] Spell Menu for Spell Critical (Able to choose)
+    - [] Test
+- [] Figure out Spell Critical for dealing bonus damage
+    - [] May want to rewrite using nwnx for all of them
+- [] Check and Fine Tune Duelist
+- [] Fill out TLK fields
+- [] Figure out Void Scarred debuffs - rewrite them with nwnx
+- [] Get Learning Spell working, change where database is and persist between
+
+## Prettifying/Polishing touches
+- [] Prettify Learn Spells - scrollbars, proper size, prevent window close?
+- [] Prettify Spell Synthesis Gui (Auto detect size)
+- [] Make Gui to show duration of a debuff?
+- [] Rest of Void Scarred Feat/Abilities
+- [] Color Void clones to dim purple
+- [] Void Scarred Ability visual/sound effects
+- [] TLK formatting look nice etc
+- [] Packages for all the classes, and a couple for Void Scarred
+- [] Saving Location/Entering Exit is handled like a normal save game

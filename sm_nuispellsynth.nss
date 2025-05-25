@@ -1,4 +1,4 @@
-#include "sm_consts"
+#include "sm_spellfunc"
 #include "nw_inc_nui"
 
 int GetDivineSpellcasterClass(object oPC)
@@ -47,9 +47,10 @@ int GetArcaneSpellcasterClass(object oPC)
     return CLASS_TYPE_INVALID;
 }
 
-json SMGetMemorizedSpells(object oPC, int nClass)
+json SMGetMemorizedSpells(object oPC, int nClass, int nArcaneDivine)
 {
-    int nLevel = GetLevelByClass(nClass, oPC);
+    int nLevel = SMGetCasterLevel(oPC, nArcaneDivine) / 2 + 1;
+    //SendMessageToPC(oPC, "Spell Level: "+ IntToString(nLevel));
     int nLevelIterate = 0;
     json jRoot = JsonArray();
     json jAddedSpells = JsonArray();
@@ -205,7 +206,7 @@ void SMChooseSpellSynthMenu(int nArcaneDivine, object oPC)
         case CLASS_TYPE_DRUID:
         case CLASS_TYPE_PALADIN:
         {
-            jRoot = JsonArrayInsert(jRoot, SMGetMemorizedSpells(oPC, nClassName));
+            jRoot = JsonArrayInsert(jRoot, SMGetMemorizedSpells(oPC, nClassName, nArcaneDivine));
         }
     }
 
