@@ -61,7 +61,7 @@ json SMGetMemorizedSpells(object oPC, int nClass)
         {
             int nSpellPosition = GetMemorizedSpellId(oPC, nClass, nLevelIterate, nSpellIndex);
             json jFound = JsonFind(jAddedSpells, JsonInt(nSpellPosition));
-            SpeakString(JsonDump(jFound));
+            //SpeakString(JsonDump(jFound));
             if (nSpellPosition == -1 || JsonDump(jFound) != "null")
             {
                 continue;
@@ -69,7 +69,7 @@ json SMGetMemorizedSpells(object oPC, int nClass)
             string name = Get2DAString("spells", "Name", nSpellPosition);
             string iconResRef = Get2DAString("spells", "IconResRef", nSpellPosition);
 
-            SpeakString(GetStringByStrRef(StringToInt(name)));
+            //SpeakString(GetStringByStrRef(StringToInt(name)));
             json jButton = NuiButtonImage(JsonString(iconResRef));
             jButton = NuiTooltip(jButton, JsonString(GetStringByStrRef(StringToInt(name))));
             jButton = NuiId(jButton, "spell_"+(IntToString(nSpellPosition+1)));
@@ -90,7 +90,7 @@ json SMGetMemorizedSpells(object oPC, int nClass)
 */
 json SMGetLearnedSpells(object oPC, int nClass)
 {
-
+    return JsonString("None Yet");
 }
 
 // Possible Classes that it will go through
@@ -101,19 +101,27 @@ void SMChooseSpellSynthMenu(int nArcaneDivine, object oPC)
     int nClassName;  //This will be the class to search through the 2da spells
     if (nArcaneDivine == ARCANE_CLASS)
     {
-        sToken = NUI_ARCANE_SPELL_SYNTH;
         nClassName = GetArcaneSpellcasterClass(oPC);
+        sToken = NUI_ARCANE_SPELL_SYNTH;
     }
     else
     {
-        sToken = NUI_DIVINE_SPELL_SYNTH;
         nClassName = GetDivineSpellcasterClass(oPC);
+        sToken = NUI_DIVINE_SPELL_SYNTH;
     }
-    int nPreviousToken = NuiFindWindow(oPC, sToken);
+
+    int nPreviousToken = NuiFindWindow(oPC, NUI_ARCANE_SPELL_SYNTH);
     if (nPreviousToken != 0)
     {
         NuiDestroy(oPC, nPreviousToken);
     }
+
+    nPreviousToken = NuiFindWindow(oPC, NUI_DIVINE_SPELL_SYNTH);
+    if (nPreviousToken != 0)
+    {
+        NuiDestroy(oPC, nPreviousToken);
+    }
+
     /*
     In the json of an object
     ClassList - value
@@ -149,19 +157,23 @@ void SMChooseSpellSynthMenu(int nArcaneDivine, object oPC)
         }
     }
 
-    json jAccept = NuiButton(JsonString("Quit"));
+    json jAccept = NuiId(NuiButton(JsonString("Close")), "Quit");
     string currentSpell = "CURRENTLYCHOSEN";
     json jSpellChosen = JsonArray();
-    jSpellChosen = JsonArrayInsert(jSpellChosen, NuiLabel(NuiBind(currentSpell), JsonInt(NUI_HALIGN_CENTER), JsonInt(NUI_VALIGN_TOP)));
-    jSpellChosen = JsonArrayInsert(jSpellChosen, NuiId(NuiButton(JsonString("Switch")), "nui_sm_switch_arcanedivine"));
+    jSpellChosen = JsonArrayInsert(jSpellChosen, NuiWidth(NuiLabel(NuiBind(currentSpell), JsonInt(NUI_HALIGN_CENTER), JsonInt(NUI_VALIGN_TOP)), 300.0));
+    json jSwitchButton = NuiId(NuiButton(JsonString("Switch")), "nui_sm_switch_splsyn");
+
+
+    jSpellChosen = JsonArrayInsert(jSpellChosen, jSwitchButton);
+    jSpellChosen = JsonArrayInsert(jSpellChosen, jAccept);
     jRoot = JsonArrayInsert(jRoot, NuiRow(jSpellChosen));
 
-    jRoot = JsonArrayInsert(jRoot, NuiRow(jAccept));
+    //jRoot = JsonArrayInsert(jRoot, NuiRow(jAccept));
     jRoot = NuiCol(jRoot);
     json nui = NuiWindow(jRoot, JsonString("Spell Synthesis Spell Choice"), NuiBind("geometry"), NuiBind("resizable"), NuiBind("collapsed"), NuiBind("closable"), NuiBind("transparent"), NuiBind("border"));
     int nToken = NuiCreate(oPC, nui, sToken);
 
-    NuiSetBind(oPC, nToken, "geometry", NuiRect(-1.0f, -1.0f, 480.0f, 240.0f));
+    NuiSetBind(oPC, nToken, "geometry", NuiRect(10.0f, 10.0f, 960.0f, 480.0f));
     NuiSetBind(oPC, nToken, "collapsed", JsonBool(FALSE));
     NuiSetBind(oPC, nToken, "resizable", JsonBool(TRUE));
     NuiSetBind(oPC, nToken, "closable", JsonBool(TRUE));
@@ -177,6 +189,8 @@ void SMChooseSpellSynthMenu(int nArcaneDivine, object oPC)
     NuiSetBind(oPC, nToken, "spell_ACCEPT", NuiColor(100,100,100));
     int nCurrentArcane = GetLocalInt(oPC, SM_SPELLSYNTHESIS_ARCANE);
     int nCurrentDivine = GetLocalInt(oPC, SM_SPELLSYNTHESIS_DIVINE);
+    //SpeakString("Arcane Value upon making: " +IntToString(nCurrentArcane));
+    //SpeakString("Divine Value upon making: " +IntToString(nCurrentDivine));
     NuiSetBind(oPC, nToken, "spell_"+IntToString(nCurrentArcane), NuiColor(255, 0, 0, 255));
     NuiSetBind(oPC, nToken, "spell_"+IntToString(nCurrentDivine), NuiColor(255, 0, 0, 255));
     if (nArcaneDivine == ARCANE_CLASS && nCurrentArcane > 0)
@@ -185,7 +199,7 @@ void SMChooseSpellSynthMenu(int nArcaneDivine, object oPC)
         json jCurrentSpell = JsonString(GetStringByStrRef(StringToInt(nCurrentName)));
         NuiSetBind(oPC, nToken, currentSpell, jCurrentSpell);
     }
-    else if (nCurrentDivine == DIVINE_CLASS)
+    else if (nArcaneDivine == DIVINE_CLASS && nCurrentDivine > 0)
     {
         string nCurrentName = Get2DAString("spells", "Name", nCurrentDivine - 1);
         json jCurrentSpell = JsonString(GetStringByStrRef(StringToInt(nCurrentName)));
