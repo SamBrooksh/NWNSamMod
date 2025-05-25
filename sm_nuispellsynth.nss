@@ -87,10 +87,62 @@ json SMGetMemorizedSpells(object oPC, int nClass)
 
 /*
     Used for Bard/Sorc
+    Goes through the Character Json to get the info
 */
 json SMGetLearnedSpells(object oPC, int nClass)
 {
-    return JsonString("None Yet");
+	json jRoot = JsonArray();
+    json jPlayer = ObjectToJson(oPC);
+    //Need to find the right class
+    int nClassPosition = 1;
+    json jClass = JsonObjectGet(jPlayer, "ClassList");
+    json jClassArray = JsonObjectGet(jClass, "value");
+	int nLength = JsonGetLength(jClassArray);
+	int nIterate = 0;
+	for (nIterate; nIterate < nLength; nIterate += 1)
+	{
+		json jIndividualClass = JsonArrayGet(jClassArray, nIterate);
+		json jClassValue = JsonObjectGet(JsonObjectGet(jIndividualClass, "Class"), "value");
+		if (nClass != JsonGetInt(jClassValue))
+		{
+			continue;
+		}
+		json jSpellsPerDayList = JsonObjectGet(JsonObjectGet(jIndividualClass, "SpellsPerDayList"), "value");
+		int nKnownList = 0;
+		for (nKnownList; nKnownList < 10; nKnownList += 1)
+		{
+			json jSpellUsesLeft = JsonObjectGet(JsonObjectGet(JsonArrayGet(jSpellsPerDayList, nKnownList), "NumSpellsLeft"), "value");
+			int nSpellUsesLeft = JsonGetInt(jSpellUsesLeft);
+			//SpeakString(JsonDump(jSpellUsesLeft));
+			if (nSpellUsesLeft < 1)
+			{
+				//SpeakString("Skipping Level");
+				continue;
+			}
+			json jRow = JsonArray();
+			json jKnownList = JsonObjectGet(JsonObjectGet(jIndividualClass, "KnownList"+IntToString(nKnownList)), "value");
+			
+			int nKnownListLength = JsonGetLength(jKnownList);
+			int nSpellIterate = 0;
+			for (nSpellIterate; nSpellIterate < nKnownListLength; nSpellIterate += 1)
+			{
+				//Only add it if the same position in the SpellsPerDayList is over 0
+				
+				int nSpellPosition = JsonGetInt(JsonObjectGet(JsonObjectGet(JsonArrayGet(jKnownList, nSpellIterate), "Spell"), "value"));
+				string name = Get2DAString("spells", "Name", nSpellPosition);
+				string iconResRef = Get2DAString("spells", "IconResRef", nSpellPosition);
+				json jButton = NuiButtonImage(JsonString(iconResRef));
+				jButton = NuiTooltip(jButton, JsonString(GetStringByStrRef(StringToInt(name))));
+				jButton = NuiId(jButton, "spell_"+(IntToString(nSpellPosition+1)));
+				jButton = NuiStyleForegroundColor(jButton, NuiBind("spell_"+IntToString(nSpellPosition+1)));
+				jButton = NuiWidth(jButton, 48.0);
+				jButton = NuiHeight(jButton, 48.0);
+				jRow = JsonArrayInsert(jRow, jButton);
+			}
+			jRoot = JsonArrayInsert(jRoot, NuiRow(jRow));
+		}
+	}
+    return NuiCol(jRoot);
 }
 
 // Possible Classes that it will go through
