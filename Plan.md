@@ -299,6 +299,7 @@ Add Void Energy type
 # 5/25/2025 Todo List To "Completion"
 
 - [x] Make Spell Radial Menu for Spell Synthesis
+Note that I have a spell synthesis feat that is unused right now
     - [x] Test as well - execution by using it
     - [ ] Needs more conclusive testing - Healing Spells need a check for sure
 - [ ] Spell Menu Feat for Spell Critical (Able to choose)

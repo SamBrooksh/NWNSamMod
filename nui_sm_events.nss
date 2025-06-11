@@ -4,9 +4,6 @@
 const string LEARN_SPELL = "LEARNSPELL";
 const string NUI_SPELL_HELPER = "SPELLHELPER";
 
-//Need to change this (and everything with it)
-const string NUI_SAM_ALL_SPELLS = "nui_sam_all_spells";
-
 //Used to identify what class to add the spells to when learning from a prestige
 //Will give it to just the first one found
 int SpellLearnClass(object oPlayer, int nARCANEDIVINE = ARCANE_CLASS)
@@ -85,7 +82,7 @@ void main()
     string sElement  = NuiGetEventElement();
     int nIndex       = NuiGetEventArrayIndex();
     string sWindowId = NuiGetWindowId(oPlayer, nToken);
-    if (sWindowId != NUI_SAM_ALL_SPELLS && sWindowId != NUI_SM_LEARN_ARCANE_SPELLS && sWindowId != NUI_ARCANE_SPELL_SYNTH && sWindowId != NUI_DIVINE_SPELL_SYNTH)
+    if (sWindowId != NUI_SM_ELDRITCH_SPELL_CRIT && sWindowId != NUI_SM_LEARN_ARCANE_SPELLS && sWindowId != NUI_ARCANE_SPELL_SYNTH && sWindowId != NUI_DIVINE_SPELL_SYNTH)
     {
         return;
     }
@@ -95,7 +92,7 @@ void main()
         return;
     }
 
-    if (sWindowId == NUI_SAM_ALL_SPELLS)
+    if (sWindowId == NUI_SM_ELDRITCH_SPELL_CRIT)
     {
         json jPayload = NuiGetEventPayload();
         json jKeys = JsonObjectKeys(jPayload);
@@ -103,7 +100,7 @@ void main()
         int nButton = JsonGetInt(jButton);
         switch(nButton)
         {
-            case 0:
+            case NUI_MOUSE_BUTTON_LEFT:
                 if (GetLocalInt(oPlayer, SM_SPELL_CRITICAL2_CONST) == StringToInt(sElement))
                 {
                     //Change color of SM_DEMO to None
@@ -119,7 +116,7 @@ void main()
                 //SendMessageToPC(oPlayer, "Changed Spell");
                 break;
 
-            case 2:
+            case NUI_MOUSE_BUTTON_MIDDLE:
                 if (GetLocalInt(oPlayer, SM_SPELL_CRITICAL_CONST) == StringToInt(sElement))
                 {
                     SetLocalInt(oPlayer, SM_SPELL_CRITICAL_CONST, 0);
@@ -133,7 +130,7 @@ void main()
                 SetLocalInt(oPlayer, SM_SPELL_CRITICAL2_CONST, StringToInt(sElement));
                 break;
 
-            case 3:
+            case NUI_MOUSE_BUTTON_RIGHT:
                 if (GetLocalInt(oPlayer, SM_SPELL_CRITICAL_CONST) == StringToInt(sElement))
                 {
                     SetLocalInt(oPlayer, SM_SPELL_CRITICAL_CONST, 0);

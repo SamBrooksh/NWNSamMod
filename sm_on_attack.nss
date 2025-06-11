@@ -24,6 +24,7 @@ void main()
             if (nAtkRes == ATTACK_CRITICAL_HIT_VALUE)
             {
                 //Handle Spell Critical
+                ExecuteScript("sm_eld_spellcrit", OBJECT_SELF);
             }
         }
 

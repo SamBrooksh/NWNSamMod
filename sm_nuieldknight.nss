@@ -193,7 +193,7 @@ void SMEldritchKnightSpellCritical(object oPlayer)
     jRoot = JsonArrayInsert(jRoot, jLevel9);
 
     jRoot = NuiCol(jRoot);
-    json nui = NuiWindow(jRoot, JsonString("Nui All Spells"), NuiBind("geometry"), NuiBind("resizable"), NuiBind("collapsed"), NuiBind("closable"), NuiBind("transparent"), NuiBind("border"));
+    json nui = NuiWindow(jRoot, JsonString("Spell Critical Choice"), NuiBind("geometry"), NuiBind("resizable"), NuiBind("collapsed"), NuiBind("closable"), NuiBind("transparent"), NuiBind("border"));
     int nToken = NuiCreate(oPlayer, nui, NUI_SM_ELDRITCH_SPELL_CRIT);
 
     NuiSetBind(oPlayer, nToken, "geometry", NuiRect(-1.0f, -1.0f, 480.0f, 240.0f));
@@ -206,15 +206,15 @@ void SMEldritchKnightSpellCritical(object oPlayer)
     int iterate = 0;
     for (iterate = 0; iterate < pos; iterate += 1)
     {
-        if (chosen1 == iterate + 1)
+        if (chosen1 == iterate)
         {
            NuiSetBind(oPlayer, nToken, IntToString(iterate), NuiColor(0,255,0));
         }
-        else if (chosen2 == iterate + 1)
+        else if (chosen2 == iterate)
         {
            NuiSetBind(oPlayer, nToken, IntToString(iterate), NuiColor(0,0,255));
         }
-        else if (chosen3 == iterate + 1)
+        else if (chosen3 == iterate)
         {
             NuiSetBind(oPlayer, nToken, IntToString(iterate), NuiColor(255,0,0));
         }

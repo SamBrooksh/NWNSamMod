@@ -1,5 +1,5 @@
-#include "nwnx_events"
 #include "nwnx_damage"
+#include "nwnx_creature"
 #include "sm_consts"
 
 /*
@@ -45,33 +45,41 @@ void CastSpell(int spellID)
     }
     else
     */
-    spellID = spellID - 1;  //Need to add one to it so that Acid Fog is caught and not an error
-
-
+    int bResult = FALSE;
+    int nClassCasterPosition = 0;   //Need to update this
+    ClearAllActions(TRUE);
+    int nAddFirst = TRUE;
     if (harmOrBenef == CAT_HARMFUL_SPELL)
     {
         if ((target & CAT_AOE_SPELL) != 0)
         {
             location lTarget = GetLocation(oTarget);
-            ActionCastSpellAtLocation(spellID, lTarget, METAMAGIC_NONE, FALSE, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
+            bResult = NWNX_Creature_AddCastSpellActions(OBJECT_SELF, oTarget, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
+            //ActionCastSpellAtLocation(spellID, lTarget, METAMAGIC_NONE, FALSE, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
         }
         else
         {
-            ActionCastSpellAtObject(spellID, oTarget, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
+            bResult = NWNX_Creature_AddCastSpellActions(OBJECT_SELF, oTarget, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
+            
+            //ActionCastSpellAtObject(spellID, oTarget, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
         }
     }
     else
     {
         if ((target & CAT_SELF_SPELL) != 0)
         {
-            ActionCastSpellAtObject(spellID, OBJECT_SELF, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
+            bResult = NWNX_Creature_AddCastSpellActions(OBJECT_SELF, OBJECT_SELF, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
+            
+            //ActionCastSpellAtObject(spellID, OBJECT_SELF, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
         }
         else
         {
-            ActionCastSpellAtObject(spellID, oTarget, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
+            bResult = NWNX_Creature_AddCastSpellActions(OBJECT_SELF, OBJECT_SELF, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
+            
+            //ActionCastSpellAtObject(spellID, oTarget, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
         }
     }
-    SpeakString("Spell Critical!", 1);
+    SpeakString("Spell Critical! Casted " + IntToString(spellID) + " RESULT: " + IntToString(bResult));
     //Change the otarget depending on the target of the spell (self, aoe or the like)
     //ActionCastSpellAtObject(spellID, otarget, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
     //May need to change Action Cast Spells to change which classtype to use
@@ -93,7 +101,7 @@ int RateSpell(int nSpell, object oPC)
 int BestSpell(int s1, int s2, int s3, object oPC)
 {
     int rS1, rS2, rS3;
-    rS1 = RateSpell(s1, oPC) * 3;   //May not be necessary   
+    rS1 = RateSpell(s1, oPC) * 3;   //May not be necessary
     rS2 = RateSpell(s2, oPC) * 2;
     rS3 = RateSpell(s3, oPC);
 
@@ -106,27 +114,25 @@ int BestSpell(int s1, int s2, int s3, object oPC)
     return -1;
 }
 
-const int CRITICAL = 3;
-const int DEVASTATING_CRITICAL = 10;
 
 void main()
 {
     struct NWNX_Damage_AttackEventData attack = NWNX_Damage_GetAttackEventData();
     object oAttacker = OBJECT_SELF;
-
-    if ((attack.iAttackResult == CRITICAL || attack.iAttackResult == DEVASTATING_CRITICAL) && GetHasFeat(FEAT_SPELL_CRITICAL, oAttacker))
+    SpeakString("In ELD SPELL CRIT");
+    if (GetHasFeat(FEAT_SPELL_CRITICAL, oAttacker))
     {
         //Need to decrement what it was so that it reflects the actual spell instead of the modified one - -1 means no spell was there
         int nSpell1 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL_CONST) - 1;
         int nSpell2 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL2_CONST) - 1;
         int nSpell3 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL3_CONST) - 1;
         nSpell1 = BestSpell(nSpell1, nSpell2, nSpell3, oAttacker);
-        //If 
+        //If
         if (nSpell1 != -1)
         {
             CastSpell(nSpell1);
         }
-        else 
+        else
         {
             //Deal some bonus damage instead?
             SpeakString("No Spell selected for Spell Critical!");
