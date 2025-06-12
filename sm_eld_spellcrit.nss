@@ -30,38 +30,37 @@ This should probably just choose the point for where the spell should be cast
 ***/
 void CastSpell(int spellID)
 {
-    object oTarget = GetAttackTarget(OBJECT_SELF); //Choose target based on spell qualities
+    object oCaster = OBJECT_SELF;
+    object oTarget = GetAttackTarget(oCaster); //Choose target based on spell qualities
     int harmOrBenef = GetSpellHarmful(spellID);
     int target = GetSpellTargetType(spellID);
     if (! GetIsObjectValid(oTarget))
         return;
-    /* For now, should probably just leave if an error
-    if (spellID == 0)   //Doesn't have a valid spellID to cast - choose one
-    {
-        int classUse = GetLastSpellCastClass();     //May want to change this to the highest arcane level class?
-        //There should probably
-        int spellLevel = Random(GetCasterLevel(OBJECT_SELF) - 1) + 1;
-        spellID = GetKnownSpellId(OBJECT_SELF, classUse, spellLevel, 0);
-    }
-    else
-    */
+    
     int bResult = FALSE;
     int nClassCasterPosition = 0;   //Need to update this
     int nAddFirst = TRUE;
+    float fDelay = 0.5;
+    //Probably should check if there is a projectile with the spell (and do 0 if so) 
     //Need to change the targeting and remove a spell use
-    DecrementRemainingSpellUses(OBJECT_SELF, spellID);
+    DecrementRemainingSpellUses(oCaster, spellID);
+    // Tried again to use the AddCastSpellActions - it seems to have problems if the person
+    // has multiple attacks (sorta) so I'm going to just use doitemcastspell
+    // Should change this logic for if it's placed on enemy or self
     if (harmOrBenef == CAT_HARMFUL_SPELL)
     {
         if ((target & CAT_AOE_SPELL) != 0)
         {
-            //bResult = NWNX_Creature_AddCastSpellActions(OBJECT_SELF, oTarget, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
-            NWNX_Creature_DoItemCastSpell(OBJECT_SELF, OBJECT_INVALID, GetLocation(oTarget), spellID, GetCasterLevel(OBJECT_SELF), 0.0);
+            SpeakString("In 1");
+            //bResult = NWNX_Creature_AddCastSpellActions(oCaster, oTarget, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
+            NWNX_Creature_DoItemCastSpell(oCaster, OBJECT_INVALID, GetLocation(oTarget), spellID, GetCasterLevel(oCaster), fDelay);
             //ActionCastSpellAtLocation(spellID, lTarget, METAMAGIC_NONE, FALSE, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
         }
         else
         {
-            //bResult = NWNX_Creature_AddCastSpellActions(OBJECT_SELF, oTarget, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
-            NWNX_Creature_DoItemCastSpell(OBJECT_SELF, oTarget, GetLocation(oTarget), spellID, GetCasterLevel(OBJECT_SELF), 0.0);
+            SpeakString("In 2");
+            //bResult = NWNX_Creature_AddCastSpellActions(oCaster, oTarget, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
+            NWNX_Creature_DoItemCastSpell(oCaster, oTarget, GetLocation(oTarget), spellID, GetCasterLevel(oCaster), fDelay);
             //ActionCastSpellAtObject(spellID, oTarget, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
         }
     }
@@ -69,18 +68,20 @@ void CastSpell(int spellID)
     {
         if ((target & CAT_SELF_SPELL) != 0)
         {
-            //bResult = NWNX_Creature_AddCastSpellActions(OBJECT_SELF, OBJECT_SELF, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
-            NWNX_Creature_DoItemCastSpell(OBJECT_SELF, OBJECT_SELF, GetLocation(OBJECT_SELF), spellID, GetCasterLevel(OBJECT_SELF), 0.0);
-            //ActionCastSpellAtObject(spellID, OBJECT_SELF, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
+            SpeakString("In 3");
+            //bResult = NWNX_Creature_AddCastSpellActions(oCaster, oCaster, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
+            NWNX_Creature_DoItemCastSpell(oCaster, oCaster, GetLocation(oCaster), spellID, GetCasterLevel(oCaster), fDelay);
+            //ActionCastSpellAtObject(spellID, oCaster, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
         }
         else
         {
-            //bResult = NWNX_Creature_AddCastSpellActions(OBJECT_SELF, OBJECT_SELF, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
-            NWNX_Creature_DoItemCastSpell(OBJECT_SELF, OBJECT_SELF, GetLocation(OBJECT_SELF), spellID, GetCasterLevel(OBJECT_SELF), 0.0);
+            SpeakString("In 4");
+            //bResult = NWNX_Creature_AddCastSpellActions(oCaster, oCaster, GetTargetingModeSelectedPosition(), spellID, nClassCasterPosition, METAMAGIC_NONE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE, FALSE, nAddFirst);
+            NWNX_Creature_DoItemCastSpell(oCaster, oTarget, GetLocation(oTarget), spellID, GetCasterLevel(oCaster), fDelay);
             //ActionCastSpellAtObject(spellID, oTarget, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
         }
     }
-    SpeakString("Spell Critical! Casted " + IntToString(spellID) + " RESULT: " + IntToString(bResult));
+    SpeakString("Spell Critical!");
     //Change the otarget depending on the target of the spell (self, aoe or the like)
     //ActionCastSpellAtObject(spellID, otarget, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
     //May need to change Action Cast Spells to change which classtype to use
