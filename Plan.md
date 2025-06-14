@@ -124,8 +124,9 @@ Maybe bonuses to INT/CHA/WIS? - Adding +1 Wis at 4th, and +1 Int/Cha at 6th
 
 # Eldritch Knight
 # TODO
-Create Menu for Spell Critical - Should be done - needs testing
-Create NWNX effects to let Sorcerer and Wizard learn spells when leveling up - Should be done
+- [x] Create Menu for Spell Critical - Should be done - needs testing
+- [x] Create NWNX effects to let Sorcerer and Wizard learn spells when leveling up - Should be done
+Should be completely functional 
 
 ### Prerequisites
 #### Alignment

@@ -18,7 +18,7 @@
 #include "x2_inc_switches"
 #include "x2_inc_intweapon"
 #include "x3_inc_horse"
-#include "sm_consts"
+#include "sm_cannydef"
 
 void main()
 {

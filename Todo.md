@@ -21,9 +21,9 @@ Change Targeting on clone to just execute the spell(effect) instead of target
 
 Get the custom spells to be used instead of default
 
-Have Arcane spellcaster learn spells when levelling
+- [x] Have Arcane spellcaster learn spells when levelling
 
-Spell Critical - SetAttackEventScript - (Same script concept - should use different and have multiple  as the One with the Void to trigger the various things) will need quite a bit of logic to identify which target to do
+- [x] Spell Critical - SetAttackEventScript - (Same script concept - should use different and have multiple  as the One with the Void to trigger the various things) will need quite a bit of logic to identify which target to do
 
 Make sure the spells use the updated Spellcaster level
 

@@ -12,7 +12,7 @@ void main()
     struct NWNX_Damage_AttackEventData data = NWNX_Damage_GetAttackEventData();
     int nAtkRes = data.iAttackResult;
     object oDamager = OBJECT_SELF;
-
+    
     if (nAtkRes == ATTACK_HIT_VALUE
     || nAtkRes == ATTACK_AUTOMATIC_HIT_VALUE
     || nAtkRes == ATTACK_DEVASTATING_CRIT_VALUE
@@ -32,21 +32,26 @@ void main()
         {
             // Handle Precise Strike
             // Check if light 1 handed... Somehow
-
+            // Should prevent if damager is immune to crits
+            SpeakString("In on attack");
             object iHeld = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oDamager);
             object iOffhand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oDamager);
 
             int nBaseItem = GetBaseItemType(iHeld);
             int nOffhand = GetBaseItemType(iOffhand);
+            SpeakString(IntToString(nBaseItem) + " : " + IntToString(nOffhand));
             if (nBaseItem != BASE_ITEM_INVALID && nOffhand == BASE_ITEM_INVALID)
             {
-                int nWeaponType = StringToInt(Get2DAString("baseitem", "WeaponType", nBaseItem));
-                if ((nWeaponType == 1 || nWeaponType == 4) && Get2DAString("baseitem", "WeaponWield", nBaseItem) != "0")
+                //SpeakString("Second");
+                int nWeaponType = StringToInt(Get2DAString("baseitems", "WeaponType", nBaseItem));
+                //SpeakString(IntToString(nWeaponType) + ": Weapon Type");
+                if ((nWeaponType == 1 || nWeaponType == 4) && Get2DAString("baseitems", "WeaponWield", nBaseItem) != "0" && StringToInt(Get2DAString("baseitems", "RangedWeapon", nBaseItem)) < 1)
                 {
-                    data.iPierce += GetLevelByClass(CLASS_TYPE_DUELIST, oDamager);
+                    int nExtraDamage = GetLevelByClass(CLASS_TYPE_DUELIST, oDamager);
+                    data.iPierce += nExtraDamage;
                     //May also specify That this is happening somehow
                     //May need to check Damage Resistances somehow? Needs testing
-
+                    SpeakString("Duelist Extra Damage Worked! " + IntToString(nExtraDamage));
                 }
             }
 

@@ -12,28 +12,28 @@ int CAT_AOE_SPELL = 4;
 int CAT_SELF_SPELL = 1;
 int CAT_TARGET_SPELL = 2;
 
-int GetSpellHarmful(int spell_id)
+int GetSpellHarmful(int nSpell)
 {
     //This should work I think
-    int harmful = StringToInt(Get2DAString("spells", "HostileSetting", spell_id));
+    int harmful = StringToInt(Get2DAString("spells", "HostileSetting", nSpell));
     return harmful;
 }
 
-int GetSpellTargetType(int spell_id)
+int GetSpellTargetType(int nSpell)
 {
-    int target = StringToInt(Get2DAString("spells", "TargetType", spell_id));
+    int target = StringToInt(Get2DAString("spells", "TargetType", nSpell));
     return target;
 }
 
 /***
 This should probably just choose the point for where the spell should be cast
 ***/
-void CastSpell(int spellID)
+void CastSpell(int nSpellID)
 {
     object oCaster = OBJECT_SELF;
     object oTarget = GetAttackTarget(oCaster); //Choose target based on spell qualities
-    int harmOrBenef = GetSpellHarmful(spellID);
-    int nSpellTargetType = GetSpellTargetType(spellID);
+    int harmOrBenef = GetSpellHarmful(nSpellID);
+    int nSpellTargetType = GetSpellTargetType(nSpellID);
     //SpeakString("nSpellTargetType mod 4: " + IntToString(nSpellTargetType & CAT_AOE_SPELL));
     if (!GetIsObjectValid(oTarget))
         return;
@@ -41,7 +41,7 @@ void CastSpell(int spellID)
     int bResult = FALSE;
     int nAddFirst = TRUE;
     float fDelay = 0.0;
-    string bProjectile = Get2DAString("spells", "HasProjectile", spellID);
+    string bProjectile = Get2DAString("spells", "HasProjectile", nSpellID);
     int nCasterLevel = GetCasterLevel(oCaster);
     //SpeakString("Projectile: " + bProjectile);
     if (bProjectile == "1")
@@ -51,7 +51,7 @@ void CastSpell(int spellID)
     }
     //Probably should check if there is a projectile with the spell (and do 0 if so) 
     //Need to change the targeting and remove a spell use - May want to try and have it confirm that
-    DecrementRemainingSpellUses(oCaster, spellID);
+    DecrementRemainingSpellUses(oCaster, nSpellID);
     // Tried again to use the AddCastSpellActions - it seems to have problems if the person
     // has multiple attacks (sorta) so I'm going to just use doitemcastspell
     // Should change this logic for if it's placed on enemy or self
@@ -59,32 +59,30 @@ void CastSpell(int spellID)
     {
         if ((nSpellTargetType & CAT_AOE_SPELL) != 0)
         {
-            SpeakString("In 1");
-            NWNX_Creature_DoItemCastSpell(oCaster, OBJECT_INVALID, GetLocation(oTarget), spellID, nCasterLevel, fDelay);
+            //SpeakString("In 1");
+            NWNX_Creature_DoItemCastSpell(oCaster, OBJECT_INVALID, GetLocation(oTarget), nSpellID, nCasterLevel, fDelay);
         }
         else
         {
-            SpeakString("In 2");
-            NWNX_Creature_DoItemCastSpell(oCaster, oTarget, GetLocation(oTarget), spellID, nCasterLevel, fDelay);
+            //SpeakString("In 2");
+            NWNX_Creature_DoItemCastSpell(oCaster, oTarget, GetLocation(oTarget), nSpellID, nCasterLevel, fDelay);
         }
     }
     else
     {
         if ((nSpellTargetType & CAT_SELF_SPELL) != 0)
         {
-            SpeakString("In 3");
-            NWNX_Creature_DoItemCastSpell(oCaster, oCaster, GetLocation(oCaster), spellID, nCasterLevel, fDelay);
+            //SpeakString("In 3");
+            NWNX_Creature_DoItemCastSpell(oCaster, oCaster, GetLocation(oCaster), nSpellID, nCasterLevel, fDelay);
         }
         else
         {
-            SpeakString("In 4");
-            NWNX_Creature_DoItemCastSpell(oCaster, oCaster, GetLocation(oCaster), spellID, nCasterLevel, fDelay);
+            //SpeakString("In 4");
+            NWNX_Creature_DoItemCastSpell(oCaster, oCaster, GetLocation(oCaster), nSpellID, nCasterLevel, fDelay);
         }
     }
     SpeakString("Spell Critical!");
-    //Change the otarget depending on the target of the spell (self, aoe or the like)
-    //ActionCastSpellAtObject(spellID, otarget, METAMAGIC_NONE, FALSE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
-    //May need to change Action Cast Spells to change which classtype to use
+    
 }
 
 float CharToRange(string cha)
@@ -109,6 +107,8 @@ Currently checks that target is in range, target doesn't have effect, and caster
 */
 int RateSpell(int nSpell, object oPC, object oTarget)
 {
+    // Probably need to have dispel magic specifically checked
+    // Since it can be beneficial to cast on either self or enemy depending on situation...
     if (!GetHasSpell(nSpell, oPC))
     {  
         PrintString("Eldritch Knight Spell Critical: No use of Spell " + IntToString(nSpell));
@@ -140,11 +140,11 @@ int RateSpell(int nSpell, object oPC, object oTarget)
 int BestSpell(int s1, int s2, int s3, object oPC, object oTarget)
 {
     int rS1, rS2, rS3;
-    rS1 = RateSpell(s1, oPC, oTarget) * 3;   //May not be necessary
+    rS1 = RateSpell(s1, oPC, oTarget) * 3;   //May not be necessary, but useful if I make it "smarter"
     rS2 = RateSpell(s2, oPC, oTarget) * 2;
     rS3 = RateSpell(s3, oPC, oTarget);
 
-    if (rS1 >= rS2 && rS1 > rS3 && rS1 > -1)
+    if (rS1 >= rS2 && rS1 >= rS3 && rS1 > -1)
         return s1;
     if (rS2 >= rS3 && rS2 > -1)
         return s2;
@@ -165,7 +165,7 @@ void main()
         int nSpell2 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL2_CONST) - 1;
         int nSpell3 = GetLocalInt(oAttacker, SM_SPELL_CRITICAL3_CONST) - 1;
         nSpell1 = BestSpell(nSpell1, nSpell2, nSpell3, oAttacker, attack.oTarget);
-        //If
+
         if (nSpell1 != -1)
         {
             CastSpell(nSpell1);
