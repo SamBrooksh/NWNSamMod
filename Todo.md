@@ -2,7 +2,8 @@ List of how to do things:
 
 
 # VOID SCARRED
-Void Clone attack - make weapon with tag s2cloneatk - hook all scripts into that
+- [ ] Get all of the Stuff with this setup!
+Void Clone attack - make weapon with tag s2cloneatk - hook all scripts into that?
 
 DR/1 Energy Resist 1 (Void Touched) - Make handle damage script - check for local variables (VOID_RESIST/DR 1) subtract that damage off the result I think
 
@@ -32,9 +33,19 @@ Make sure the spells use the updated Spellcaster level
 Check to see if I can limit class chosen with NWNX (requiring 2nd level divine and arcane spellcasting)
 
 Combined Spells seems like more of a pain than worth for now...
-Scripts for Spell Synthesis (I think I have a base idea - I don't think that I need NWNX for this)
+- [x] Scripts for Spell Synthesis (I think I have a base idea - I don't think that I need NWNX for this) Works!
 
 # Duelist
 
-Change how Precise Strike functions - In the damage script (Same as Spell critical and the like) check to see if 
-Duelist, with 1 hand 
+- [x] Change how Precise Strike functions - In the damage script (Same as Spell critical and the like) check to see if 
+Duelist, with 1 hand (Did in Attack script instead)
+
+- [ ] Menu for Crippling Critical? 
+    - [x] For now just Make it random
+
+
+# Misc
+
+- [ ] Make GUI's look nice
+- [ ] Fix SQL details
+- [ ] TLK details

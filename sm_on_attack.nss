@@ -33,13 +33,13 @@ void main()
             // Handle Precise Strike
             // Check if light 1 handed... Somehow
             // Should prevent if damager is immune to crits
-            SpeakString("In on attack");
+            //SpeakString("In on attack");
             object iHeld = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oDamager);
             object iOffhand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oDamager);
 
             int nBaseItem = GetBaseItemType(iHeld);
             int nOffhand = GetBaseItemType(iOffhand);
-            SpeakString(IntToString(nBaseItem) + " : " + IntToString(nOffhand));
+            //SpeakString(IntToString(nBaseItem) + " : " + IntToString(nOffhand));
             if (nBaseItem != BASE_ITEM_INVALID && nOffhand == BASE_ITEM_INVALID)
             {
                 //SpeakString("Second");
@@ -51,7 +51,7 @@ void main()
                     data.iPierce += nExtraDamage;
                     //May also specify That this is happening somehow
                     //May need to check Damage Resistances somehow? Needs testing
-                    SpeakString("Duelist Extra Damage Worked! " + IntToString(nExtraDamage));
+                    //SpeakString("Duelist Extra Damage Worked! " + IntToString(nExtraDamage));
                 }
             }
 
@@ -60,6 +60,8 @@ void main()
                 //Handle Crippling Critical
                 effect eCrit;
                 int nCripChoice = GetLocalInt(oDamager, CRIPPLING_CRITICAL_LOCAL_NAME);
+                nCripChoice = d6();
+                // I think I'll just make this random?
                 switch (nCripChoice)
                 {
                     case CRIPPLING_CRITICAL_AC_PENALTY:
