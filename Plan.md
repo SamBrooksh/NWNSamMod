@@ -207,7 +207,7 @@ Gain DR/1 and Energy Resist 1 - Void Touched
 ###### I am not sure if I want to apply it through an effect or with NWNX - Have both setup
 ###### Going to stick with NWNX for now except for Damage Resistance 
 #### 7th Level
-Ability to cast Invisibility 2 + INT times/day - Void Cloak
+Ability to cast Invisibility 2 + INT times/day - Void Hidden
 #### 8th Level
 Ability to cast Haste 1 + INT times/day
 #### 9th Level
@@ -254,6 +254,9 @@ Improved Fade Out - Larger Bonus, Longer time (INT MOD rounds) LVL 11
 Void's Hatred - Increases the chance that Clones try to apply Void Scorn LVL 13
 Ravaging Swap - Deal Void Damage to creatures between Clone and Player - 1d10 + INT per 3 levels LVL 9?
 Empowering Swap - Gain Buff (Clone and Player) After Swapping for short time (+2 Atk Bonus, +10 temp HP, +10% to random modifiers - like clone applying debuffs?, +LVL to Void Damage for INT MOD turns) LVL 5
+
+Other Possible feats:
+When casting the Haste, Incorporeal, invis - it also effects the void clones?
 
 
 Fading DC 10 + INT + 1/4 lvl (maybe 1/2) target suffers HD void dmg max HD amount/2 turns (possible only 2)

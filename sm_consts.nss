@@ -144,6 +144,8 @@ const string VOID_CLONE_TAG_2         = "SM_CLONE_2";
 
 const string CONST_USES_VMISSILE     =  "SM_VMISS_USES";
 const string CONST_USES_VOID_RIP     =  "SM_VRIP_USES";
+const string CONST_USES_VOID_HIDDEN  =  "SM_VOID_HIDDEN_USES";
+const string CONST_USES_VOID_HASTE   =  "SM_VOID_HASTE_USES";
 
 const string CONST_VOID_STRIKE_ITEM_TAG="SM_VOIDSTRIKE";
 
