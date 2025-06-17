@@ -201,7 +201,7 @@ Void Strike - After hitting an enemy with melee weapon, deal 1/3 Void Scarred Le
 #### 4th Level
 Evasion
 #### 5th Level
-Void Swap - Swap positions with Void clone
+Void Swap - Swap positions with Void clone - May drop this, and replace with a temporary boost to clone and personal stats 
 #### 6th Level
 Gain DR/1 and Energy Resist 1 - Void Touched
 ###### I am not sure if I want to apply it through an effect or with NWNX - Have both setup
@@ -212,6 +212,9 @@ Ability to cast Invisibility 2 + INT times/day - Void Hidden
 Ability to cast Haste 1 + INT times/day
 #### 9th Level
 Void Shadowed - Ability to cast Incorporeal 1 + INT times/day
+- Need to figure out what to do - can really only do miss chance
+Currently have it 40%
+
 #### 10th Level
 Void Renewall - Clone grants temp HP to player on it dealing damage - For now going to try doing it with effects and just be 2d6 temp hit points for 1 minute
 #### 11st Level

@@ -4,19 +4,21 @@
 void main()
 {
     object oCaster = OBJECT_SELF;
-    int nUses = GetLocalInt(CONST_VOID_HASTE, oCaster);
+    int nUses = GetLocalInt(oCaster, CONST_USES_VOID_HASTE);
     if (nUses > 0)
     {
-        IncrementRemainingFeatUses(oCaster, CONST_USES_VOID_HASTE);
+        IncrementRemainingFeatUses(oCaster, FEAT_VOID_HASTE);
     }
-    SetLocalInt(oCaster, CONST_VOID_HIDDEN, nUses - 1);
+    SetLocalInt(oCaster, CONST_USES_VOID_HASTE, nUses - 1);
 
     if (GetHasSpellEffect(SPELL_EXPEDITIOUS_RETREAT, oCaster))
         RemoveSpellEffects(SPELL_EXPEDITIOUS_RETREAT, oCaster, oCaster);
-    if (GetHasSpellEffect(SPELL_MASS_HASTE, oCaster));
+    if (GetHasSpellEffect(SPELL_MASS_HASTE, oCaster))
         RemoveSpellEffects(SPELL_MASS_HASTE, oCaster, oCaster);
     if (GetHasSpellEffect(647, oCaster))    //Epic Blinding Speed Feat Spell I think
         RemoveSpellEffects(647, oCaster, oCaster);
+    if (GetHasSpellEffect(SPELL_HASTE, oCaster))
+        RemoveSpellEffects(SPELL_HASTE, oCaster, oCaster);
 
     effect eHaste = EffectHaste();
     effect eVis = EffectVisualEffect(VFX_IMP_HASTE);
@@ -25,6 +27,6 @@ void main()
 
     int nDuration = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
 
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDur, oCaster, RoundsToSeconds(nDuration));
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, RoundsToSeconds(nDuration));
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oCaster);
 }
