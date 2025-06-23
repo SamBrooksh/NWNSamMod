@@ -38,6 +38,7 @@
 #include "x2_inc_restsys"
 #include "nwnx_events"
 #include "nwnx_damage"
+#include "sm_consts"
 
 void main()
 {
@@ -127,6 +128,8 @@ void main()
     NWNX_Events_SubscribeEvent(NWNX_ON_ELC_VALIDATE_CHARACTER_AFTER, "sm_duelconnect");
     SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_NUI_EVENT, "nui_sm_events");
     NWNX_Events_SubscribeEvent(NWNX_ON_ITEM_EQUIP_AFTER, "sm_duel_equip");
+    NWNX_Events_SubscribeEvent(NWNX_ON_TIMING_BAR_STOP_BEFORE, "sm_voidsc_rest");
+    NWNX_Events_SubscribeEvent(SM_REST_EVENT_DONE, "sm_voidsc_rest");
     //Add after rest - Void Touch set all local ints, and on join? 
 
     NWNX_Damage_SetDamageEventScript("sm_on_damage");

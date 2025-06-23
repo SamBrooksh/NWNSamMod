@@ -209,7 +209,7 @@ Gain DR/1 and Energy Resist 1 - Void Touched
 #### 7th Level
 Ability to cast Invisibility 2 + INT times/day - Void Hidden
 #### 8th Level
-Ability to cast Haste 1 + INT times/day
+Ability to cast Haste 1 + INT times/day - Void Haste
 #### 9th Level
 Void Shadowed - Ability to cast Incorporeal 1 + INT times/day
 - Need to figure out what to do - can really only do miss chance
@@ -221,6 +221,8 @@ Void Renewall - Clone grants temp HP to player on it dealing damage - For now go
 Void Assimilation - Reduce the Penalty of summoning a clone - -1 REF/WILL/FORT -2 STR -1 CHA?
 #### 12nd Level
 Curse (Consumed by Void) - Clone attempts to Void Curse on hit (lower DC), player can activate it 3+INT number of times
+Lasts for 1 round per Void Scarred level
+Referred to as Void Consumed
 #### 13rd Level
 Void Hop = Short Range Teleport (Essentially Spell - with small penalty) 1 + INT times - May rework
 Void Scorn - Target Debuff for a while (Clone has small chance to try and apply)
@@ -229,7 +231,7 @@ Reinvigorate - Remove Fading from target to get buffs
 +4 DEX + STR - 2*LVL temp HP +2 Fort/Will/Ref for 2*lvl rnds
 Heal To Full as well? (For now)
 #### 15th Level
-Sapping Strkes - Clone's on hit attempts to apply a Fort reduction debuff, Player can attempt as well
+Sapping Strkes - Clone's on hit attempts to apply a Fort reduction debuff, Player can attempt as well currently just 1+INT I think uses
 DC 10 + VoidScarred Level + INT mod for now - Duration 1/round per level
 #### 16th Level
 Impending Void - Player can deal massive dmg (1d6 per level) to target with Curse, Fading and Void Scorn other debuff VOID damage
@@ -271,6 +273,9 @@ Modify On hit to check if Attacker is Void Scarred or Clone
 
 ### Other modifications
 Add Void Energy type
+
+Currently no way to apply fading straight debuff... Should do something about that (Maybe on crit it applies at some point)
+Has to have consumed by void apply it the fading as is (which is only 2 turns or so of it) - I may do it that they get it all back after combat... but that does mean there would be some exploits...
 
 ### Stats
 

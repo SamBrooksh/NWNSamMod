@@ -8,7 +8,7 @@ void main()
         return;
     string name = NWNX_Events_GetEventData("PLAYER_NAME");
     string cdkey = NWNX_Events_GetEventData("CDKEY");
-    //I need to figure out what else I need to do here...
+    //I need to figure out what else I need to do here... probably do all the sql saving that I need to
     ExportSingleCharacter(oPlayer);
 
     

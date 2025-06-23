@@ -3,6 +3,7 @@
 // On hit for item, deal Void damage
 void main()
 {
+    PrintString("Void Strike");
     object oCaster = OBJECT_SELF;
     object oTarget = GetSpellTargetObject();
     int nVoidLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
