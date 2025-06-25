@@ -13,7 +13,7 @@ void main()
         int nLastLevel = NWNX_Creature_GetClassByLevel(oCreature, nCurrLevel - 1);
         if (SMPrestigeArcaneSpellIncrease(nLastLevel))
         {
-            LearnNewArcaneSpells(oCreature, 2);
+            NUILearnNewArcaneSpells(oCreature, 2);
         }
     }
 }

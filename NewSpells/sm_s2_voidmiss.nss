@@ -34,6 +34,13 @@ void main()
     int nullCast = GetHasFeat(FEAT_VOID_NULL_MISSILE, oCaster);
     float fDelay = 0.0;
 
+    int nUses = GetLocalInt(oCaster, CONST_USES_VMISSILE);
+    if (nUses > 0)
+    {
+        IncrementRemainingFeatUses(oCaster, FEAT_VOID_MISSILE);
+    }
+    SetLocalInt(oCaster, CONST_USES_VMISSILE, nUses - 1);
+
     if(!GetIsReactionTypeFriendly(oTarget))
     {
         //Fire cast spell at event for the specified target
@@ -73,15 +80,16 @@ void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel,
         nMissiles = 3;
     }
     int nCnt;
+    int nDam;
     if (!RESISTED)
     {
         for (nCnt = 1; nCnt <= nMissiles; nCnt++)
         {
             //Roll damage
-            int nDam = d4(1);
-
+            nDam = d4(1);
+            PrintInteger(nDam);
             //Set damage effect
-            effect eDam = EffectDamage(nDam, DAMAGE_TYPE_VOID);
+            effect eDam = EffectDamage(nDam, DAMAGE_TYPE_VOID, DAMAGE_POWER_ENERGY);
             if (NULL_MISSILE)
             {
                 //Have them try to resist - with delay I assume

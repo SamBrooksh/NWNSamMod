@@ -14,13 +14,14 @@ void main()
     location lTarget = GetSpellTargetLocation();
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eExplode, lTarget);
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTarget, FALSE, OBJECT_TYPE_CREATURE);
-    int nUsesLeft = GetLocalInt(oCaster, CONST_USES_VOID_RIP) - 1;
-    SetLocalInt(oCaster, CONST_USES_VOID_RIP, nUsesLeft);
-
-    if (nUsesLeft > 1)
+    
+    int nUses = GetLocalInt(oCaster, CONST_USES_VOID_RIP);
+    if (nUses > 0)
     {
         IncrementRemainingFeatUses(oCaster, FEAT_VOID_RIP);
     }
+    SetLocalInt(oCaster, CONST_USES_VOID_RIP, nUses - 1);
+
 
     while (GetIsObjectValid(oTarget))
     {

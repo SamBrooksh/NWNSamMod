@@ -38,6 +38,7 @@ void main()
                     //Do the Ravage feat
                     int nDmg = d10(nLevel / 3) + (nLevel / 3);
                     effect eDmg = EffectDamage(nDmg, DAMAGE_TYPE_VOID);
+                    //Should have animation displayed as well
                     ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, inBetween);
                 }
             }
@@ -56,6 +57,8 @@ void main()
         effect eTemp = EffectTemporaryHitpoints(nTempHp);
         int nDuration = GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster) + 1;
         eBuff = EffectLinkEffects(eBuff, eTemp);
+        // Should have animation
+        // Need to add way to have chance of modifiers for the clones
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oCaster, RoundsToSeconds(nDuration));
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBuff, oTarget, RoundsToSeconds(nDuration));
     }

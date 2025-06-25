@@ -10,8 +10,8 @@ int SMisDivine(int class);
 int SMGetCasterLevel(object oCaster, int arcaneDivine);
 int SMMaximizeOrEmpower(object oCaster, int feat, int damage, int max = 6);
 float SMExtended(object oCaster, int feat, float duration);
-void SMIncreaseUsesPerDay(object oTarget);
-void SMRestFinishedFunctions(object oSleeper);
+int SMVoidStrike(object oCaster, object oTarget);
+void SMCloneAttack(object oClone, object oTarget, object oMaster);
 void SMVoidFadingDebuff(object oTarget, object oCaster);
 void SMApplyVoidFadingDebuff(object oTarget, object oCaster, int rounds);
 void SMVoidConsumedDebuff(object oTarget, object oCaster);
@@ -156,32 +156,74 @@ float SMExtended(object oCaster, int feat, float duration)
     return duration;
 }
 
-// Used on rest to manually add modifier to uses for a specific feat?
-// Currently Need to modify the specific feats with more uses
-void SMIncreaseUsesPerDay(object oTarget)
+int SMVoidStrike(object oCaster, object oTarget)    //returns void strike damage amount
 {
-    int chaMod = GetAbilityModifier(ABILITY_CHARISMA, oTarget);
-    int intMod = GetAbilityModifier(ABILITY_INTELLIGENCE, oTarget);
-    if (GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oTarget))  //Being a bit more efficient
+    int nVoidLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
+    int nDamage = nVoidLevel / 3;
+    int bFading = SMHasVoidDebuff(oTarget, oCaster, CONST_VOID_FADING_DEBUFF);
+    if (GetHasFeat(FEAT_VOID_DEFT_DAMAGE, oCaster))
     {
-        if (GetHasFeat(FEAT_VOID_MISSILE, oTarget))
-        {
-            int extra = GetHasFeat(FEAT_VOID_EXTRA_MISSILE, oTarget);
-            int vMissUses = (extra * 3) + intMod + 1;
-            SetLocalInt(oTarget, CONST_USES_VMISSILE, vMissUses);
-        }
-        if (GetHasFeat(FEAT_VOID_RIP, oTarget))
-        {
-            int vRipUses = 1 + intMod / 2;
-            SetLocalInt(oTarget, CONST_USES_VOID_RIP, vRipUses);
-        }
+        int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
+        if (bFading)
+            {nDamage = nVoidLevel / 3 * 2 + nInt;}
+        else 
+            {nDamage = nVoidLevel / 2 + nInt;}
     }
+    else 
+    {
+        if (bFading)
+            {nDamage = nVoidLevel;}
+    }
+    return nDamage;
 }
 
-//Put all on rest functions in here, so it is simple to add to the finished rest function
-void SMRestFinishedFunctions(object oSleeper)
+void SMCloneAttack(object oClone, object oTarget, object oMaster)
 {
-    SMIncreaseUsesPerDay(oSleeper);
+    int voidHatred = GetHasFeat(FEAT_VOID_HATRED, oMaster);
+    int chance = 50;    //Change this when more accurate
+    int nIntMod = GetAbilityModifier(ABILITY_INTELLIGENCE, oMaster);
+
+    if (GetHasFeat(FEAT_VOID_HATRED, oMaster))
+    {
+        chance += 10;
+    }
+
+
+    if (GetHasFeat(FEAT_VOID_SCORN, oMaster))
+    {
+        //Add Void Scorn Chance
+        if (d100() < chance)
+        {
+            SpeakString("Void Scorn Applied", 1);
+            SMApplyVoidScorned(oTarget, oMaster, 3);
+        }
+    }
+    
+    if (GetHasFeat(FEAT_VOID_CONSUMED_BY_VOID, oMaster))
+    {
+        //Add Consumed by void chance to be applied
+        if (d100() < chance)
+        {
+            SpeakString("Consumed by Void Applied", 1);
+            SMApplyVoidConsumed(oTarget, oMaster, 1);
+        }
+    }
+    if (GetHasFeat(FEAT_SAPPING_STRIKE, oMaster))
+    {
+        SpeakString("Sapping Strikes Applied", 1);
+        SMApplySappingStrike(oMaster, oTarget);
+        
+    }
+    if (GetHasFeat(FEAT_VOID_RENEWALL, oMaster))
+    {
+        SpeakString("Void Renewall Applied", 1);
+        //Maybe make this something else?
+        effect eTempHit = EffectTemporaryHitpoints(d6(2));
+        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eTempHit, oMaster, RoundsToSeconds(10));
+    }
+
+    effect eIntBonus = EffectDamage(nIntMod, DAMAGE_TYPE_VOID);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, eIntBonus, oTarget);
 }
 
 // Void Fading Persistent Debuff

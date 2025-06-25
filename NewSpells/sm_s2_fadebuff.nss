@@ -1,5 +1,6 @@
 #include "sm_spellfunc"
 
+// There currently isn't anyway for this to get called - may use, may not. We will see
 void main()
 {
     object oCaster = OBJECT_SELF;

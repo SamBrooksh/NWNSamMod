@@ -198,6 +198,7 @@ Relogging causes Clone to unsummon
 Clone has 1/2 hp(Currently at 75% for the moment), and does 1d4+INT dmg - Same AC
 #### 3rd Level
 Void Strike - After hitting an enemy with melee weapon, deal 1/3 Void Scarred Level in void damamge - if they are fading, deal Level instead
+Currently does with all weapons... not just melee weapons - should probably make it roll for damage depending on level (like 1/3 level d2, then make the deft damage give int bonus and up it to d3 or d4 (depending on situation))
 #### 4th Level
 Evasion
 #### 5th Level
@@ -224,7 +225,7 @@ Curse (Consumed by Void) - Clone attempts to Void Curse on hit (lower DC), playe
 Lasts for 1 round per Void Scarred level
 Referred to as Void Consumed
 #### 13rd Level
-Void Hop = Short Range Teleport (Essentially Spell - with small penalty) 1 + INT times - May rework
+Void Hop = Short Range Teleport (Essentially Spell - with small penalty) 1 + INT times - May rework - Currently haven't implemented
 Void Scorn - Target Debuff for a while (Clone has small chance to try and apply)
 #### 14th Level
 Reinvigorate - Remove Fading from target to get buffs
@@ -240,7 +241,7 @@ One with the Void - Take half damage from Void Sources
 #### 18th Level
 Void Rip - AoE Fireball like spell that does Void and applies Curse - Clones Immune 1 + INT/2 times
 #### 19th Level
-Deft Damage - Void Strike empowered - 1/2 level, 2*level - both increased by INT
+Deft Damage - Void Strike empowered - 1/2 level, 3/2*level - both increased by INT
 #### 20th Level
 Can Summon 2 Clones (Maybe?) - they get full HP, Full Stats, instead of decreased stats - Void Perfection
 ### Bonus Feats Options
@@ -253,7 +254,7 @@ Void Missile - 1+INT uses like Magic Missle but void LVL 3
 Extra Void Missle - Gain 3 Charges LVL 5 - currently doing it just in 2da, may need to change it so it doesn't change name
 Crackling Missiles - Void Missle applies Fading Debuff LVL 7
 Clone Copy - Clones cast Void missle (with all feats) as well LVL 13
-Null Missile - Void Missile applies Void Scorn LVL 13
+Null Missile - Void Missile applies Void Scorn LVL 13 1 round per missile that failed saves
 Fade Out - After getting hit, gain AC Bonus for a short time (1 round) LVL 7    - Maybe a different colored mage armor
 Improved Fade Out - Larger Bonus, Longer time (INT MOD rounds) LVL 11
 Void's Hatred - Increases the chance that Clones try to apply Void Scorn LVL 13
@@ -262,6 +263,7 @@ Empowering Swap - Gain Buff (Clone and Player) After Swapping for short time (+2
 
 Other Possible feats:
 When casting the Haste, Incorporeal, invis - it also effects the void clones?
+Ways to buff the Void Renewall buff? Maybe heal and gain hp? Way to give more defense to clones?
 
 
 Fading DC 10 + INT + 1/4 lvl (maybe 1/2) target suffers HD void dmg max HD amount/2 turns (possible only 2)

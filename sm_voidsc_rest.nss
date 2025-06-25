@@ -1,17 +1,19 @@
 #include "nwnx_events"
+//#include "nwnx_creature"
 #include "sm_consts"
 
 void main()
 {
     // Looks like there may not be a on rest event in nwnx_events but I should be able to signal it
-    // Will have to set that up in the rest script regardless 
+    // Will have to set that up in the rest script regardless
     object oPC = OBJECT_SELF;
     //int nID = StringToInt(NWNX_Events_GetEventData("EVENT_ID"));
     //if (nID == NWNX_EVENTS_TIMING_BAR_REST)
+    PrintString("In Void Rest");
     int nTalentAmount = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC) + 1;
     int nMissileCount = nTalentAmount;
     int nSappingStrikeCount = nTalentAmount;
-    int nVoidRipCount = FloatToInt(GetAbilityModifier(ABILITY_INTELLIGENCE, oPC) / 2) + 1;
+    int nVoidRipCount = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC) / 2 + 1;
     if (GetHasFeat(FEAT_VOID_TALENTS, oPC))
     {
         nTalentAmount += 3;
@@ -27,6 +29,7 @@ void main()
     {
         //Need to make uses here
         SetLocalInt(oPC, CONST_USES_VMISSILE, nMissileCount);
+        //NWNX_Creature_SetFeatRemainingUses(oPC, FEAT_VOID_MISSILE, nMissileCount);
     }
 
     if (GetHasFeat(FEAT_VOID_HIDDEN, oPC))
@@ -58,5 +61,5 @@ void main()
     {
         SetLocalInt(oPC, CONST_USES_SAPPING_STRIKE, nSappingStrikeCount);
     }
-    
+
 }
