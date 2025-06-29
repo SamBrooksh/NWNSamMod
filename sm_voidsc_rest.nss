@@ -10,10 +10,11 @@ void main()
     //int nID = StringToInt(NWNX_Events_GetEventData("EVENT_ID"));
     //if (nID == NWNX_EVENTS_TIMING_BAR_REST)
     PrintString("In Void Rest");
-    int nTalentAmount = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC) + 1;
+    int nTalentAmount = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC);
+    // Originally Had +1 but the player will one use by default anyway
     int nMissileCount = nTalentAmount;
     int nSappingStrikeCount = nTalentAmount;
-    int nVoidRipCount = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC) / 2 + 1;
+    int nVoidRipCount = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC) / 2;
     if (GetHasFeat(FEAT_VOID_TALENTS, oPC))
     {
         nTalentAmount += 3;
@@ -29,12 +30,12 @@ void main()
     {
         //Need to make uses here
         SetLocalInt(oPC, CONST_USES_VMISSILE, nMissileCount);
-        //NWNX_Creature_SetFeatRemainingUses(oPC, FEAT_VOID_MISSILE, nMissileCount);
     }
 
     if (GetHasFeat(FEAT_VOID_HIDDEN, oPC))
     {
-        SetLocalInt(oPC, CONST_USES_VOID_HIDDEN, nTalentAmount);
+        SetLocalInt(oPC, CONST_USES_VOID_HIDDEN, nTalentAmount + 1);
+        // Void Hidden is 2+Int not 1+Int so needs the +1 here
     }
 
     if (GetHasFeat(FEAT_VOID_HASTE, oPC))

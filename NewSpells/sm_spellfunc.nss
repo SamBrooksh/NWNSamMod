@@ -159,20 +159,20 @@ float SMExtended(object oCaster, int feat, float duration)
 int SMVoidStrike(object oCaster, object oTarget)    //returns void strike damage amount
 {
     int nVoidLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
-    int nDamage = nVoidLevel / 3;
+    int nDamage = d2(nVoidLevel / 3);
     int bFading = SMHasVoidDebuff(oTarget, oCaster, CONST_VOID_FADING_DEBUFF);
     if (GetHasFeat(FEAT_VOID_DEFT_DAMAGE, oCaster))
     {
         int nInt = GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
         if (bFading)
-            {nDamage = nVoidLevel / 3 * 2 + nInt;}
+            {nDamage = d3(nVoidLevel / 3) + nInt;}
         else 
-            {nDamage = nVoidLevel / 2 + nInt;}
+            {nDamage = d4(nVoidLevel / 3) + nInt;}
     }
     else 
     {
         if (bFading)
-            {nDamage = nVoidLevel;}
+            {nDamage = d2(nVoidLevel);}
     }
     return nDamage;
 }

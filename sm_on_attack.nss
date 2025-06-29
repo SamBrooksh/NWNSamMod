@@ -30,14 +30,14 @@ void main()
     
         if (GetHasFeat(FEAT_VOID_STRIKE, oDamager))
         {
-            PrintString("Moved this here now");
+            //PrintString("Moved this here now");
             data.iCustom1 += SMVoidStrike(oDamager, data.oTarget);
         }
 
         //If attacker is a clone - handle on hit
         if (GetTag(oDamager) == VOID_CLONE_TAG || GetTag(oDamager) == VOID_CLONE_TAG_2)
         {
-            PrintString("Clone is attacking/and hit");
+            //PrintString("Clone is attacking/and hit");
             object oMaster = GetMaster(oDamager);
             SMCloneAttack(oDamager, data.oTarget, oMaster);
         }
