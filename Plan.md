@@ -236,6 +236,7 @@ Sapping Strkes - Clone's on hit attempts to apply a Fort reduction debuff, Playe
 DC 10 + VoidScarred Level + INT mod for now - Duration 1/round per level
 #### 16th Level
 Impending Void - Player can deal massive dmg (1d6 per level) to target with Curse, Fading and Void Scorn other debuff VOID damage
+This gives the Void Scarred the ability to deal massive damage to Target with Curse, FADING, and Void Scorn VOID damage. The damage is a number of 1d4 equal to the Void Scarred Level * number of debuffs applied.
 #### 17th Level
 One with the Void - Take half damage from Void Sources
 #### 18th Level
@@ -249,7 +250,7 @@ Cursed Strikes - After Delay, deal massive damage - also increases Impending Voi
 Gain more DR/Energy Resist (Min Level 10) - Void Strengthen
 Empower Void Clone - Gives Flat HP bonus per time taken? LVL 3
 Extra Haste, Incorporeal, Invis (Maybe all in one) - 2 Extra? LVL 11
-Void Resist - Reduce Debuff from Void Clone LVL 3
+Void Resist - Reduce Debuff from Void Clone LVL 3 - Make it so that it buffs them if has Void Perfection
 Void Missile - 1+INT uses like Magic Missle but void LVL 3
 Extra Void Missle - Gain 3 Charges LVL 5 - currently doing it just in 2da, may need to change it so it doesn't change name
 Crackling Missiles - Void Missle applies Fading Debuff LVL 7
