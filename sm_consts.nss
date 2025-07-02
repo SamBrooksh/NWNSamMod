@@ -15,6 +15,7 @@ const   int     DAMAGE_TYPE_VOID        =       8192;
 // Module Constants //
 //////////////////////
 const int CLASS_MAX                     =       8;
+const string SM_DB_NAME                 =       "SM_DB_VARS";
 
 /////////////////////
 // Feat Constants //
@@ -136,6 +137,7 @@ const string CONST_VOID_CURSED_S_DEBUFF     =       "SM_V_CURSED_S_DEBUFF";
 const string CONST_VOID_SUMMON_DEBUFF       =       "VOID_SUMMON_PENALTY";
 const string CONST_VOID_RESISTS             =       "VOID_RESISTS";
 const string CONST_VOID_REINVIGORATED       =       "VOID_REINVIGORATE";
+const string CONST_VOID_SCORN_NEXT_ATTACK   =       "APPLY_VOID_SCORN_NEXT_ATTACK";
 
 const string VOID_CLONE_HEX_NUM             =       "SM_V_CLONE_HEX_NUM";
 const string VOID_CLONE_HEX_NUM2            =       "SM_V_CLONE_HEX_NUM2";
@@ -149,6 +151,7 @@ const string CONST_USES_VOID_HASTE          =       "SM_VOID_HASTE_USES";
 const string CONST_USES_VOID_SHADOW         =       "SM_VOID_SHADOW_USES";
 const string CONST_USES_VOID_CONSUMED       =       "SM_VOID_CONSUMED_USES";
 const string CONST_USES_SAPPING_STRIKE      =       "SM_SAPPING_STRIKE_USES";
+const string CONST_USES_VOID_SCORN          =       "SM_VOID_SCORN_USES";
 
 const string CONST_VOID_STRIKE_ITEM_TAG     =       "SM_VOIDSTRIKE";
 

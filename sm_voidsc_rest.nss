@@ -63,4 +63,10 @@ void main()
         SetLocalInt(oPC, CONST_USES_SAPPING_STRIKE, nSappingStrikeCount);
     }
 
+    if (GetHasFeat(FEAT_VOID_SCORN, oPC))
+    {
+        // Testing CampaignInt
+        SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SCORN, nSappingStrikeCount + 1, oPC);
+        //SetLocalInt(oPC, CONST_USES_VOID_SCORN, nSappingStrikeCount + 1);
+    }
 }

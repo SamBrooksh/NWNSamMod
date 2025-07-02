@@ -226,7 +226,7 @@ Lasts for 1 round per Void Scarred level
 Referred to as Void Consumed
 #### 13rd Level
 Void Hop = Short Range Teleport (Essentially Spell - with small penalty) 1 + INT times - May rework - Currently haven't implemented
-Void Scorn - Target Debuff for a while (Clone has small chance to try and apply)
+Void Scorn - Target Debuff for a while (Clone has small chance to try and apply) 1 + INT times per day (handled completely behind the scenes) - Consumes a use when applied
 #### 14th Level
 Reinvigorate - Remove Fading from target to get buffs
 +4 DEX + STR - 2*LVL temp HP +2 Fort/Will/Ref for 2*lvl rnds

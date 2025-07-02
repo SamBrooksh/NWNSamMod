@@ -12,7 +12,6 @@ void main()
     struct NWNX_Damage_AttackEventData data = NWNX_Damage_GetAttackEventData();
     int nAtkRes = data.iAttackResult;
     object oDamager = OBJECT_SELF;
-    
     if (nAtkRes == ATTACK_HIT_VALUE
     || nAtkRes == ATTACK_AUTOMATIC_HIT_VALUE
     || nAtkRes == ATTACK_DEVASTATING_CRIT_VALUE
@@ -27,21 +26,41 @@ void main()
                 ExecuteScript("sm_eld_spellcrit", OBJECT_SELF);
             }
         }
-    
-        if (GetHasFeat(FEAT_VOID_STRIKE, oDamager))
+        if (GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oDamager) > 0)
         {
-            //PrintString("Moved this here now");
-            data.iCustom1 += SMVoidStrike(oDamager, data.oTarget);
-        }
+            if (GetHasFeat(FEAT_VOID_STRIKE, oDamager))
+            {
+                //PrintString("Moved this here now");
+                data.iCustom1 += SMVoidStrike(oDamager, data.oTarget);
+            }
 
-        //If attacker is a clone - handle on hit
-        if (GetTag(oDamager) == VOID_CLONE_TAG || GetTag(oDamager) == VOID_CLONE_TAG_2)
-        {
-            //PrintString("Clone is attacking/and hit");
-            object oMaster = GetMaster(oDamager);
-            SMCloneAttack(oDamager, data.oTarget, oMaster);
-        }
+            if (GetLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK) > 0)
+            {
+                int nRounds = d6(2);
+                SpeakString("Applying Void Scorned for " + IntToString(nRounds));
+                SMApplyVoidScorned(data.oTarget, oDamager, nRounds);
+                DeleteLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK);
+                int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SCORN, oDamager);
+                SpeakString(IntToString(nUses - 1) + " Void Scorn Uses left");
+                if (nUses > 0)
+                {
+                    SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SCORN, nUses - 1, oDamager);
+                }
+            }
 
+            //If attacker is a clone - handle on hit
+            if (GetTag(oDamager) == VOID_CLONE_TAG || GetTag(oDamager) == VOID_CLONE_TAG_2)
+            {
+                //PrintString("Clone is attacking/and hit");
+                object oMaster = GetMaster(oDamager);
+                SMCloneAttack(oDamager, data.oTarget, oMaster);
+            }
+
+            if (GetLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK))
+            {
+                DeleteLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK);
+            }
+        }
         if (GetLevelByClass(CLASS_TYPE_DUELIST, oDamager) > 0)
         {
             // Handle Precise Strike

@@ -327,7 +327,27 @@ void SMApplyVoidConsumed(object oTarget, object oCaster, int rounds = 1)
 // Apply the Void Scorn Script
 void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1)
 {
-    effect eApply = EffectRunScript("sm_s2_voidscorn", "sm_s2_voidscorn", "sm_s2_voidscorn", RoundsToSeconds(1), IntToString(rounds));
+    string concatenated = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_SCORNED_DEBUFF);
+    int currentInt = GetLocalInt(oTarget, concatenated);
+    SetLocalInt(oTarget, concatenated, currentInt + 1);
+    //-2 Will, AC, STR, DEX, Reflex
+    effect eWill = EffectSavingThrowDecrease(SAVING_THROW_WILL, 2);
+    effect eAC = EffectACDecrease(2);
+    effect eSTR = EffectAbilityDecrease(ABILITY_STRENGTH, 2);
+    effect eDEX = EffectAbilityDecrease(ABILITY_DEXTERITY, 2);
+    effect eReflex = EffectSavingThrowDecrease(SAVING_THROW_REFLEX, 2);
+    effect eVis = EffectLinkEffects(eWill, eAC);
+    eVis = EffectLinkEffects(eVis, eSTR);
+    eVis = EffectLinkEffects(eVis, eDEX);
+    eVis = EffectLinkEffects(eVis, eReflex);
+    eVis = HideEffectIcon(eVis);
+    eVis = EffectLinkEffects(eVis, EffectIcon(EFFECT_ICON_VOID_SCORN));
+    eVis = EffectLinkEffects(eVis, EffectRunScript("", "sm_s2_rmvscorn"));
+    //Add Visual and Sound effects
+    eVis = TagEffect(eVis, concatenated);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(rounds));
+    effect eCessate = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCessate, oTarget, 0.5);
 }
 
 // Cursed Strikes Debuff
