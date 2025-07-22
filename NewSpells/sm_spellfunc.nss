@@ -277,7 +277,7 @@ void SMApplyFadingDebuff(object oTarget, object oCaster, int rounds = 1)
     eVis = TagEffect(eVis, concatenate);
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
     SetLocalInt(oTarget, concatenate, rounds);
-    DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster));
+    AssignCommand(GetModule(), DelayCommand(RoundsToSeconds(1), SMVoidFadingDebuff(oTarget, oCaster)));
 }
 
 // Void Consumed Persistent Debuff
@@ -286,6 +286,8 @@ void SMVoidConsumedDebuff(object oTarget, object oCaster)
 {
     string concatenated = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_CONSUMED_DEBUFF);
     int curr = GetLocalInt(oTarget, concatenated);
+    
+    PrintString("Void Consumed Iterate: " + IntToString(curr));
     if (GetIsDead(oTarget) || curr < 1)
     {
         //This may not work if target is dead...
@@ -311,13 +313,16 @@ void SMApplyVoidConsumed(object oTarget, object oCaster, int rounds = 1)
     int nDuration = GetLocalInt(oTarget, concatenated);
     if (nDuration < 1)
     {
-        DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster));
+        // Currently this is doing the Void Consumed on the clone/player - want to have this be applied on the target
+        // Also is possible to have two iterations of it? Need to make sure that that doesn't happen
+        // I think that I can do this to fix the first one...
+        AssignCommand(GetModule(), DelayCommand(RoundsToSeconds(1), SMVoidConsumedDebuff(oTarget, oCaster)));
         nDuration = 0;      //Make sure negative doesn't affect it
         //May remove this check, and then that should allow multiple people to hit and apply debuffs - it will spread the duration between them though
         //That may be a bit fast though
-        effect eVis = EffectVisualEffect(VFX_DUR_AURA_ODD);
+        effect eVis = EffectVisualEffect(VFX_DUR_AURA_COLD);
         eVis = EffectLinkEffects(eVis, EffectIcon(EFFECT_ICON_VOID_CONSUMED));
-        eVis = EffectLinkEffects(eVis, EffectRunScript());
+        eVis = EffectLinkEffects(eVis, EffectRunScript("", "sm_s2_rmvdcon"));
         eVis = TagEffect(eVis, concatenated);
         ApplyEffectToObject(DURATION_TYPE_PERMANENT, eVis, oTarget);
     }
@@ -346,8 +351,8 @@ void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1)
     //Add Visual and Sound effects
     eVis = TagEffect(eVis, concatenated);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(rounds));
-    effect eCessate = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCessate, oTarget, 0.5);
+    effect eCessate = EffectVisualEffect(VFX_DUR_AURA_CYAN);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCessate, oTarget, 1.0);
 }
 
 // Cursed Strikes Debuff
@@ -393,7 +398,7 @@ void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 5)
     eVis = EffectLinkEffects(eVis, EffectRunScript());
     eVis = TagEffect(eVis, concatenated);
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, RoundsToSeconds(rounds));
-    DelayCommand(0.0, SMVoidCursedStrikesDebuff(oTarget, oCaster));
+    AssignCommand(GetModule(), DelayCommand(0.0, SMVoidCursedStrikesDebuff(oTarget, oCaster)));
 }
 
 void SMReinivigoratedBuff(object oCaster, object oTarget)

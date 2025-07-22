@@ -18,6 +18,6 @@ void main()
     }
     else 
     {
-        SpeakString("No more uses of Void Scorn Left!");
+        SpeakString("No more uses of Void Scorn Left!", TALKVOLUME_WHISPER);
     }
 }

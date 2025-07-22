@@ -37,7 +37,7 @@ void main()
             if (GetLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK) > 0)
             {
                 int nRounds = d6(2);
-                SpeakString("Applying Void Scorned for " + IntToString(nRounds));
+                SpeakString("Applying Void Scorned for " + IntToString(nRounds) + " Rounds");
                 SMApplyVoidScorned(data.oTarget, oDamager, nRounds);
                 DeleteLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK);
                 int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SCORN, oDamager);
