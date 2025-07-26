@@ -222,7 +222,7 @@ Void Renewall - Clone grants temp HP to player on it dealing damage - For now go
 Void Assimilation - Reduce the Penalty of summoning a clone - -1 REF/WILL/FORT -2 STR -1 CHA?
 #### 12nd Level
 Curse (Consumed by Void) - Clone attempts to Void Curse on hit (lower DC), player can activate it 3+INT number of times
-Lasts for 1 round per Void Scarred level
+Lasts for 1 round per Void Scarred level - Currently using it the same way as Void Scorn - Click to apply on next attack - should probably 
 Referred to as Void Consumed
 #### 13rd Level
 Void Hop = Short Range Teleport (Essentially Spell - with small penalty) 1 + INT times - May rework - Currently haven't implemented

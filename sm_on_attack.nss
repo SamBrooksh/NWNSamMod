@@ -12,6 +12,10 @@ void main()
     struct NWNX_Damage_AttackEventData data = NWNX_Damage_GetAttackEventData();
     int nAtkRes = data.iAttackResult;
     object oDamager = OBJECT_SELF;
+
+    //Any attack
+
+    //Hits
     if (nAtkRes == ATTACK_HIT_VALUE
     || nAtkRes == ATTACK_AUTOMATIC_HIT_VALUE
     || nAtkRes == ATTACK_DEVASTATING_CRIT_VALUE
@@ -19,7 +23,6 @@ void main()
     {
         if (GetLevelByClass(CLASS_TYPE_ELDRITCH_KNIGHT, oDamager) > 0)
         {
-
             if (nAtkRes == ATTACK_CRITICAL_HIT_VALUE)
             {
                 //Handle Spell Critical
@@ -45,6 +48,20 @@ void main()
                 if (nUses > 0)
                 {
                     SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SCORN, nUses - 1, oDamager);
+                }
+            }
+
+            if (GetLocalInt(oDamager, CONST_VOID_CONSUME_NEXT_ATTACK) > 0)
+            {
+                int nLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oAttacker);
+
+                SpeakString("Applying Void Consumed for " + IntToString(nLevel) + " Rounds");
+                SMApplyVoidConsumed(data.oTarget, oDamager, nLevel);
+                DeleteLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK);
+                int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SCORN, oDamager);
+                if (nUses > 0)
+                {
+                    SetCampaignInt(SM_DB_NAME, CONST_VOID_CONSUME_NEXT_ATTACK, nUses - 1, oDamager);
                 }
             }
 

@@ -50,7 +50,7 @@ void main()
 
     if (GetHasFeat(FEAT_VOID_CONSUMED_BY_VOID, oPC))
     {
-        SetLocalInt(oPC, CONST_USES_VOID_CONSUMED, nTalentAmount);
+        SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_CONSUMED, nTalentAmount + 1, oPC);
     }
 
     if (GetHasFeat(FEAT_VOID_RIP, oPC))

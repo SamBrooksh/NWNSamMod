@@ -138,6 +138,7 @@ const string CONST_VOID_SUMMON_DEBUFF       =       "VOID_SUMMON_PENALTY";
 const string CONST_VOID_RESISTS             =       "VOID_RESISTS";
 const string CONST_VOID_REINVIGORATED       =       "VOID_REINVIGORATE";
 const string CONST_VOID_SCORN_NEXT_ATTACK   =       "APPLY_VOID_SCORN_NEXT_ATTACK";
+const string CONST_VOID_CONSUME_NEXT_ATTACK =       "APPLY_VOID_CONSUME_NEXT_ATTACK";
 
 const string VOID_CLONE_HEX_NUM             =       "SM_V_CLONE_HEX_NUM";
 const string VOID_CLONE_HEX_NUM2            =       "SM_V_CLONE_HEX_NUM2";

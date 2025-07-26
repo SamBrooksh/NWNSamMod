@@ -1,17 +1,23 @@
-#include "sm_spellfunc"
+#include "sm_consts"
 
 void main()
 {
-    object oCaster = OBJECT_SELF;
-    object oTarget = GetSpellTargetObject();
-    int nRounds = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
-
-    int nUses = GetLocalInt(oCaster, CONST_USES_VOID_CONSUMED);
-    if (nUses > 0)
+    object oPC = OBJECT_SELF;
+    if (GetCampaignInt(SM_DB_NAME, CONST_VOID_CONSUME_NEXT_ATTACK, oPC) > 0)
     {
-        IncrementRemainingFeatUses(oCaster, FEAT_VOID_CONSUMED_BY_VOID);
+        if (GetLocalInt(oPC, CONST_VOID_CONSUME_NEXT_ATTACK) > 0)
+        {
+            SpeakString("Not Applying Void Consume", TALKVOLUME_WHISPER);
+            DeleteLocalInt(oPC, CONST_VOID_CONSUME_NEXT_ATTACK);
+        }
+        else 
+        {
+            SpeakString("Applying Void Consume on Next Attack", TALKVOLUME_WHISPER);
+            SetLocalInt(oPC, CONST_VOID_CONSUME_NEXT_ATTACK, TRUE);
+        }
     }
-    SetLocalInt(oCaster, CONST_USES_VOID_CONSUMED, nUses - 1);
-
-    SMApplyVoidConsumed(oTarget, oCaster, nRounds);
+    else 
+    {
+        SpeakString("No more uses of Void Consume Left!", TALKVOLUME_WHISPER);
+    }
 }
