@@ -7,14 +7,23 @@ const int ATTACK_AUTOMATIC_HIT_VALUE = 7;
 const int ATTACK_DEVASTATING_CRIT_VALUE = 10;
 const int ATTACK_CRITICAL_HIT_VALUE = 3; //Just a hardcoded number
 
+void DeleteAttackInt(string uses, string onAttack, object oDamager, string display) 
+{
+    DeleteLocalInt(oDamager, onAttack);
+    int nUses = GetCampaignInt(SM_DB_NAME, uses, oDamager);
+    SpeakString(IntToString(nUses - 1) + " " + display + " Uses left");
+    if (nUses > 0)
+    {
+        SetCampaignInt(SM_DB_NAME, uses, nUses - 1, oDamager);
+    }
+}
+
 void main()
 {
     struct NWNX_Damage_AttackEventData data = NWNX_Damage_GetAttackEventData();
     int nAtkRes = data.iAttackResult;
     object oDamager = OBJECT_SELF;
-
-    //Any attack
-
+    
     //Hits
     if (nAtkRes == ATTACK_HIT_VALUE
     || nAtkRes == ATTACK_AUTOMATIC_HIT_VALUE
@@ -42,13 +51,7 @@ void main()
                 int nRounds = d6(2);
                 SpeakString("Applying Void Scorned for " + IntToString(nRounds) + " Rounds");
                 SMApplyVoidScorned(data.oTarget, oDamager, nRounds);
-                DeleteLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK);
-                int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SCORN, oDamager);
-                SpeakString(IntToString(nUses - 1) + " Void Scorn Uses left");
-                if (nUses > 0)
-                {
-                    SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SCORN, nUses - 1, oDamager);
-                }
+                DeleteAttackInt(CONST_USES_VOID_SCORN, CONST_VOID_SCORN_NEXT_ATTACK, oDamager, "Void Scorn");
             }
 
             if (GetLocalInt(oDamager, CONST_VOID_CONSUME_NEXT_ATTACK) > 0)
@@ -57,12 +60,7 @@ void main()
                 // Should give the target a chance to save from this
                 SpeakString("Applying Void Consumed for " + IntToString(nLevel) + " Rounds");
                 SMApplyVoidConsumed(data.oTarget, oDamager, nLevel);
-                DeleteLocalInt(oDamager, CONST_VOID_CONSUME_NEXT_ATTACK);
-                int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SCORN, oDamager);
-                if (nUses > 0)
-                {
-                    SetCampaignInt(SM_DB_NAME, CONST_VOID_CONSUME_NEXT_ATTACK, nUses - 1, oDamager);
-                }
+                DeleteAttackInt(CONST_USES_VOID_CONSUMED, CONST_VOID_CONSUME_NEXT_ATTACK, oDamager, "Void Consume");
             }
 
             //If attacker is a clone - handle on hit
@@ -73,10 +71,6 @@ void main()
                 SMCloneAttack(oDamager, data.oTarget, oMaster);
             }
 
-            if (GetLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK))
-            {
-                DeleteLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK);
-            }
         }
         if (GetLevelByClass(CLASS_TYPE_DUELIST, oDamager) > 0)
         {
@@ -152,6 +146,15 @@ void main()
                         break;
                 }
             }
+        }
+    }
+    else    // Missed attacks 
+    {
+        //Void Consume
+        if (GetLocalInt(oDamager, CONST_VOID_CONSUME_NEXT_ATTACK) > 0)
+        {
+            SpeakString("Void Consumed Missed!");            
+            DeleteAttackInt(CONST_USES_VOID_CONSUMED, CONST_VOID_CONSUME_NEXT_ATTACK, oDamager, "Void Consume");
         }
 
     }
