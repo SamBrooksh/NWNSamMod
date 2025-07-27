@@ -53,11 +53,11 @@ void main()
 
             if (GetLocalInt(oDamager, CONST_VOID_CONSUME_NEXT_ATTACK) > 0)
             {
-                int nLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oAttacker);
-
+                int nLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oDamager);
+                // Should give the target a chance to save from this
                 SpeakString("Applying Void Consumed for " + IntToString(nLevel) + " Rounds");
                 SMApplyVoidConsumed(data.oTarget, oDamager, nLevel);
-                DeleteLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK);
+                DeleteLocalInt(oDamager, CONST_VOID_CONSUME_NEXT_ATTACK);
                 int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SCORN, oDamager);
                 if (nUses > 0)
                 {

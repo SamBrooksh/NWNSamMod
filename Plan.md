@@ -222,7 +222,7 @@ Void Renewall - Clone grants temp HP to player on it dealing damage - For now go
 Void Assimilation - Reduce the Penalty of summoning a clone - -1 REF/WILL/FORT -2 STR -1 CHA?
 #### 12nd Level
 Curse (Consumed by Void) - Clone attempts to Void Curse on hit (lower DC), player can activate it 3+INT number of times
-Lasts for 1 round per Void Scarred level - Currently using it the same way as Void Scorn - Click to apply on next attack - should probably 
+Lasts for 1 round per Void Scarred level - Currently using it the same way as Void Scorn - Click to apply on next attack - should probably make it an attempt (should probably also allow the target a save)
 Referred to as Void Consumed
 #### 13rd Level
 Void Hop = Short Range Teleport (Essentially Spell - with small penalty) 1 + INT times - May rework - Currently haven't implemented
@@ -327,6 +327,11 @@ Note that I have a spell synthesis feat that is unused right now
 - [ ] Check and Fine Tune Duelist
 - [ ] Fill out TLK fields
 - [ ] Figure out Void Scarred debuffs - rewrite them with nwnx
+    - [ ] Would probably be smart to make only one (void scorn or void curse) be able to be applied at one time (On next attack) - or that it can only do one
+    - [x] Void Scorn (And test)
+    - [x] Void Curse (Consumed by Void) Needs testing - I think it works? Needs better graphics though
+    - [ ] Cursed Strikes 
+    - [x] Void Fading - probably should make it work if the creator dies or the like... I think it should be fine for now... also should see if it works with xp
 - [ ] Get Learning Spell working, change where database is and persist between
 
 ## Prettifying/Polishing touches

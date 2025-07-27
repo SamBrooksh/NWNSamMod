@@ -3,7 +3,7 @@
 void main()
 {
     object oPC = OBJECT_SELF;
-    if (GetCampaignInt(SM_DB_NAME, CONST_VOID_CONSUME_NEXT_ATTACK, oPC) > 0)
+    if (GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_CONSUMED, oPC) > 0)
     {
         if (GetLocalInt(oPC, CONST_VOID_CONSUME_NEXT_ATTACK) > 0)
         {

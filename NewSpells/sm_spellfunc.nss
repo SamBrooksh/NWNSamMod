@@ -4,6 +4,7 @@
 #include "nwnx_creature"
 #include "nwnx_object"
 #include "nw_i0_generic"
+#include "nwnx_damage"
 
 int SMisArcane(int class);
 int SMisDivine(int class);
@@ -233,7 +234,7 @@ void SMCloneAttack(object oClone, object oTarget, object oMaster)
 void SMVoidFadingDebuff(object oTarget, object oCaster)
 {
     int fading_div = 2;
-    string concatenate = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_CONSUMED_DEBUFF);
+    string concatenate = SMVoidDebuffString(oTarget, oCaster, CONST_VOID_FADING_DEBUFF);
     int remaining = GetLocalInt(oTarget, concatenate);
     if (GetIsDead(oTarget) || remaining < 1)
     {
@@ -247,10 +248,14 @@ void SMVoidFadingDebuff(object oTarget, object oCaster)
     if (!MySavingThrow(SAVING_THROW_FORT, oTarget, dc, SAVING_THROW_TYPE_ALL, oCaster))
     {
         int nDamage = GetHitDice(oTarget);
-        effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
+        if (nDamage < 1)
+            nDamage = 1;
+        //effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
         //effect eVis = EffectVisualEffect(); //Find visuals for this
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-        //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+        //ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+        struct NWNX_Damage_DamageData data;
+        data.iCustom1 = nDamage;
+        NWNX_Damage_DealDamage(data, oTarget, oCaster);
         remaining = remaining + 1;    //This makes it so # of rounds successes are needed - May be too strong
     }
     SetLocalInt(oTarget, concatenate, remaining - 1);
