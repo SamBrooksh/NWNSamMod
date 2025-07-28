@@ -87,7 +87,7 @@ void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel,
         {
             //Roll damage
             nDam = d4(1);
-            PrintInteger(nDam);
+            //PrintInteger(nDam);
             //Set damage effect
             effect eDam = EffectDamage(nDam, DAMAGE_TYPE_VOID, DAMAGE_POWER_ENERGY);
             if (NULL_MISSILE)
@@ -113,7 +113,10 @@ void castMissile(object oCaster, object oTarget, int RESISTED, int nCasterLevel,
     {
         for (nCnt = 1; nCnt <= nMissiles; nCnt++)
         {
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget);
+            fTime = fDelay;
+            fDelay2 += 0.1;
+            fTime += fDelay2;
+            DelayCommand(fTime, ApplyEffectToObject(DURATION_TYPE_INSTANT, eMissile, oTarget));
         }
     }
 }
