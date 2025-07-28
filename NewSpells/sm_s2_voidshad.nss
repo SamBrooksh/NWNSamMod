@@ -3,12 +3,12 @@
 void main()
 {
     object oCaster = OBJECT_SELF;
-    int nUses = GetLocalInt(oCaster, CONST_USES_VOID_SHADOW);
+    int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SHADOW, oCaster);
     if (nUses > 0)
     {
         IncrementRemainingFeatUses(oCaster, FEAT_VOID_SHADOWED);
     }
-    SetLocalInt(oCaster, CONST_USES_VOID_SHADOW, nUses - 1);
+    SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SHADOW, nUses - 1, oCaster);
 
     int nDuration = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
 

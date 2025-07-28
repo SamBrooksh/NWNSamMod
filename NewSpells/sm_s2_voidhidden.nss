@@ -3,12 +3,12 @@
 void main()
 {
     object oCaster = OBJECT_SELF;
-    int nUses = GetLocalInt(oCaster, CONST_USES_VOID_HIDDEN);
+    int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_HIDDEN, oCaster);
     if (nUses > 0)
     {
         IncrementRemainingFeatUses(oCaster, FEAT_VOID_HIDDEN);
     }
-    SetLocalInt(oCaster, CONST_USES_VOID_HIDDEN, nUses - 1);
+    SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_HIDDEN, nUses - 1, oCaster);
 
     effect eImpact = EffectVisualEffect(VFX_IMP_HEAD_MIND);
     effect eInvis = EffectInvisibility(INVISIBILITY_TYPE_NORMAL);

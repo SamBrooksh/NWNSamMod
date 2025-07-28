@@ -34,12 +34,12 @@ void main()
     int nullCast = GetHasFeat(FEAT_VOID_NULL_MISSILE, oCaster);
     float fDelay = 0.0;
 
-    int nUses = GetLocalInt(oCaster, CONST_USES_VMISSILE);
+    int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VMISSILE, oCaster);
     if (nUses > 0)
     {
         IncrementRemainingFeatUses(oCaster, FEAT_VOID_MISSILE);
     }
-    SetLocalInt(oCaster, CONST_USES_VMISSILE, nUses - 1);
+    SetCampaignInt(SM_DB_NAME, CONST_USES_VMISSILE, nUses - 1, oCaster);
 
     if(!GetIsReactionTypeFriendly(oTarget))
     {

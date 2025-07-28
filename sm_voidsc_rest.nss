@@ -29,23 +29,23 @@ void main()
     if (GetHasFeat(FEAT_VOID_MISSILE, oPC))
     {
         //Need to make uses here
-        SetLocalInt(oPC, CONST_USES_VMISSILE, nMissileCount);
+        SetCampaignInt(SM_DB_NAME, CONST_USES_VMISSILE, nMissileCount, oPC);
     }
 
     if (GetHasFeat(FEAT_VOID_HIDDEN, oPC))
     {
-        SetLocalInt(oPC, CONST_USES_VOID_HIDDEN, nTalentAmount + 1);
+        SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_HIDDEN, nTalentAmount + 1, oPC);
         // Void Hidden is 2+Int not 1+Int so needs the +1 here
     }
 
     if (GetHasFeat(FEAT_VOID_HASTE, oPC))
     {
-        SetLocalInt(oPC, CONST_USES_VOID_HASTE, nTalentAmount);
+        SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_HASTE, nTalentAmount, oPC);
     }
 
     if (GetHasFeat(FEAT_VOID_SHADOWED, oPC))
     {
-        SetLocalInt(oPC, CONST_USES_VOID_SHADOW, nTalentAmount);
+        SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_SHADOW, nTalentAmount, oPC);
     }
 
     if (GetHasFeat(FEAT_VOID_CONSUMED_BY_VOID, oPC))
@@ -55,7 +55,7 @@ void main()
 
     if (GetHasFeat(FEAT_VOID_RIP, oPC))
     {
-        SetLocalInt(oPC, CONST_USES_VOID_RIP, nVoidRipCount);
+        SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_RIP, nVoidRipCount, oPC);
     }
 
     if (GetHasFeat(FEAT_SAPPING_STRIKE, oPC))

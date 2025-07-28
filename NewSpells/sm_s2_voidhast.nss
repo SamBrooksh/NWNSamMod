@@ -4,12 +4,12 @@
 void main()
 {
     object oCaster = OBJECT_SELF;
-    int nUses = GetLocalInt(oCaster, CONST_USES_VOID_HASTE);
+    int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_HASTE, oCaster);
     if (nUses > 0)
     {
         IncrementRemainingFeatUses(oCaster, FEAT_VOID_HASTE);
     }
-    SetLocalInt(oCaster, CONST_USES_VOID_HASTE, nUses - 1);
+    SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_HASTE, nUses - 1, oCaster);
 
     if (GetHasSpellEffect(SPELL_EXPEDITIOUS_RETREAT, oCaster))
         RemoveSpellEffects(SPELL_EXPEDITIOUS_RETREAT, oCaster, oCaster);

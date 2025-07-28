@@ -10,7 +10,7 @@ void main()
     float fDist = GetDistanceBetweenLocations(lTarget, GetLocation(oCaster));
     //float fRayDelay = fDist/(3.0 * log(fDist) + 2.0);
     float fDelay = 0.0;
-    effect eExplode = EffectVisualEffect(VFX_VOID_RIP); //Change to be a black and purple effect
+    effect eExplode = EffectVisualEffect(VFX_IMP_VOID_RIP); //Change to be a black and purple effect - This doesn't exist yet?
     effect eVis = EffectVisualEffect(VFX_MIRV_VOID_IMPACT);      //likewise
     effect eDam;
 
@@ -19,12 +19,12 @@ void main()
 
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eExplode, lTarget);
     
-    int nUses = GetLocalInt(oCaster, CONST_USES_VOID_RIP);
+    int nUses = GetCampaignInt(SM_DB_NAME, CONST_USES_VOID_RIP, oCaster);
     if (nUses > 0)
     {
         IncrementRemainingFeatUses(oCaster, FEAT_VOID_RIP);
     }
-    SetLocalInt(oCaster, CONST_USES_VOID_RIP, nUses - 1);
+    SetCampaignInt(SM_DB_NAME, CONST_USES_VOID_RIP, nUses - 1, oCaster);
 
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GARGANTUAN, lTarget, FALSE, OBJECT_TYPE_CREATURE);
     while (GetIsObjectValid(oTarget))
