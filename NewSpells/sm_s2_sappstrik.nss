@@ -2,15 +2,23 @@
 
 void main()
 {
-    object oCaster = OBJECT_SELF;
-    object oTarget = GetSpellTargetObject();
-
-    int nUses = GetLocalInt(oCaster, CONST_USES_SAPPING_STRIKE);
-    if (nUses > 0)
+    object oPC = OBJECT_SELF;
+    if (GetCampaignInt(SM_DB_NAME, CONST_USES_SAPPING_STRIKE, oPC) > 0)
     {
-        IncrementRemainingFeatUses(oCaster, FEAT_SAPPING_STRIKE);
+        if (GetLocalInt(oPC, CONST_SAP_STRIKE_NEXT_ATTACK) > 0)
+        {
+            SpeakString("Not Applying Sapping Strike", TALKVOLUME_WHISPER);
+            DeleteLocalInt(oPC, CONST_SAP_STRIKE_NEXT_ATTACK);
+        }
+        else 
+        {
+            RemoveVoidOnAttacks(oPC);
+            SpeakString("Applying Sapping Strike on Next Attack", TALKVOLUME_WHISPER);
+            SetLocalInt(oPC, CONST_SAP_STRIKE_NEXT_ATTACK, TRUE);
+        }
     }
-    SetLocalInt(oCaster, CONST_USES_SAPPING_STRIKE, nUses - 1);
-
-    SMApplySappingStrike(oCaster, oTarget);
+    else 
+    {
+        SpeakString("No more uses of Sapping Strike Left!", TALKVOLUME_WHISPER);
+    }
 }

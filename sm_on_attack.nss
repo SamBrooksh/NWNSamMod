@@ -5,13 +5,13 @@
 const int ATTACK_HIT_VALUE = 1;
 const int ATTACK_AUTOMATIC_HIT_VALUE = 7;
 const int ATTACK_DEVASTATING_CRIT_VALUE = 10;
-const int ATTACK_CRITICAL_HIT_VALUE = 3; //Just a hardcoded number
+const int ATTACK_CRITICAL_HIT_VALUE = 3; //Just hardcoded numbers
 
 void DeleteAttackInt(string uses, string onAttack, object oDamager, string display) 
 {
     DeleteLocalInt(oDamager, onAttack);
     int nUses = GetCampaignInt(SM_DB_NAME, uses, oDamager);
-    SpeakString(IntToString(nUses - 1) + " " + display + " Uses left");
+    SpeakString(IntToString(nUses - 1) + " " + display + " Uses left", TALKVOLUME_WHISPER);
     if (nUses > 0)
     {
         SetCampaignInt(SM_DB_NAME, uses, nUses - 1, oDamager);
@@ -49,7 +49,7 @@ void main()
             if (GetLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK) > 0)
             {
                 int nRounds = d6(2);
-                SpeakString("Applying Void Scorned for " + IntToString(nRounds) + " Rounds");
+                //SpeakString("Applying Void Scorned for " + IntToString(nRounds) + " Rounds");
                 SMApplyVoidScorned(data.oTarget, oDamager, nRounds);
                 DeleteAttackInt(CONST_USES_VOID_SCORN, CONST_VOID_SCORN_NEXT_ATTACK, oDamager, "Void Scorn");
             }
@@ -58,9 +58,29 @@ void main()
             {
                 int nLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oDamager);
                 // Should give the target a chance to save from this
-                SpeakString("Applying Void Consumed for " + IntToString(nLevel) + " Rounds");
+                //SpeakString("Applying Void Consumed for " + IntToString(nLevel) + " Rounds");
                 SMApplyVoidConsumed(data.oTarget, oDamager, nLevel);
                 DeleteAttackInt(CONST_USES_VOID_CONSUMED, CONST_VOID_CONSUME_NEXT_ATTACK, oDamager, "Void Consume");
+            }
+
+            if (GetLocalInt(oDamager, CONST_CURSED_STRIKE_NEXT_ATTACK) > 0)
+            {
+                int nLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oDamager);
+                int nDC = 10 + GetAbilityModifier(ABILITY_INTELLIGENCE, oDamager) + GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oDamager) / 2;
+                if (!MySavingThrow(SAVING_THROW_FORT, data.oTarget, nDC, SAVING_THROW_TYPE_NONE, oDamager, 0.0))
+                {
+                    SMApplyCursedStrikes(data.oTarget, oDamager);
+                }
+                DeleteAttackInt(CONST_USES_CURSED_STRIKE, CONST_CURSED_STRIKE_NEXT_ATTACK, oDamager, "Cursed Strike");
+            }
+
+            if (GetLocalInt(oDamager, CONST_SAP_STRIKE_NEXT_ATTACK) > 0)
+            {
+                int nLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oDamager);
+                // Should give the target a chance to save from this
+                //SpeakString("Applying Void Consumed for " + IntToString(nLevel) + " Rounds");
+                SMApplySappingStrike(oDamager, data.oTarget);
+                DeleteAttackInt(CONST_USES_SAPPING_STRIKE, CONST_SAP_STRIKE_NEXT_ATTACK, oDamager, "Sapping Strike");
             }
 
             //If attacker is a clone - handle on hit
@@ -156,7 +176,24 @@ void main()
             SpeakString("Void Consumed Missed!");            
             DeleteAttackInt(CONST_USES_VOID_CONSUMED, CONST_VOID_CONSUME_NEXT_ATTACK, oDamager, "Void Consume");
         }
-
+        //Sapping Strike
+        if (GetLocalInt(oDamager, CONST_SAP_STRIKE_NEXT_ATTACK) > 0)
+        {
+            SpeakString("Sapping Strike Missed!");            
+            DeleteAttackInt(CONST_USES_SAPPING_STRIKE, CONST_SAP_STRIKE_NEXT_ATTACK, oDamager, "Sapping Strike");
+        }
+        //Cursed Strikes
+        if (GetLocalInt(oDamager, CONST_CURSED_STRIKE_NEXT_ATTACK) > 0)
+        {
+            SpeakString("Cursed Strikes Missed!");            
+            DeleteAttackInt(CONST_USES_CURSED_STRIKE, CONST_CURSED_STRIKE_NEXT_ATTACK, oDamager, "Cursed Strikes");
+        }
+        //Void Scorn
+        if (GetLocalInt(oDamager, CONST_VOID_SCORN_NEXT_ATTACK) > 0)
+        {
+            SpeakString("Void Scorn Missed!");            
+            DeleteAttackInt(CONST_USES_VOID_SCORN, CONST_VOID_SCORN_NEXT_ATTACK, oDamager, "Void Scorn");
+        }
     }
     NWNX_Damage_SetAttackEventData(data);
 }

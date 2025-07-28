@@ -139,6 +139,8 @@ const string CONST_VOID_RESISTS             =       "VOID_RESISTS";
 const string CONST_VOID_REINVIGORATED       =       "VOID_REINVIGORATE";
 const string CONST_VOID_SCORN_NEXT_ATTACK   =       "APPLY_VOID_SCORN_NEXT_ATTACK";
 const string CONST_VOID_CONSUME_NEXT_ATTACK =       "APPLY_VOID_CONSUME_NEXT_ATTACK";
+const string CONST_CURSED_STRIKE_NEXT_ATTACK=       "APPLY_CURSED_STRIKE_NEXT_ATTACK";
+const string CONST_SAP_STRIKE_NEXT_ATTACK   =       "APPLY_SAP_STRIKE_NEXT_ATTACK";
 
 const string VOID_CLONE_HEX_NUM             =       "SM_V_CLONE_HEX_NUM";
 const string VOID_CLONE_HEX_NUM2            =       "SM_V_CLONE_HEX_NUM2";
@@ -153,6 +155,7 @@ const string CONST_USES_VOID_SHADOW         =       "SM_VOID_SHADOW_USES";
 const string CONST_USES_VOID_CONSUMED       =       "SM_VOID_CONSUMED_USES";
 const string CONST_USES_SAPPING_STRIKE      =       "SM_SAPPING_STRIKE_USES";
 const string CONST_USES_VOID_SCORN          =       "SM_VOID_SCORN_USES";
+const string CONST_USES_CURSED_STRIKE       =       "SM_CURSED_STRIKE_USES";
 
 const string CONST_VOID_STRIKE_ITEM_TAG     =       "SM_VOIDSTRIKE";
 

@@ -1,4 +1,4 @@
-#include "sm_consts"
+#include "sm_spellfunc"
 
 void main()
 {
@@ -12,6 +12,7 @@ void main()
         }
         else 
         {
+            RemoveVoidOnAttacks(oPC);
             SpeakString("Applying Void Scorn on Next Attack", TALKVOLUME_WHISPER);
             SetLocalInt(oPC, CONST_VOID_SCORN_NEXT_ATTACK, TRUE);
         }

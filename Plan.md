@@ -246,7 +246,7 @@ Deft Damage - Void Strike empowered - 1/2 level, 3/2*level - both increased by I
 #### 20th Level
 Can Summon 2 Clones (Maybe?) - they get full HP, Full Stats, instead of decreased stats - Void Perfection
 ### Bonus Feats Options
-Cursed Strikes - After Delay, deal massive damage - also increases Impending Void dmg to be 1d6+1d4 (Min Level 16)
+Cursed Strikes - After Delay, deal massive damage - also increases Impending Void dmg to be 1d6+1d4 (Min Level 16) - DC should probably be 1/4 level + 2*Int? or just half level + int. Also will probably have it act the same way as the other on hit attacks
 Gain more DR/Energy Resist (Min Level 10) - Void Strengthen
 Empower Void Clone - Gives Flat HP bonus per time taken? LVL 3
 Extra Haste, Incorporeal, Invis (Maybe all in one) - 2 Extra? LVL 11

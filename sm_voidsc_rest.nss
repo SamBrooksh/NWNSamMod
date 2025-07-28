@@ -9,7 +9,7 @@ void main()
     object oPC = OBJECT_SELF;
     //int nID = StringToInt(NWNX_Events_GetEventData("EVENT_ID"));
     //if (nID == NWNX_EVENTS_TIMING_BAR_REST)
-    PrintString("In Void Rest");
+    //PrintString("In Void Rest");
     int nTalentAmount = GetAbilityModifier(ABILITY_INTELLIGENCE, oPC);
     // Originally Had +1 but the player will one use by default anyway
     int nMissileCount = nTalentAmount;
@@ -60,7 +60,12 @@ void main()
 
     if (GetHasFeat(FEAT_SAPPING_STRIKE, oPC))
     {
-        SetLocalInt(oPC, CONST_USES_SAPPING_STRIKE, nSappingStrikeCount);
+        SetCampaignInt(SM_DB_NAME, CONST_USES_SAPPING_STRIKE, nSappingStrikeCount + 1, oPC);
+    }
+
+    if (GetHasFeat(FEAT_VOID_CURSED_STRIKES, oPC))
+    {
+        SetCampaignInt(SM_DB_NAME, CONST_USES_CURSED_STRIKE, 1, oPC);
     }
 
     if (GetHasFeat(FEAT_VOID_SCORN, oPC))

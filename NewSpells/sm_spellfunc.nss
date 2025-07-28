@@ -178,6 +178,15 @@ int SMVoidStrike(object oCaster, object oTarget)    //returns void strike damage
     return nDamage;
 }
 
+void RemoveVoidOnAttacks(object oCaster)
+{
+    DeleteLocalInt(oCaster, CONST_VOID_CONSUME_NEXT_ATTACK);
+    DeleteLocalInt(oCaster, CONST_SAP_STRIKE_NEXT_ATTACK);
+    DeleteLocalInt(oCaster, CONST_VOID_SCORN_NEXT_ATTACK);
+    DeleteLocalInt(oCaster, CONST_CURSED_STRIKE_NEXT_ATTACK);
+    SpeakString("Removing other attack options", TALKVOLUME_WHISPER);
+}
+
 void SMCloneAttack(object oClone, object oTarget, object oMaster)
 {
     int voidHatred = GetHasFeat(FEAT_VOID_HATRED, oMaster);
@@ -381,9 +390,10 @@ void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
     if (current < 1)
     {
         int nDamage = d12(GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster));
-        effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_VOID);
-        effect eVis = EffectVisualEffect(VFX_COM_BLOOD_LRG_RED);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
+        struct NWNX_Damage_DamageData data;
+        data.iCustom1 = nDamage;
+        effect eVis = EffectVisualEffect(VFX_IMP_DESTRUCTION);
+        NWNX_Damage_DealDamage(data, oTarget, oCaster);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
         SetLocalInt(oTarget, concatenated, 0);
         SMRemoveBuff(oTarget, concatenated);
@@ -404,7 +414,7 @@ void SMApplyCursedStrikes(object oTarget, object oCaster, int rounds = 5)
         return;
     }
     SetLocalInt(oTarget, concatenated, rounds);
-    effect eVis = EffectVisualEffect(VFX_DUR_AURA_PULSE_BLUE_BLACK);
+    effect eVis = EffectVisualEffect(VFX_DUR_FLIES);
     effect eIcon = EffectIcon(EFFECT_ICON_CURSED_STRIKES); //Make new icon
     eVis = EffectLinkEffects(eVis, eIcon);
     eVis = EffectLinkEffects(eVis, EffectRunScript());
