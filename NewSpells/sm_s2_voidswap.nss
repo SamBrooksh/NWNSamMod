@@ -7,7 +7,7 @@
 void main()
 {
     object oCaster = OBJECT_SELF;
-    object oTarget = GetSpellTargetObject(); 
+    object oTarget = GetSpellTargetObject();
     object oClone1 = GetLocalObject(oCaster, VOID_CLONE_HEX_NUM);
     object oClone2 = GetLocalObject(oCaster, VOID_CLONE_HEX_NUM2);
     if (oTarget != oClone1 && oTarget != oClone2)
@@ -18,28 +18,31 @@ void main()
         return;
     }
     location lCaster = GetLocation(oCaster);
-    location lTarget = GetLocation(oTarget);    
+    location lTarget = GetLocation(oTarget);
     int ravage = GetHasFeat(FEAT_VOID_RAVAGING_SWAP, oCaster);
     int empower = GetHasFeat(FEAT_VOID_EMPOWERING_SWAP, oCaster);
     float size = 30.0;
     int nLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
     object inBetween = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
-    
+
     if (ravage)
     {
-        while (GetIsObjectValid(inBetween)) 
+        int nDC = 10 + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster) + nLevel;
+        while (GetIsObjectValid(inBetween))
         {
             //Exclude caster and target
             if (inBetween != oCaster && inBetween != oTarget)
             {
                 //Don't hurt friends
-                if (spellsIsTarget(inBetween, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+                if (spellsIsTarget(inBetween, SPELL_TARGET_STANDARDHOSTILE, oCaster) && !FortitudeSave(oTarget, nLevel))
                 {
                     //Do the Ravage feat
                     int nDmg = d10(nLevel / 3) + (nLevel / 3);
                     effect eDmg = EffectDamage(nDmg, DAMAGE_TYPE_VOID);
+                    effect eVis = EffectVisualEffect(VFX_IMP_LIGHTNING_S);
+                    effect eLink = EffectLinkEffects(eDmg, eVis);
                     //Should have animation displayed as well
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDmg, inBetween);
+                    DelayCommand(0.5, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLink, inBetween));
                 }
             }
             inBetween = GetNextObjectInShape(SHAPE_SPELLCYLINDER, size, lTarget, TRUE, OBJECT_TYPE_CREATURE, GetPosition(oCaster));
@@ -48,11 +51,11 @@ void main()
 
     if (empower)
     {
-        //Gain Buff (Clone and Player) After Swapping for short time 
+        //Gain Buff (Clone and Player) After Swapping for short time
         //(+2 Atk Bonus, +10 temp HP, +10% to random modifiers - like clone applying debuffs?, +LVL to Void Damage for INT MOD turns) LVL 5
         //Need to set up local int for the void damage and random modifier
         int nTempHp = GetMaxHitPoints(oCaster) / 10;
-        int nAttackBonus = 2; 
+        int nAttackBonus = 2;
         effect eBuff = EffectAttackIncrease(2);
         effect eTemp = EffectTemporaryHitpoints(nTempHp);
         int nDuration = GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster) + 1;

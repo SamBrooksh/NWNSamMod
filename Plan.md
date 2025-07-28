@@ -38,7 +38,7 @@ Fast
 ### Abilities
 
 #### 1st Level
-Precise Strike - While using a light 1 handed weapon and no shield, add duelist level to damage (Unless immune to crits) - looks like the easiest will probably the hacky way of on-hit scripts
+Precise Strike - While using a light 1 handed weapon and no shield, add duelist level to damage (Unless immune to crits) - looks like the easiest will probably the hacky way of on-hit scripts - just using NWNX actually
 Canny Defense - When wearing light or no armor, add INT to AC (up to max of Duelist Level)
 #### 2nd Level
 Expert Parry - Bonus to Parry at Level 2 - Skill Focus?
