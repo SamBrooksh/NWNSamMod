@@ -31,9 +31,9 @@ void main()
     effect eAcid;
     if (spellReaction)
     {
-        eAcid = EffectDamage(FloatToInt(IntToFloat(d6(3)) * SPELL_REACTION_CRITICAL), DAMAGE_TYPE_ACID);
+        eAcid = EffectDamage(FloatToInt(IntToFloat(d6(3)) * SPELL_REACTION_MULTIPLIER), DAMAGE_TYPE_ACID);
     }
-    else 
+    else
     {
         eAcid = EffectDamage(d6(3), DAMAGE_TYPE_ACID);
     }

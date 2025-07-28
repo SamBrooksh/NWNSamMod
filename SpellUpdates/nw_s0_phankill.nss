@@ -15,6 +15,7 @@
 
 #include "NW_I0_SPELLS"
 #include "x2_inc_spellhook"
+#include "sm_spellfunc"
 
 int MySavingThrow2(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus = OBJECT_SELF, float fDelay = 0.0);
 
@@ -190,4 +191,3 @@ int MySavingThrow2(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVI
     }
     return bValid;
 }
-

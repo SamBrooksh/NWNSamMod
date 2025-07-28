@@ -18,23 +18,23 @@
 
 #include "X0_I0_SPELLS"
 
-#include "x2_inc_spellhook" 
+#include "x2_inc_spellhook"
 #include "sm_spellfunc"
 
 void main()
 {
 
-/* 
-  Spellcast Hook Code 
+/*
+  Spellcast Hook Code
   Added 2003-06-20 by Georg
   If you want to make changes to all spells,
   check x2_inc_spellhook.nss to find out more
-  
+
 */
 
     if (!X2PreSpellCastCode())
     {
-	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
+    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
 
@@ -72,7 +72,7 @@ void main()
         if (d20(1) == 20)
         {
             SpeakString("Spell Reaction!", 1);
-            nHD = nHD * SPELL_REACTION_MULTIPLIER;
+            nHD = FloatToInt(IntToFloat(nHD) * SPELL_REACTION_MULTIPLIER);
         }
     }
     ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eFNF, GetSpellTargetLocation());
@@ -94,8 +94,8 @@ void main()
         while (GetIsObjectValid(oTarget))
         {
             //Make sure the currect target is not an enemy
-        	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
-        	{
+            if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
+            {
                 //Get a local set on the creature that checks if the spell has already allowed them to save
                 bAlreadyAffected = GetLocalInt(oTarget, "bDEATH" + sIdentifier);
                 if (!bAlreadyAffected)

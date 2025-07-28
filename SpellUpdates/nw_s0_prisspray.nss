@@ -13,26 +13,26 @@
 //:: Last Updated By: Aidan Scanlan On: April 11, 2001
 //:: Last Updated By: Preston Watamaniuk, On: June 11, 2001
 
-int ApplyPrismaticEffect(int nEffect, object oTarget);
+int ApplyPrismaticEffect(int nEffect, object oTarget, int spellReaction = FALSE);
 
 #include "X0_I0_SPELLS"
-#include "x2_inc_spellhook" 
+#include "x2_inc_spellhook"
 #include "sm_spellfunc"
 
 void main()
 {
 
-/* 
-  Spellcast Hook Code 
+/*
+  Spellcast Hook Code
   Added 2003-06-20 by Georg
   If you want to make changes to all spells,
   check x2_inc_spellhook.nss to find out more
-  
+
 */
 
     if (!X2PreSpellCastCode())
     {
-	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
+    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
 
@@ -51,7 +51,7 @@ void main()
     //Set the delay to apply to effects based on the distance to the target
     float fDelay = 0.5 + GetDistanceBetween(OBJECT_SELF, oTarget)/20;
     //Get first target in the spell area
-	oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 11.0, GetSpellTargetLocation());
+    oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 11.0, GetSpellTargetLocation());
     //Adding Eldritch Knight Spell double damage chance
     int spellReaction = FALSE;
     if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
@@ -62,10 +62,10 @@ void main()
             spellReaction = TRUE;
         }
     }
-	while (GetIsObjectValid(oTarget))
-	{
+    while (GetIsObjectValid(oTarget))
+    {
         if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-    	{
+        {
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_PRISMATIC_SPRAY));
             //Make an SR check
@@ -101,7 +101,7 @@ void main()
         }
         //Get next target in the spell area
         oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, 11.0, GetSpellTargetLocation());
-	}
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -205,4 +205,3 @@ int ApplyPrismaticEffect(int nEffect, object oTarget, int spellReaction = FALSE)
     }
     return nVis;
 }
-

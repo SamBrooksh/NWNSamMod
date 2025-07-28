@@ -51,6 +51,7 @@ void main()
     int      nPotential;
     effect   eDam;
     object   oLastValid;
+    object   oCaster = OBJECT_SELF;
     effect   eStun = EffectLinkEffects(EffectVisualEffect(VFX_IMP_STUN),EffectStunned());
     int spellReaction = FALSE;
     if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
@@ -154,5 +155,4 @@ void main()
     }
 
 }
-
 

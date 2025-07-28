@@ -131,7 +131,7 @@ void main()
 }
 
 
-void RunImpact(object oTarget, object oCaster, int nMetaMagic,spellReaction=FALSE)
+void RunImpact(object oTarget, object oCaster, int nMetaMagic, int spellReaction=FALSE)
 {
     //--------------------------------------------------------------------------
     // Check if the spell has expired (check also removes effects)

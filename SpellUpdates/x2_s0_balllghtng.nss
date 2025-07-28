@@ -43,5 +43,5 @@ void main()
         }
     }
    //SpawnScriptDebugger();                         503
-    DoMissileStorm(1, 15, GetSpellId(), 503,VFX_IMP_LIGHTNING_S ,DAMAGE_TYPE_ELECTRICAL, FALSE, TRUE, FALSE, FALSE, spellReaction );
+    DoMissileStorm(1, 15, GetSpellId(), 503,VFX_IMP_LIGHTNING_S ,DAMAGE_TYPE_ELECTRICAL, FALSE, TRUE, spellReaction);
 }

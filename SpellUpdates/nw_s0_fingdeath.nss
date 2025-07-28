@@ -83,7 +83,7 @@ void main()
                             nDamage = nDamage + (nDamage/2);
                         }
                         //Adding Eldritch Knight Spell double damage chance
-                        if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF()))
+                        if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
                         {
                             if (d20(1) == 20)
                             {

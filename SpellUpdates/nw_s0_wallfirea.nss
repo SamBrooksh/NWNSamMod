@@ -47,7 +47,7 @@ void main()
                      nDamage = nDamage + (nDamage/2); //Damage/Healing is +50%
                 }
                 int spellReaction = FALSE;
-                if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+                if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
                 {
                     if (d20(1) == 20)
                     {

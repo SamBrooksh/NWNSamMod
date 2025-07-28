@@ -46,7 +46,7 @@ void main()
         nDam =  nDam + (nDam/2); //Damage/Healing is +50%
     }
     //Adding Eldritch Knight Spell double damage chance
-    if (GetHasFeat(FEAT_SPELL_REACTION, GetEffectCreator()))
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
     {
         if (d20(1) == 20)
         {

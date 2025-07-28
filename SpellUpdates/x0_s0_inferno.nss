@@ -22,7 +22,7 @@
 #include "x2_inc_spellhook"
 #include "x2_i0_spells"
 
-void RunImpact(object oTarget, object oCaster, int nMetamagic);
+void RunImpact(object oTarget, object oCaster, int nMetaMagic, int spellReaction = FALSE);
 
 void main()
 {
@@ -64,7 +64,7 @@ void main()
     {
         nDuration = 1;
     }
-    
+
     int spellReaction = FALSE;
     if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
     {
@@ -114,7 +114,7 @@ void main()
 }
 
 
-void RunImpact(object oTarget, object oCaster, int nMetaMagic, int spellReaction)
+void RunImpact(object oTarget, object oCaster, int nMetaMagic, int spellReaction = FALSE)
 {
     //--------------------------------------------------------------------------
     // Check if the spell has expired (check also removes effects)
@@ -141,4 +141,3 @@ void RunImpact(object oTarget, object oCaster, int nMetaMagic, int spellReaction
         DelayCommand(6.0f,RunImpact(oTarget,oCaster,nMetaMagic,spellReaction));
     }
 }
-

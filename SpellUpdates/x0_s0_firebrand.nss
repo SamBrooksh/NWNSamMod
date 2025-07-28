@@ -38,7 +38,8 @@ void main()
 
 // End of Spell Cast Hook
 
-    
+
+    object oCaster = OBJECT_SELF;
     int spellReaction = FALSE;
     if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
     {
@@ -48,13 +49,12 @@ void main()
             spellReaction = TRUE;
         }
     }
-    int nDamage =  GetCasterLevel(OBJECT_SELF);
+    int nDamage =  SMGetCasterLevel(oCaster, ARCANE_CLASS);
     if (nDamage > 15)
         nDamage = 15;
 
     DoMissileStorm(nDamage, 15, SPELL_FIREBRAND, VFX_IMP_MIRV_FLAME, VFX_IMP_FLAME_M, DAMAGE_TYPE_FIRE, TRUE, TRUE, spellReaction);
 }
-
 
 
 

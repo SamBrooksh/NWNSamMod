@@ -82,7 +82,7 @@ void main()
         nDuration *= 2;
     }
     int spellReaction = FALSE;
-    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
     {
         if (d20(1) == 20)
         {

@@ -41,9 +41,9 @@ void main()
 
     oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     //Declare the spell shape, size and the location.
-    
+
     int spellReaction = FALSE;
-    if (GetHasFeat(FEAT_SPELL_REACTION, oCaster))
+    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
     {
         if (d20(1) == 20)
         {

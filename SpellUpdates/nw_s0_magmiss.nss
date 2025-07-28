@@ -23,7 +23,7 @@
 
 void main()
 {
-
+    PrintString("Worked");
 /* 
   Spellcast Hook Code 
   Added 2003-06-23 by GeorgZ

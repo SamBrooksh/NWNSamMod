@@ -20,7 +20,7 @@ float SpellDelay (object oTarget, int nShape);
 
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook" 
-#include "sm_spellconsts"
+#include "sm_spellfunc"
 
 void main()
 {

@@ -15,7 +15,7 @@
 //:://////////////////////////////////////////////
 
 #include "X0_I0_SPELLS"
-#include "sm_spellconsts"
+#include "sm_spellfunc"
 
 void main()
 {
