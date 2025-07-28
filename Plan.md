@@ -278,7 +278,10 @@ Modify On hit to check if Attacker is Void Scarred or Clone
 Add Void Energy type
 
 Currently no way to apply fading straight debuff... Should do something about that (Maybe on crit it applies at some point)
-Has to have consumed by void apply it the fading as is (which is only 2 turns or so of it) - I may do it that they get it all back after combat... but that does mean there would be some exploits...
+Has to have consumed by void apply it the fading as is (which is only 2 turns or so of it) - I may do it that they get it all back after combat... but that does mean there would be some exploits... - I think I have it working well now
+
+Some thoughts: Shouldn't have void hop - and we will see how effective void swap or viable it is. May be too unwieldy (and may not be worth it unless, the ravaging swap is built in)
+Probably should move around some of the feats - Like the miss chance to later, and one of the damaging to earlier
 
 ### Stats
 
@@ -322,25 +325,27 @@ Note that I have a spell synthesis feat that is unused right now
     - [ ] Needs more conclusive testing - Healing Spells need a check for sure
 - [ ] Spell Menu Feat for Spell Critical (Able to choose)
     - [ ] Test - Needs lots of testing
-- [ ] Figure out Spell Critical (Nat 20 rolls) for dealing bonus damage
-    - [ ] May want to rewrite using nwnx for all of them
+- [x] Figure out Spell Reaction (Nat 20 rolls) for dealing bonus damage - May need to double check that the spells are written correct and the like
+    - [ ] May want to rewrite using nwnx for damage for all of them
 - [ ] Check and Fine Tune Duelist
 - [ ] Fill out TLK fields
-- [ ] Figure out Void Scarred debuffs - rewrite them with nwnx
-    - [ ] Would probably be smart to make only one (void scorn or void curse) be able to be applied at one time (On next attack) - or that it can only do one
+- [x] Figure out Void Scarred debuffs - rewrite them with nwnx
+    - [x] Would probably be smart to make only one (void scorn or void curse) be able to be applied at one time (On next attack) - or that it can only do one
     - [x] Void Scorn (And test)
     - [x] Void Curse (Consumed by Void) Needs testing - I think it works? Needs better graphics though
-    - [ ] Cursed Strikes 
+    - [x] Cursed Strikes 
     - [x] Void Fading - probably should make it work if the creator dies or the like... I think it should be fine for now... also should see if it works with xp
 - [ ] Get Learning Spell working, change where database is and persist between
 
 ## Prettifying/Polishing touches
 - [ ] Prettify Learn Spells - scrollbars, proper size, prevent window close?
 - [ ] Prettify Spell Synthesis Gui (Auto detect size)
-- [ ] Make Gui to show duration of a debuff?
+- [ ] Make Gui to show duration of a debuff? This may be a pain to do though...
 - [ ] Rest of Void Scarred Feat/Abilities
 - [ ] Color Void clones to dim purple
 - [ ] Void Scarred Ability visual/sound effects
+    - [ ] Each ability should have a row here
 - [ ] TLK formatting look nice etc
 - [ ] Packages for all the classes, and a couple for Void Scarred
 - [ ] Saving Location/Entering Exit is handled like a normal save game
+    - [ ] Same location, enemies/characters dead etc

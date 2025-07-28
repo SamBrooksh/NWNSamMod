@@ -23,7 +23,6 @@
 
 void main()
 {
-    PrintString("Worked");
 /* 
   Spellcast Hook Code 
   Added 2003-06-23 by GeorgZ
@@ -55,9 +54,11 @@ void main()
     float fDelay2, fTime;
     //Adding Eldritch Knight Spell double damage chance
     int spellReaction = FALSE;
-    if (GetHasFeat(FEAT_SPELL_REACTION, GetAreaOfEffectCreator()))
+    if (GetHasFeat(FEAT_SPELL_REACTION, OBJECT_SELF))
     {
-        if (d20(1) == 20)
+        int roll = d20(1); 
+        PrintInteger(roll);
+        if (roll == 20)
         {
             SpeakString("Spell Reaction!", 1);
             spellReaction = TRUE;

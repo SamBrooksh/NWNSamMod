@@ -359,13 +359,11 @@ void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1)
     effect eSTR = EffectAbilityDecrease(ABILITY_STRENGTH, 2);
     effect eDEX = EffectAbilityDecrease(ABILITY_DEXTERITY, 2);
     effect eReflex = EffectSavingThrowDecrease(SAVING_THROW_REFLEX, 2);
-    effect eFort = EffectSavingThrowDecrease(SAVING_THROW_FORT, 2);
     effect eVis = EffectLinkEffects(eWill, eAC);
     eVis = EffectLinkEffects(eVis, EffectVisualEffect(VFX_DUR_ENTANGLE));
     eVis = EffectLinkEffects(eVis, eSTR);
     eVis = EffectLinkEffects(eVis, eDEX);
     eVis = EffectLinkEffects(eVis, eReflex);
-    eVis = EffectLinkEffects(eVis, eFort);
     eVis = HideEffectIcon(eVis);
     eVis = EffectLinkEffects(eVis, EffectIcon(EFFECT_ICON_VOID_SCORN));
     eVis = EffectLinkEffects(eVis, EffectRunScript("", "sm_s2_rmvscorn"));
@@ -378,6 +376,7 @@ void SMApplyVoidScorned(object oTarget, object oCaster, int rounds = 1)
 
 // Cursed Strikes Debuff
 // Once the delay is over, deal LVL d12 VOID damage
+// Fort save to half the dmg with a higher dc than when on hit
 // Otherwise wait in the shadows
 void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
 {
@@ -389,13 +388,19 @@ void SMVoidCursedStrikesDebuff(object oTarget, object oCaster)
     }
     if (current < 1)
     {
-        int nDamage = d12(GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster));
+        int nLevel = GetLevelByClass(CLASS_TYPE_VOID_SCARRED, oCaster);
+        int nDamage = d12(nLevel);
+        int nDC = 10 + nLevel + GetAbilityModifier(ABILITY_INTELLIGENCE, oCaster);
+        if (FortitudeSave(oTarget, nDC))
+        {
+            //Should probably have some sort of resist note here
+            nDamage = nDamage / 2;
+        }
         struct NWNX_Damage_DamageData data;
         data.iCustom1 = nDamage;
         effect eVis = EffectVisualEffect(VFX_IMP_DESTRUCTION);
         NWNX_Damage_DealDamage(data, oTarget, oCaster);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-        SetLocalInt(oTarget, concatenated, 0);
         SMRemoveBuff(oTarget, concatenated);
         return;
     }
